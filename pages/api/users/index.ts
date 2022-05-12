@@ -2,25 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import { connectToDatabase } from "../../../middleware/database";
 
-// interface User {
-//   _id: ObjectId;
-//   first_name: string;
-//   last_name: string;
-//   address: string;
-//   city: string;
-//   state: string;
-//   zip: string;
-//   email: string;
-//   phone: string;
-//   photoURL: string;
-//   created_at: Date;
-//   guide: boolean;
-//   active_tours: any[];
-//   purchased_tours: any[];
-//   completed_tours: any[];
-//   cancelled_tours: any[];
-// }
-
 export default nc<NextApiRequest, NextApiResponse>()
   .get(async (req, res) => {
     try {
@@ -33,10 +14,15 @@ export default nc<NextApiRequest, NextApiResponse>()
     }
   })
   .post(async (req, res) => {
+    const user = {
+      offered_tours: [],
+      ...req.body,
+    };
+
     try {
       const { db } = await connectToDatabase();
 
-      const users = await db.collection("users").insertOne(req.body);
+      const users = await db.collection("users").insertOne(user);
 
       const newUser = await db
         .collection("users")

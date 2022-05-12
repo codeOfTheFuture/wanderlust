@@ -1,14 +1,13 @@
-import { MongoClient } from "mongodb";
+import { Db, MongoClient, MongoClientOptions } from "mongodb";
 
-const URI = process.env.NEXT_PUBLIC_MONGODB_URI;
-const DB_NAME = process.env.NEXT_PUBLIC_MONGODB_DB_NAME;
+const URI = process.env.NEXT_PUBLIC_MONGODB_URI as string;
+const DB_NAME = process.env.NEXT_PUBLIC_MONGODB_DB_NAME as string;
 
-const client = new MongoClient(URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const clientOptions: MongoClientOptions = {};
 
-export const connectDatabase = async () => {
+const client: MongoClient = new MongoClient(URI, clientOptions);
+
+export const connectDatabase = async (): Promise<void> => {
   try {
     await client.connect();
     console.log("Connected to database");
@@ -17,7 +16,7 @@ export const connectDatabase = async () => {
   }
 };
 
-export const getDatabase = async () => {
+export const getDatabase = async (): Promise<Db | undefined> => {
   try {
     const db = client.db(DB_NAME);
     return db;
@@ -26,7 +25,7 @@ export const getDatabase = async () => {
   }
 };
 
-export const closeDatabase = async () => {
+export const closeDatabase = async (): Promise<void> => {
   try {
     await client.close();
     console.log("Disconnected from database");
@@ -35,8 +34,8 @@ export const closeDatabase = async () => {
   }
 };
 
-let cachedClient = null;
-let cachedDb = null;
+let cachedClient: MongoClient | null = null;
+let cachedDb: Db | null = null;
 
 if (!URI) {
   throw new Error("Please define the MongoDB URI in the .env.local file");
@@ -46,15 +45,15 @@ if (!DB_NAME) {
   throw new Error("Please define the MongoDB DB_NAME in the .env.local file");
 }
 
-export async function connectToDatabase() {
+export async function connectToDatabase(): Promise<{
+  client: MongoClient;
+  db: Db;
+}> {
   if (cachedClient && cachedDb) {
     return { client: cachedClient, db: cachedDb };
   }
 
-  const client = await MongoClient.connect(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  const client = await MongoClient.connect(URI, clientOptions);
 
   const db = client.db(DB_NAME);
 
