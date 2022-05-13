@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import { connectToDatabase } from "../../../middleware/database";
 
-// Get all tours
+// Get all tours - GET /api/tours
 export default nc<NextApiRequest, NextApiResponse>().get(async (req, res) => {
   try {
     const { db } = await connectToDatabase();
