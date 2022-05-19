@@ -5,7 +5,8 @@ import { connectToDatabase } from "../../../../../middleware/database";
 import { Tour, User } from "../../../../../types/types";
 
 export default nc<NextApiRequest, NextApiResponse>()
-  // Book a tour
+  // - PUT /api/tours/[tour_id]/booktour/[user_id]
+  // Tourist book a tour - add to the tourist's booked tours and add the tourist to the tour's booked tourist list
   .put(async (req, res) => {
     const TOUR_ID: string = req.query.tour_id as string;
     const TOURIST_ID: string = req.query.user_id as string;
@@ -38,7 +39,7 @@ export default nc<NextApiRequest, NextApiResponse>()
       const guide = await db
         .collection("users")
         .findOne({ _id: new ObjectId(GUIDE_ID) });
-      const offered_tours = guide?.offered_tours;
+      const offered_tours: Tour[] = guide?.offered_tours;
       // Finds the tour in the offered tours and updates the booked_tourists with the new tourist
       const updated_offered_tours = offered_tours.map((tour: Tour) => {
         if (tour._id.toString() === TOUR_ID) {
@@ -117,3 +118,6 @@ export default nc<NextApiRequest, NextApiResponse>()
       res.status(500).json({ error: error.message });
     }
   });
+
+// Tour of Hollywood
+// Tour Description: A tour of Hollywood. This tour is for people who want to see the greatest movies in Hollywood.  See all of the sights and sounds of Hollywood.

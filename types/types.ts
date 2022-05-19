@@ -19,16 +19,17 @@ interface User {
 
 interface Tour {
   _id: ObjectId;
-  guide_id: ObjectId;
+  guide_id?: ObjectId;
   title: string;
   description?: string;
   price?: number;
   duration?: number;
   tour_date?: Date;
-  created_at: Date;
+  created_at?: Date;
+  tour_location?: { lat: number; lng: number };
   booked_tourists: User[];
   items_to_bring?: string[];
-  tour_location?: { lat: number; lng: number };
+  tour_photos?: string[];
 }
 
 export { type User, type Tour };

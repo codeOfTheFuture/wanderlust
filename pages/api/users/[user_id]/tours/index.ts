@@ -13,6 +13,8 @@ export default nc<NextApiRequest, NextApiResponse>()
     const tour: Tour = {
       guide_id: new ObjectId(USER_ID),
       booked_tourists: [],
+      tour_date: new Date("2022-08-01"),
+      created_at: new Date(),
       ...req.body,
     };
     const { booked_tourists } = tour;
