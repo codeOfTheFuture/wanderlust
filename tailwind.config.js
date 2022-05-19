@@ -8,6 +8,9 @@ module.exports = {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
       },
+      backgroundImage: {
+        "mountain-jump": "url(/assets/images/jumping-mountain.png)",
+      },
     },
   },
   plugins: [],

@@ -1,19 +1,19 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { User } from "../types/types";
+import Layout from "../components/Layout";
 
-interface Props {
-  users: User[];
-}
-
-const Home: NextPage<Props> = () => {
+const Home: NextPage = () => {
   return (
     <div className="font-poppins">
       <Head>
         <title>Wanderlust</title>
       </Head>
 
-      <h1>Wanderlust</h1>
+      <Layout>
+        <div className="flex justify-start items-center h-full w-full">
+          <h1 className="text-8xl font-semibold text-white">Zion National Park</h1>
+        </div>
+      </Layout>
     </div>
   );
 };
