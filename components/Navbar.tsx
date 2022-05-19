@@ -7,17 +7,16 @@ interface Props {
 
 const Navbar: React.FC<Props> = (props) => {
   const { scrollPosition } = props;
-  console.log(scrollPosition);
 
   return (
-    <nav className={`flex justify-between items-center p-4 text-white z-50 ${scrollPosition ? "bg-[#4285F4]" : "bg-transparent"}`}>
+    <nav className={`flex justify-between items-center p-4 text-white ${scrollPosition ? "bg-[#4285F4] shadow-xl" : "bg-transparent"}`}>
       <div>
         <Link href='/'>
-          <a className='text-2xl font-bold'>Wanderlust</a>
+          <a className='text-xl md:text-2xl font-bold'>Wanderlust</a>
         </Link>
       </div>
 
-      <div>
+      <div className="hidden md:inline-flex">
         <ul className='flex justify-around items-center gap-8 text-xl'>
           <li className='hover:cursor-pointer'>Popular</li>
           <li className='hover:cursor-pointer'>Deals</li>
@@ -28,7 +27,7 @@ const Navbar: React.FC<Props> = (props) => {
       </div>
 
       <div>
-        <p className='hover:cursor-pointer text-xl '>Emilia</p>
+        <p className='hover:cursor-pointer text-lg md:text-xl '>Emilia</p>
       </div>
     </nav>
   );
