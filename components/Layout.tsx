@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 interface Props {
@@ -34,6 +35,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         <Navbar scrollPosition={scrollPosition} />
       </header>
       <main className="flex flex-col items-center justify-center w-full md:w-3/4 mx-auto">{children}</main>
+      <Footer />
     </div>
   );
 };
