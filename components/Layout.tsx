@@ -1,30 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 
 interface Props {
   children: React.ReactNode;
 }
 
-type ScrollEvent = React.UIEvent<Element, UIEvent>;
-type HandleScroll = (event: ScrollEvent) => void;
+type HandleScroll = () => void;
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const [pageScroll, setPageScroll] = useState<boolean>(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  const handleScroll: HandleScroll = () => {
-    if (window.scrollY > 0) {
-      setPageScroll(true);
-    } else {
-      setPageScroll(false);
-    }
-  };
+  useEffect(() => {
+    const handleScroll: HandleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
 
   return (
     <div
-      className='font-poppins bg-mountain-jump bg-contain bg-no-repeat bg-top h-screen'
-      onScroll={handleScroll}
+      className='relative font-poppins bg-mountain-jump bg-contain bg-no-repeat bg-top h-[1000px] w-full'
     >
-      <Navbar pageScroll={pageScroll} />
+      <div className="absolute top-0 left-0 w-full h-[875px] bg-black opacity-50">
+
+      </div>
+      <header className="sticky top-0 left-0">
+        <Navbar scrollPosition={scrollPosition} />
+      </header>
       <main>{children}</main>
     </div>
   );

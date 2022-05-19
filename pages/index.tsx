@@ -10,8 +10,11 @@ const Home: NextPage = () => {
       </Head>
 
       <Layout>
-        <div className="flex justify-start items-center h-full w-full">
-          <h1 className="text-8xl font-semibold text-white">Zion National Park</h1>
+        <div className="flex justify-start items-center h-[100vh] w-full">
+          <div className="flex flex-col justify-center mt-32 ml-32 z-10">
+            <h1 className="text-8xl font-semibold text-white">Zion National Park</h1>
+            <button className="w-40 h-14 bg-[#4285F4] rounded-lg text-lg text-white">View Tours</button>
+          </div>
         </div>
       </Layout>
     </div>

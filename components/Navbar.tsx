@@ -1,32 +1,34 @@
 import Link from "next/link";
-import { useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 
 interface Props {
-  pageScroll: boolean;
+  scrollPosition: number;
 }
 
 const Navbar: React.FC<Props> = (props) => {
-  const { pageScroll } = props;
-  console.log(pageScroll);
+  const { scrollPosition } = props;
+  console.log(scrollPosition);
 
   return (
-    <nav className={`sticky top-0 left-0 flex justify-between items-center p-4 text-white ${pageScroll ? "bg-transparent" : "bg-[#4285F4]"}`}>
+    <nav className={`flex justify-between items-center p-4 text-white z-50 ${scrollPosition ? "bg-[#4285F4]" : "bg-transparent"}`}>
       <div>
         <Link href='/'>
-          <a className='text-xl'>Wanderlust</a>
+          <a className='text-2xl font-bold'>Wanderlust</a>
         </Link>
       </div>
 
       <div>
-        <ul className='flex justify-around items-center gap-8'>
+        <ul className='flex justify-around items-center gap-8 text-xl'>
           <li className='hover:cursor-pointer'>Popular</li>
           <li className='hover:cursor-pointer'>Deals</li>
-          <li className='hover:cursor-pointer'>Categories</li>
+          <li className='flex items-center hover:cursor-pointer'>Categories
+            <ChevronDownIcon className="w-6" />
+          </li>
         </ul>
       </div>
 
       <div>
-        <p className='hover:cursor-pointer'>Emilia</p>
+        <p className='hover:cursor-pointer text-xl '>Emilia</p>
       </div>
     </nav>
   );
