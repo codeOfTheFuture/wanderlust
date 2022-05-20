@@ -31,9 +31,8 @@ const Layout: React.FC<Props> = ({ children }) => {
       <div className="absolute top-0 left-0 w-full h-[80vh] bg-black opacity-60">
       </div>
 
-      <header className="sticky top-0 left-0 z-50">
-        <Navbar scrollPosition={scrollPosition} />
-      </header>
+      <Navbar scrollPosition={scrollPosition} />
+
       <main className="flex flex-col items-center justify-center w-full md:w-3/4 mx-auto">{children}</main>
       <Footer />
     </div>

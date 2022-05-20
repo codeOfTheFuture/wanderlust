@@ -9,7 +9,7 @@ const Navbar: React.FC<Props> = (props) => {
   const { scrollPosition } = props;
 
   return (
-    <nav className={`flex justify-between items-center p-4 text-white ${scrollPosition ? "bg-[#4285F4] shadow-xl" : "bg-transparent"}`}>
+    <nav className={`fixed w-full top-0 left-0 z-50 flex justify-between items-center p-4 text-white ${scrollPosition > 0 ? "bg-[#4285F4] shadow-xl" : "bg-transparent"}`}>
       <div>
         <Link href='/'>
           <a className='text-xl md:text-2xl font-bold'>Wanderlust</a>

@@ -2,7 +2,7 @@ import Image from "next/image"
 
 const Footer: React.FC = () => {
   return (
-    <div className="flex justify-between w-full p-5">
+    <div className="flex justify-between items-center w-full p-5 border-y bg-slate-100 border-slate-800">
       <span>&copy; Wanderlust 2022</span>
 
       <div className="flex gap-6">

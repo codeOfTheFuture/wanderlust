@@ -1,16 +1,16 @@
-import { Tour as Tours } from "../types/types";
+import { Tour } from "../types/types";
 import TourCard from "./TourCard";
 
 interface Props {
-  tours: Tours[];
+  tours: Tour[];
 }
 
-const Tours: React.FC<Props> = ({ tours }) => {
+const TourCardWrapper: React.FC<Props> = ({ tours }) => {
   const page = 1;
   return (
-    <div className='relative flex flex-col w-full'>
+    <div className='flex flex-col w-full mt-20'>
       <h3 className='text-2xl mb-10'>Tour Results</h3>
-      <div className='grid grid-cols-1 md:grid-cols-3 justify-center items-center gap-4 2xl:gap-24 w-full'>
+      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center gap-8 w-full'>
         {tours?.map(tour => (
           <TourCard key={tour._id.toString()} tour={tour} />
         ))}
@@ -24,4 +24,4 @@ const Tours: React.FC<Props> = ({ tours }) => {
   );
 };
 
-export default Tours;
+export default TourCardWrapper;

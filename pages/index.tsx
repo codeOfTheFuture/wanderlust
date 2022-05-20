@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Layout from "../components/Layout";
 import SearchInput from "../components/SearchInput";
-import Tours from "../components/Tours";
+import TourCardWrapper from "../components/TourCardWrapper";
 import { Tour } from "../types/types";
 
 interface Props {
@@ -26,7 +26,7 @@ const Home: NextPage<Props> = ({ tours }) => {
           <SearchInput />
         </div>
 
-        <Tours tours={tours} />
+        <TourCardWrapper tours={tours} />
       </Layout>
     </div>
   );
