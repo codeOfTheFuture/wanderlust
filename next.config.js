@@ -8,6 +8,7 @@ const nextConfig = {
       "res.cloudinary.com",
       "cdn.aarp.net",
       "upload.wikimedia.org",
+      "localhost:3000",
     ],
   },
 };

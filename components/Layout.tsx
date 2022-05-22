@@ -25,15 +25,9 @@ const Layout: React.FC<Props> = ({ children }) => {
 
 
   return (
-    <div
-      className='relative font-poppins bg-mountain-jump bg-cover bg-top bg-no-repeat w-full h-[80vh]'
-    >
-      <div className="absolute top-0 left-0 w-full h-[80vh] bg-black opacity-60">
-      </div>
-
+    <div>
       <Navbar scrollPosition={scrollPosition} />
-
-      <main className="flex flex-col items-center justify-center w-full md:w-3/4 mx-auto">{children}</main>
+      <main>{children}</main>
       <Footer />
     </div>
   );
