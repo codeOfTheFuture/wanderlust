@@ -2,29 +2,27 @@ import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import React from "react";
 import Layout from "../components/Layout";
+import RecommendedTours from "../components/RecommendedTours";
+import TourDetails from "../components/TourDetails";
 import TourPageHeader from "../components/TourPageHeader";
-import { Tour } from "../types/types";
+import { Tour, User } from "../types/types";
 
 interface Props {
+  tours: Tour[];
   tour: Tour;
+  guide: User;
 }
 
-const Tour: NextPage<Props> = ({ tour }) => {
-  const { title, description, price, duration, tour_date, items_to_bring, tour_photos } = tour;
+const Tour: NextPage<Props> = ({ tours, tour, guide }) => {
+  const { title, tour_photos } = tour;
 
   return (
     <Layout>
-      <div className='h-[1200px]'>
+      <div className='flex flex-col justify-center items-center gap-5'>
         <TourPageHeader backgroundImage={tour_photos[0]} title={title} />
-        <div className="pt-48">
-          <h1>{title}</h1>
-          <p>{description}</p>
-
-          <div>
-            <h2>{price}</h2>
-            <p>{duration}</p>
-          </div>
-        </div>
+        <TourDetails tour={tour} guide={guide} />
+        <div className="w-1/2 h-[1px] mx-auto bg-black"></div>
+        <RecommendedTours tours={tours} />
       </div>
     </Layout>
   );
@@ -34,16 +32,31 @@ export default Tour;
 
 const getServerSideProps: GetServerSideProps = async context => {
   const tour_id: string = context.query.tour as string;
+  let res: Response;
 
-  const res: Response = await fetch(
+  res = await fetch(
     `http://localhost:3000/api/tours/${tour_id}`
   );
 
   const tour: Tour = await res.json();
 
+  res = await fetch(
+    `http://localhost:3000/api/users/${tour.guide_id.toString()}`
+  );
+
+  const guide: User = await res.json();
+
+  res = await fetch(
+    `http://localhost:3000/api/tours`
+  );
+
+  const tours: Tour[] = await res.json();
+
   return {
     props: {
+      tours,
       tour,
+      guide,
     },
   };
 };
