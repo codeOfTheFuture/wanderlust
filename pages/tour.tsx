@@ -1,5 +1,4 @@
 import { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import React from "react";
 import Layout from "../components/Layout";
 import RecommendedTours from "../components/RecommendedTours";

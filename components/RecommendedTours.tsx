@@ -7,7 +7,7 @@ interface Props {
 
 const RecommendedTours: React.FC<Props> = ({ tours }) => {
   return (
-    <div className="flex gap-5 mb-5">
+    <div className="flex gap-5 mb-5 w-1/2">
       {tours?.map((tour, index) => {
         return index < 3 && (
           <TourCard key={index} tour={tour} />

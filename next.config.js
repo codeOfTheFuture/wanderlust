@@ -10,6 +10,7 @@ const nextConfig = {
       "upload.wikimedia.org",
       "randomuser.me",
       "localhost:3000",
+      "lh3.googleusercontent.com",
     ],
   },
 };

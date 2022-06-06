@@ -1,4 +1,5 @@
 import type { GetServerSideProps, NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Layout from '../components/Layout';
 import SearchInput from "../components/SearchInput";
@@ -10,6 +11,9 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ tours }) => {
+  const { data: session } = useSession<boolean>();
+
+  console.log(session);
 
   return (
     <div className='relative font-poppins'>

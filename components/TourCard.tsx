@@ -12,19 +12,18 @@ const TourCard: React.FC<Props> = ({ tour }) => {
 
   return (
     <div
-      className='flex flex-col justify-end items-center w-full h-[300px] p-5 bg-slate-200 cursor-pointer border border-slate-400 shadow-md rounded-sm'
+      className='relative flex flex-col justify-end items-center w-full h-[300px] bg-slate-200 cursor-pointer border-2 border-slate-700 shadow-md rounded-sm px-2'
       onClick={() => router.push(`/tour?tour=${_id.toString()}`)}
     >
       {tour.tour_photos.length > 0 && (
         <Image
           src={tour_photos[0]}
           alt={title}
-          width={400}
-          height={300}
-          className='object-cover'
+          layout='fill'
+          className='absolute'
         />
       )}
-      <div className='flex flex-col items-start w-full mt-4'>
+      <div className='flex flex-col items-start w-full mt-4 p-2 z-10 bg-slate-200'>
         <h2 className='font-semibold'>{title}</h2>
         <p>${price} per person</p>
       </div>

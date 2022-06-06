@@ -62,3 +62,6 @@ export async function connectToDatabase(): Promise<{
 
   return { client, db };
 }
+
+const clientPromise = client.connect();
+export default clientPromise;
