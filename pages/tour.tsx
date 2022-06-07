@@ -46,7 +46,7 @@ const getServerSideProps: GetServerSideProps = async context => {
   const guide: User = await res.json();
 
   res = await fetch(
-    `http://localhost:3000/api/tours`
+    `https://wanderlust-liart.vercel.app/api/tours`
   );
 
   const tours: Tour[] = await res.json();
