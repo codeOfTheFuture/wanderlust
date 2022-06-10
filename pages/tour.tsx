@@ -62,9 +62,9 @@ const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      tours,
-      tour,
-      guide,
+      tours: JSON.parse(JSON.stringify(tours)),
+      tour: JSON.parse(JSON.stringify(tour)),
+      guide: JSON.parse(JSON.stringify(guide)),
     },
   };
 };

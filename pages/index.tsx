@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Layout from '../components/Layout';
+import Layout from "../components/Layout";
 import SearchInput from "../components/SearchInput";
 import TourCardWrapper from "../components/TourCardWrapper";
 import { Tour } from "../types/types";
@@ -50,13 +50,15 @@ const getServerSideProps: GetServerSideProps = async () => {
   // const res: Response = await fetch("http://localhost:3000/api/tours");
 
   // console.log(await res.json());
-  const res: Response = await fetch("https://wanderlust-liart.vercel.app/api/tours");
+  const res: Response = await fetch(
+    "https://wanderlust-liart.vercel.app/api/tours"
+  );
 
   const tours: Tour[] = await res.json();
 
   return {
     props: {
-      tours,
+      tours: JSON.parse(JSON.stringify(tours)),
     },
   };
 };
