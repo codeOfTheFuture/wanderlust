@@ -47,10 +47,10 @@ const Home: NextPage<Props> = ({ tours }) => {
 export default Home;
 
 const getServerSideProps: GetServerSideProps = async () => {
-  const res: Response = await fetch("http://localhost:3000/api/tours");
+  // const res: Response = await fetch("http://localhost:3000/api/tours");
 
   // console.log(await res.json());
-  // const res: Response = await fetch("https://wanderlust-liart.vercel.app/api/tours");
+  const res: Response = await fetch("https://wanderlust-liart.vercel.app/api/tours");
 
   const tours: Tour[] = await res.json();
 
