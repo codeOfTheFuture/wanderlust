@@ -29,44 +29,44 @@ const Tour: NextPage<Props> = ({ tours, tour, guide }) => {
 
 export default Tour;
 
-const getServerSideProps: GetServerSideProps = async context => {
-  const tour_id: string = context.query.tour as string;
-  let res: Response;
+// const getServerSideProps: GetServerSideProps = async context => {
+//   const tour_id: string = context.query.tour as string;
+//   let res: Response;
 
-  // res = await fetch(
-  //   `http://localhost:3000/api/tours/${tour_id}`
-  // );
-  res = await fetch(
-    `https://wanderlust-liart.vercel.app/api/tours/${tour_id}`
-  );
+//   // res = await fetch(
+//   //   `http://localhost:3000/api/tours/${tour_id}`
+//   // );
+//   res = await fetch(
+//     `https://wanderlust-liart.vercel.app/api/tours/${tour_id}`
+//   );
 
-  const tour: Tour = await res.json();
+//   const tour: Tour = await res.json();
 
-  // res = await fetch(
-  //   `http://localhost:3000/api/users/${tour.guide_id.toString()}`
-  // );
-  res = await fetch(
-    `https://wanderlust-liart.vercel.app/api/users/${tour.guide_id.toString()}`
-  );
+//   // res = await fetch(
+//   //   `http://localhost:3000/api/users/${tour.guide_id.toString()}`
+//   // );
+//   res = await fetch(
+//     `https://wanderlust-liart.vercel.app/api/users/${tour.guide_id.toString()}`
+//   );
 
-  const guide: User = await res.json();
+//   const guide: User = await res.json();
 
-  // res = await fetch(
-  //   `http://localhost:3000/api/tours`,
-  // );
-  res = await fetch(
-    `https://wanderlust-liart.vercel.app/api/tours`
-  );
+//   // res = await fetch(
+//   //   `http://localhost:3000/api/tours`,
+//   // );
+//   res = await fetch(
+//     `https://wanderlust-liart.vercel.app/api/tours`
+//   );
 
-  const tours: Tour[] = await res.json();
+//   const tours: Tour[] = await res.json();
 
-  return {
-    props: {
-      tours: JSON.parse(JSON.stringify(tours)),
-      tour: JSON.parse(JSON.stringify(tour)),
-      guide: JSON.parse(JSON.stringify(guide)),
-    },
-  };
-};
+//   return {
+//     props: {
+//       tours: JSON.parse(JSON.stringify(tours)),
+//       tour: JSON.parse(JSON.stringify(tour)),
+//       guide: JSON.parse(JSON.stringify(guide)),
+//     },
+//   };
+// };
 
-export { getServerSideProps };
+// export { getServerSideProps };
