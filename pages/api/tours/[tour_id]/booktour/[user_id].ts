@@ -1,57 +1,44 @@
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import nc from "next-connect";
-import { connectToDatabase } from "../../../../../middleware/database";
+import connectMongo from "../../../../../utils/connectMongo";
+import Tours from "../../../../../models/tourModel";
+import Users from "../../../../../models/userModel";
 import { Tour, User } from "../../../../../types/types";
 
-export default nc<NextApiRequest, NextApiResponse>()
-  // - PUT /api/tours/[tour_id]/booktour/[user_id]
-  // Tourist book a tour - add to the tourist's booked tours and add the tourist to the tour's booked tourist list
-  .put(async (req, res) => {
-    const TOUR_ID: string = req.query.tour_id as string;
-    const TOURIST_ID: string = req.query.user_id as string;
-
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === "PUT") {
     try {
-      const { db } = await connectToDatabase();
-
-      // Query the database for the tourist user data
-      const user: any = await db.collection("users").findOne({
-        _id: new ObjectId(TOURIST_ID),
+      const user = await Tours.findOne({
+        _id: new ObjectId(req.query.tour_id as string),
       });
-      // Add the tourist to the tour's booked_tourists in the tours collection
-      await db.collection("tours").findOneAndUpdate(
-        { _id: new ObjectId(TOUR_ID) },
-        {
-          $push: {
-            booked_tourists: { ...user },
-          },
-        }
-      );
 
-      // Query's the tour to get the updated data
-      const updatedTour = await db.collection("tours").findOne({
-        _id: new ObjectId(TOUR_ID),
+      await Tours.findOneAndUpdate({
+        _id: new ObjectId(req.query.tour_id as string),
+        $push: {
+          booked_tourists: { ...user },
+        },
       });
-      // Get's the id of the guide
-      // Query the guide to get the offered tours
-      const GUIDE_ID: string = updatedTour?.guide_id as string;
 
-      const guide = await db
-        .collection("users")
-        .findOne({ _id: new ObjectId(GUIDE_ID) });
+      const updatedTour = await Tours.findOne({
+        _id: new ObjectId(req.query.tour_id as string),
+      });
+
+      const guide_id: string = updatedTour?.guide_id as string;
+
+      const guide = await Users.findOne({ _id: new ObjectId(guide_id) });
+
       const offered_tours: Tour[] = guide?.offered_tours;
-      // Finds the tour in the offered tours and updates the booked_tourists with the new tourist
+
       const updated_offered_tours = offered_tours.map((tour: Tour) => {
-        if (tour._id.toString() === TOUR_ID) {
+        if (tour._id.toString() === req.query.tour_id) {
           tour.booked_tourists = updatedTour?.booked_tourists;
           return tour;
         }
         return tour;
       });
 
-      // Updates the guide's offered tours
-      await db.collection("users").findOneAndUpdate(
-        { _id: new ObjectId(GUIDE_ID) },
+      await Users.findOneAndUpdate(
+        { _id: new ObjectId(guide_id) },
         {
           $set: {
             offered_tours: updated_offered_tours,
@@ -63,33 +50,28 @@ export default nc<NextApiRequest, NextApiResponse>()
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
-  })
-  // Unbook a tour
-  .delete(async (req, res) => {
-    const TOUR_ID: string = req.query.tour_id as string,
-      TOURIST_ID: string = req.query.user_id as string;
 
+    // Unbook a tour
+  } else if (req.method === "DELETE") {
     try {
-      const { db } = await connectToDatabase();
+      const tour = await Tours.findOne({
+        _id: new ObjectId(req.query.tour_id as string),
+      });
 
-      // Query the database for the tour data
-      // Get the id of the guide of the tour
-      // Query the database for the guide data
-      // Get the guide's offered tours
-      const tour = await db
-          .collection("tours")
-          .findOne({ _id: new ObjectId(TOUR_ID) }),
-        guide_id: ObjectId = tour?.guide_id,
-        guide = await db.collection("users").findOne({ _id: guide_id }),
-        offered_tours: Tour[] = guide?.offered_tours;
+      const guide_id: string = tour?.guide_id as string;
+
+      const guide = await Users.findOne({ _id: new ObjectId(guide_id) });
+
+      const offered_tours: Tour[] = guide?.offered_tours;
+
       let updated_booked_tourists: User[] = [];
 
       // Finds the tour in the offered tours and removes the user the booked_tourists
       const updated_offered_tours = offered_tours.map((tour: Tour) => {
-        if (tour._id.toString() === TOUR_ID) {
+        if (tour._id.toString() === req.query.tour_id) {
           updated_booked_tourists = tour.booked_tourists =
             tour.booked_tourists.filter(
-              (tourist: User) => tourist._id.toString() !== TOURIST_ID
+              (tourist: User) => tourist._id.toString() !== req.query.user_id
             );
           return tour;
         }
@@ -97,15 +79,13 @@ export default nc<NextApiRequest, NextApiResponse>()
       });
 
       // Updates the tour in the tours collection
-      await db
-        .collection("tours")
-        .findOneAndUpdate(
-          { _id: new ObjectId(TOUR_ID) },
-          { $set: { booked_tourists: updated_booked_tourists } }
-        );
+      await Tours.findOneAndUpdate(
+        { _id: new ObjectId(req.query.tour_id as string) },
+        { $set: { booked_tourists: updated_booked_tourists } }
+      );
 
       // Updates the guide's offered tours in the users collection
-      await db.collection("users").findOneAndUpdate(
+      await Users.findOneAndUpdate(
         { _id: new ObjectId(guide_id) },
         {
           $set: {
@@ -117,7 +97,7 @@ export default nc<NextApiRequest, NextApiResponse>()
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
-  });
+  }
+};
 
-// Tour of Hollywood
-// Tour Description: A tour of Hollywood. This tour is for people who want to see the greatest movies in Hollywood.  See all of the sights and sounds of Hollywood.
+export default connectMongo(handler);

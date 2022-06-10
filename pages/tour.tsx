@@ -33,18 +33,27 @@ const getServerSideProps: GetServerSideProps = async context => {
   const tour_id: string = context.query.tour as string;
   let res: Response;
 
+  // res = await fetch(
+  //   `http://localhost:3000/api/tours/${tour_id}`
+  // );
   res = await fetch(
     `https://wanderlust-liart.vercel.app/api/tours/${tour_id}`
   );
 
   const tour: Tour = await res.json();
 
+  // res = await fetch(
+  //   `http://localhost:3000/api/users/${tour.guide_id.toString()}`
+  // );
   res = await fetch(
     `https://wanderlust-liart.vercel.app/api/users/${tour.guide_id.toString()}`
   );
 
   const guide: User = await res.json();
 
+  // res = await fetch(
+  //   `http://localhost:3000/api/tours`,
+  // );
   res = await fetch(
     `https://wanderlust-liart.vercel.app/api/tours`
   );

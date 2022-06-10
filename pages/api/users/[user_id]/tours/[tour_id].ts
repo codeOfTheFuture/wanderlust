@@ -1,27 +1,23 @@
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import nc from "next-connect";
-import { connectToDatabase } from "../../../../../middleware/database";
+import connectMongo from "../../../../../utils/connectMongo";
+import Users from "../../../../../models/userModel";
+import Tours from "../../../../../models/tourModel";
+import { Tour } from "../../../../../types/types";
 
-export default nc<NextApiRequest, NextApiResponse>()
-  // Update an existing tour - PUT /api/users/:user_id/tours/:tour_id
-  .put(async (req, res) => {
-    const USER_ID: string = req.query.user_id as string;
-    const TOUR_ID: string = req.query.tour_id as string;
-
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === "PUT") {
     try {
-      const { db } = await connectToDatabase();
-
-      const tour = await db.collection("tours").findOne({
-        _id: new ObjectId(TOUR_ID),
+      const tour = await Users.findOne({
+        _id: new ObjectId(req.query.tour_id as string),
       });
 
-      if (tour?.guide_id.toString() !== USER_ID) {
+      if (tour?.guide_id.toString() !== req.query.user_id) {
         res.status(401).json({ error: "Unauthorized" });
       }
 
-      await db.collection("tours").findOneAndUpdate(
-        { _id: new ObjectId(TOUR_ID) },
+      const updatedTour = await Tours.findOneAndUpdate(
+        { _id: new ObjectId(req.query.tour_id as string) },
         {
           $set: {
             ...req.body,
@@ -29,27 +25,25 @@ export default nc<NextApiRequest, NextApiResponse>()
         }
       );
 
-      const updatedTour = await db.collection("tours").findOne({
-        _id: new ObjectId(TOUR_ID),
+      const guide = await Users.findOne({
+        _id: new ObjectId(updatedTour?.guide_id as string),
       });
 
-      const user = await db.collection("users").findOne({
-        _id: new ObjectId(USER_ID),
-      });
+      const offered_tours: Tour[] = guide?.offered_tours;
 
-      const updated_tours = user?.offered_tours.map((tour: any) => {
-        if (tour._id.toString() === TOUR_ID) {
+      const updated_offered_tours = offered_tours.map((tour: Tour) => {
+        if (tour._id.toString() === req.query.tour_id) {
           tour = updatedTour;
           return tour;
         }
         return tour;
       });
 
-      await db.collection("users").findOneAndUpdate(
-        { _id: new ObjectId(USER_ID) },
+      await Users.findOneAndUpdate(
+        { _id: new ObjectId(guide?._id as string) },
         {
           $set: {
-            offered_tours: updated_tours,
+            offered_tours: updated_offered_tours,
           },
         }
       );
@@ -58,44 +52,37 @@ export default nc<NextApiRequest, NextApiResponse>()
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
-  })
-  // Delete an existing tour by id - DELETE /api/tours/:id
-  .delete(async (req, res) => {
-    const User_ID: string = req.query.user_id as string;
-    const TOUR_ID: string = req.query.tour_id as string;
-
+  } else if (req.method === "DELETE") {
     try {
-      const { db } = await connectToDatabase();
-
-      const tour = await db.collection("tours").findOne({
-        _id: new ObjectId(TOUR_ID),
+      const tour = await Tours.findOne({
+        _id: new ObjectId(req.query.tour_id as string),
       });
 
       if (!tour) {
         res.status(404).json({ error: "Tour not found" });
       }
 
-      if (tour?.guide_id.toString() !== User_ID) {
+      if (tour?.guide_id.toString() !== req.query.user_id) {
         res.status(401).json({ error: "Unauthorized" });
       }
 
-      await db.collection("tours").deleteOne({
-        _id: new ObjectId(TOUR_ID),
+      await Tours.findOneAndDelete({
+        _id: new ObjectId(req.query.tour_id as string),
       });
 
-      const user = await db.collection("users").findOne({
-        _id: new ObjectId(User_ID),
+      const guide = await Users.findOne({
+        _id: new ObjectId(req.query.user_id as string),
       });
 
-      const updated_tours = user?.offered_tours.filter(
-        (tour: any) => tour._id.toString() !== TOUR_ID
+      const updated_offered_tours = guide?.offered_tours.filter(
+        (tour: Tour) => tour._id.toString() !== req.query.tour_id
       );
 
-      await db.collection("users").findOneAndUpdate(
-        { _id: new ObjectId(User_ID) },
+      await Users.findOneAndUpdate(
+        { _id: new ObjectId(req.query.user_id as string) },
         {
           $set: {
-            offered_tours: updated_tours,
+            offered_tours: updated_offered_tours,
           },
         }
       );
@@ -104,4 +91,7 @@ export default nc<NextApiRequest, NextApiResponse>()
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
-  });
+  }
+};
+
+export default connectMongo(handler);

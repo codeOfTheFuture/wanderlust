@@ -1,33 +1,25 @@
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import nc from "next-connect";
-import { connectToDatabase } from "../../../../../middleware/database";
+import connectMongo from "../../../../../utils/connectMongo";
+import Users from "../../../../../models/userModel";
+import Tours from "../../../../../models/tourModel";
 import { Tour } from "../../../../../types/types";
 
-export default nc<NextApiRequest, NextApiResponse>()
-  // - POST /api/users/[user_id]/tours
-  // Add a new tour to the guide's offered tours
-  .post(async (req, res) => {
-    const USER_ID: string = req.query.user_id as string;
-
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === "POST") {
     const tour: Tour = {
-      guide_id: new ObjectId(USER_ID),
+      guide_id: new ObjectId(req.query.user_id as string),
       booked_tourists: [],
       tour_date: new Date("2022-08-01"),
       created_at: new Date(),
       ...req.body,
     };
     const { booked_tourists } = tour;
-
     try {
-      const { db } = await connectToDatabase();
+      const addedTour = await Tours.create(tour);
 
-      // Add the tour to the tours collection
-      const addedTour = await db.collection("tours").insertOne(tour);
-
-      // Update the guide's offered tours with the new tour
-      await db.collection("users").findOneAndUpdate(
-        { _id: new ObjectId(USER_ID) },
+      await Users.findOneAndUpdate(
+        { _id: new ObjectId(req.query.user_id as string) },
         {
           $push: {
             offered_tours: {
@@ -39,12 +31,15 @@ export default nc<NextApiRequest, NextApiResponse>()
         }
       );
 
-      const newTour = await db
-        .collection("tours")
-        .findOne({ _id: addedTour.insertedId });
+      const newTour = await Tours.findOne({
+        _id: addedTour.insertedId,
+      });
 
       res.status(200).json(newTour);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
-  });
+  }
+};
+
+export default connectMongo(handler);
