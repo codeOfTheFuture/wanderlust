@@ -37,7 +37,7 @@ const getServerSideProps: GetServerSideProps = async context => {
   //   `http://localhost:3000/api/tours/${tour_id}`
   // );
   res = await fetch(
-    `https://wanderlust-liart.vercel.app/api/tours/${tour_id}`
+    `/api/tours/${tour_id}`
   );
 
   const tour: Tour = await res.json();
@@ -46,7 +46,7 @@ const getServerSideProps: GetServerSideProps = async context => {
   //   `http://localhost:3000/api/users/${tour.guide_id.toString()}`
   // );
   res = await fetch(
-    `https://wanderlust-liart.vercel.app/api/users/${tour.guide_id.toString()}`
+    `/api/users/${tour.guide_id.toString()}`
   );
 
   const guide: User = await res.json();
@@ -55,7 +55,7 @@ const getServerSideProps: GetServerSideProps = async context => {
   //   `http://localhost:3000/api/tours`,
   // );
   res = await fetch(
-    `https://wanderlust-liart.vercel.app/api/tours`
+    `/api/tours`
   );
 
   const tours: Tour[] = await res.json();

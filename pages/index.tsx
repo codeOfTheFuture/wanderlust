@@ -51,14 +51,14 @@ const getServerSideProps: GetServerSideProps = async () => {
 
   // console.log(await res.json());
   const res: Response = await fetch(
-    "https://wanderlust-liart.vercel.app/api/tours"
+    "/api/tours"
   );
 
   const tours: Tour[] = await res.json();
 
   return {
     props: {
-      tours: JSON.parse(JSON.stringify(tours)),
+      tours: tours,
     },
   };
 };
