@@ -25,6 +25,7 @@ const TourDetails: React.FC<Props> = ({ tour, guide }) => {
     items_to_bring,
     tour_photos,
   } = tour;
+
   const { first_name, last_name, photo_url } = guide;
 
   return (

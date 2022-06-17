@@ -1,19 +1,20 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Layout from "../components/Layout";
+import { useEffect } from "react";
+import Layout from '../components/Layout';
 import SearchInput from "../components/SearchInput";
 import TourCardWrapper from "../components/TourCardWrapper";
 import { Tour } from "../types/types";
+import { getAllTours } from "./api/tours";
 
 interface Props {
   tours: Tour[];
+  a: string;
 }
 
-const Home: NextPage<Props> = ({ tours }) => {
+const Home: NextPage<Props> = ({ tours, a }) => {
   const { data: session } = useSession<boolean>();
-
-  console.log(session);
 
   return (
     <div className='relative font-poppins'>
@@ -46,21 +47,15 @@ const Home: NextPage<Props> = ({ tours }) => {
 
 export default Home;
 
-const getServerSideProps: GetServerSideProps = async () => {
-  // const res: Response = await fetch("http://localhost:3000/api/tours");
+export const getServerSideProps = async () => {
+  const tours: Tour[] = await getAllTours();
+  console.log(tours);
 
-  // console.log(await res.json());
-  const res: Response = await fetch(
-    "/api/tours"
-  );
-
-  const tours: Tour[] = await res.json();
-
+  // const a = 'Hello';
+  // return { props: { a } };
   return {
     props: {
-      tours: tours,
+      tours: JSON.parse(JSON.stringify(tours)),
     },
   };
 };
-
-export { getServerSideProps };

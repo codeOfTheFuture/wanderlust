@@ -5,6 +5,9 @@ import RecommendedTours from "../components/RecommendedTours";
 import TourDetails from "../components/TourDetails";
 import TourPageHeader from "../components/TourPageHeader";
 import { Tour, User } from "../types/types";
+import { getAllTours } from "./api/tours";
+import { getTourById } from "./api/tours/[tour_id]";
+import { getUserById } from "./api/users/[user_id]";
 
 interface Props {
   tours: Tour[];
@@ -15,12 +18,13 @@ interface Props {
 const Tour: NextPage<Props> = ({ tours, tour, guide }) => {
   const { title, tour_photos } = tour;
 
+  console.log(tour, guide, tours);
   return (
     <Layout>
       <div className='flex flex-col justify-center items-center gap-5'>
         <TourPageHeader backgroundImage={tour_photos[0]} title={title} />
         <TourDetails tour={tour} guide={guide} />
-        <div className="w-1/2 h-[1px] mx-auto bg-black"></div>
+        <div className='w-1/2 h-[1px] mx-auto bg-black'></div>
         <RecommendedTours tours={tours} />
       </div>
     </Layout>
@@ -31,34 +35,13 @@ export default Tour;
 
 const getServerSideProps: GetServerSideProps = async context => {
   const tour_id: string = context.query.tour as string;
-  let res: Response;
 
-  // res = await fetch(
-  //   `http://localhost:3000/api/tours/${tour_id}`
-  // );
-  res = await fetch(
-    `/api/tours/${tour_id}`
-  );
+  const tour: Tour = await getTourById(tour_id);
 
-  const tour: Tour = await res.json();
-
-  // res = await fetch(
-  //   `http://localhost:3000/api/users/${tour.guide_id.toString()}`
-  // );
-  res = await fetch(
-    `/api/users/${tour.guide_id.toString()}`
-  );
-
-  const guide: User = await res.json();
-
-  // res = await fetch(
-  //   `http://localhost:3000/api/tours`,
-  // );
-  res = await fetch(
-    `/api/tours`
-  );
-
-  const tours: Tour[] = await res.json();
+  const [tours, guide]: [Tour[], User] = await Promise.all([
+    getAllTours(),
+    getUserById(tour.guide_id.toString()),
+  ]);
 
   return {
     props: {
