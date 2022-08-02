@@ -1,11 +1,11 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import React from "react";
 import Layout from "../components/Layout";
 import RecommendedTours from "../components/RecommendedTours";
 import TourDetails from "../components/TourDetails";
 import TourPageHeader from "../components/TourPageHeader";
 import { Tour, User } from "../types/types";
-import { getAllTours } from "./api/tours";
+// import { getAllTours } from "./api/tours";
 import { getTourById } from "./api/tours/[tour_id]";
 import { getUserById } from "./api/users/[user_id]";
 

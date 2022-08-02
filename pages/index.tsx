@@ -1,19 +1,18 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useEffect } from "react";
 import Layout from '../components/Layout';
 import SearchInput from "../components/SearchInput";
 import TourCardWrapper from "../components/TourCardWrapper";
+import { connectToDatabase } from "../lib/mongodb";
 import { Tour } from "../types/types";
-import { getAllTours } from "./api/tours";
 
 interface Props {
   tours: Tour[];
   a: string;
 }
 
-const Home: NextPage<Props> = ({ tours, a }) => {
+const Home: NextPage<Props> = ({ tours }) => {
   const { data: session } = useSession<boolean>();
 
   return (
@@ -48,14 +47,13 @@ const Home: NextPage<Props> = ({ tours, a }) => {
 export default Home;
 
 export const getServerSideProps = async () => {
-  const tours: Tour[] = await getAllTours();
-  console.log(tours);
+  const { db } = await connectToDatabase();
 
-  // const a = 'Hello';
-  // return { props: { a } };
+  const tours = await db.collection("tours").find({}).toArray();
+
   return {
     props: {
       tours: JSON.parse(JSON.stringify(tours)),
     },
-  };
+  }
 };
