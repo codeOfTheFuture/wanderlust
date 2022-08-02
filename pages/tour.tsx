@@ -14,10 +14,10 @@ interface Props {
   guide: User;
 }
 
-const Tour: NextPage<Props> = ({ tours, tour, guide }) => {
-  const { title, tour_photos } = tour;
+const Tour: NextPage<Props> = () => {
+  // const { title, tour_photos } = tour;
 
-  console.log(tour, guide, tours);
+  // console.log(tour, guide, tours);
   return (
     <Layout>
       {/* <div className='flex flex-col justify-center items-center gap-5'>
