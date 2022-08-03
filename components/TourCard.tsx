@@ -10,10 +10,16 @@ const TourCard: React.FC<Props> = ({ tour }) => {
   const router: NextRouter = useRouter(),
     { _id, title, tour_photos, price } = tour;
 
+  const SINGLE_TOUR_URL = `/tour?tour=${_id}`;
+
+  const handleClick = () => {
+    router.push(SINGLE_TOUR_URL);
+  }
+
   return (
     <div
       className='relative flex flex-col justify-end items-center w-full h-[300px] bg-slate-200 cursor-pointer border-2 border-slate-700 shadow-md rounded-sm px-2'
-      onClick={() => router.push(`/tour?tour=${_id.toString()}`)}
+      onClick={handleClick}
     >
       {tour.tour_photos.length > 0 && (
         <Image

@@ -1,36 +1,22 @@
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { connectToDatabase } from "../../../../lib/mongodb";
 
-// // Get a tour by id - GET /api/tours/:id
-// export const getTourById = async (tourId: string) => {
-//   try {
-//     const tour = await Tours.findOne({
-//       _id: new ObjectId(tourId),
-//     });
-//     return tour;
-//   } catch (error: any) {
-//     return error;
-//   }
-// };
+// Get a tour by id - GET /api/tours/:id
+const getSingleTourById = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { db } = await connectToDatabase();
+  const { id } = req.query;
 
-// const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-//   const { method } = req;
-//   const { id } = req.query;
-//   try {
-//     switch (method) {
-//       case "GET":
-//         const tour = await getTourById(id as string);
-//         res.status(200).json(tour);
-//         break;
-//       default:
-//         res
-//           .status(405)
-//           .json({ statusCode: 405, message: `Method ${method} not allowed!` });
-//         break;
-//     }
-//   } catch (error: any) {
-//     res.status(500).json({ statusCode: 500, message: error.message });
-//   }
-// };
+  try {
+    const tour = await db
+      .collection("tours")
+      .findOne({ _id: new ObjectId(id as string) });
 
-// export default connectMongo(handler);
+    res.status(200).json(tour);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export default getSingleTourById;

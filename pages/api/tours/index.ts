@@ -3,7 +3,7 @@ import { connectToDatabase } from "../../../lib/mongodb";
 import { Tour } from "../../../types/types";
 
 // Get all tours - GET /api/tours
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const getAllTours = async (req: NextApiRequest, res: NextApiResponse) => {
   const { db } = await connectToDatabase();
 
   try {
@@ -16,4 +16,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default getAllTours;
