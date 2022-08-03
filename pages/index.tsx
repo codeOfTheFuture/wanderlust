@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Head from "next/head";
 import Layout from '../components/Layout';
 import SearchInput from "../components/SearchInput";
 import TourCardWrapper from "../components/TourCardWrapper";
@@ -17,10 +16,6 @@ const Home: NextPage<Props> = ({ tours }) => {
 
   return (
     <div className='relative font-poppins'>
-      <Head>
-        <title>Wanderlust</title>
-      </Head>
-
       <Layout>
         <div className='absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-bottom h-[80vh] w-full'></div>
 

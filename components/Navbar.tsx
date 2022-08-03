@@ -40,12 +40,12 @@ const Navbar: React.FC<Props> = props => {
 
   return (
     <nav
-      className={`fixed w-full top-0 left-0 z-50 flex justify-between items-center select-none text-white ${scrollPosition > 0 ? "bg-[#4285F4] shadow-xl" : "bg-transparent"
+      className={`fixed w-full top-0 left-0 px-4 py-2 z-50 flex justify-between items-center select-none text-white ${scrollPosition > 0 ? "bg-[#4285F4] shadow-xl" : "bg-transparent"
         }`}
     >
       <div>
         <Link href='/'>
-          <a className='text-xl md:text-2xl font-bold m-4'>Wanderlust</a>
+          <a className='text-xl md:text-2xl font-bold'>Wanderlust</a>
         </Link>
       </div>
 

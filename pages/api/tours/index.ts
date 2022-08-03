@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../lib/mongodb";
-import { Tour } from "../../../types/types";
 
 // Get all tours - GET /api/tours
 const getAllTours = async (req: NextApiRequest, res: NextApiResponse) => {
