@@ -1,6 +1,6 @@
-import { ObjectId } from "mongodb";
-import { GetServerSideProps, NextPage } from "next";
 import React from "react";
+import { GetServerSideProps, NextPage } from "next";
+import { ObjectId } from "mongodb";
 import Layout from "../components/Layout";
 import RecommendedTours from "../components/RecommendedTours";
 import TourDetails from "../components/TourDetails";
@@ -51,5 +51,5 @@ export const getServerSideProps: GetServerSideProps = async context => {
       guide: JSON.parse(JSON.stringify(guide)),
       tours: JSON.parse(JSON.stringify(tours)),
     },
-  };
+  } as { props: { tour: Tour; guide: User; tours: Tour[] } };
 };

@@ -3,3 +3,18 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold w-full mt-2 py-2 px-4;
+  }
+  .btn-danger {
+    @apply bg-red-500 hover:bg-red-700 text-white font-bold w-56 h-14 py-2 px-4;
+  }
+  .btn-lg {
+    @apply w-full;
+  }
+  .btn-md {
+    @apply w-56 h-14;
+  }
+}

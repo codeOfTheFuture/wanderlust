@@ -1,26 +1,27 @@
-import { signIn as SignInToProvider } from "next-auth/react";
+import React from "react";
 
 interface Props {
-  provider: any;
-  text: string;
-  btnStyles: string;
-  type: "submit" | undefined;
+  label: string;
+  className: string;
+  size: "btn-sm" | "btn-md" | "btn-lg";
+  type: "submit" | "button";
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
-const Button: React.FC<Props> = (props) => {
-  const { provider, btnStyles, type, text, } = props;
+const Button: React.FC<Props> = props => {
+  const { label, className, size, type, disabled, onClick } = props;
 
-  return provider ? (
-    <button className={btnStyles} type={type}
-      onClick={() => SignInToProvider(provider?.id, { callbackUrl: "/" })}
+  return (
+    <button
+      className={`${className} ${size}`}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
     >
-      {`Sign in with ${provider?.name}`}
-    </button>
-  ) : (
-    <button className={btnStyles} type={type}>
-      {text}
+      {label}
     </button>
   );
-}
+};
 
-export default Button
+export default Button;

@@ -1,4 +1,5 @@
-import type { NextPage } from "next";
+import React from "react";
+import type { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Layout from '../components/Layout';
 import SearchInput from "../components/SearchInput";
@@ -8,11 +9,10 @@ import { Tour } from "../types/types";
 
 interface Props {
   tours: Tour[];
-  a: string;
 }
 
 const Home: NextPage<Props> = ({ tours }) => {
-  const { data: session } = useSession<boolean>();
+  const { data: session } = useSession();
 
   return (
     <div className='relative font-poppins'>
@@ -41,7 +41,7 @@ const Home: NextPage<Props> = ({ tours }) => {
 
 export default Home;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { db } = await connectToDatabase();
 
   const tours = await db.collection("tours").find({}).toArray();
@@ -50,5 +50,5 @@ export const getServerSideProps = async () => {
     props: {
       tours: JSON.parse(JSON.stringify(tours)),
     },
-  }
+  } as { props: { tours: Tour[] } };
 };

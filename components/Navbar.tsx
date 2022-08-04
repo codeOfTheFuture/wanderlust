@@ -70,14 +70,14 @@ const Navbar: React.FC<Props> = props => {
       )}
       {router.pathname === "/auth/signin" && (
         <Link href='/auth/signup'>
-          <a className='text-lg'>Sign up</a>
+          <a className='text-lg'>Sign Up</a>
         </Link>
       )}
       {router.pathname !== "/auth/signup" &&
         router.pathname !== "/auth/signin" &&
         !session && (
           <Link href='/auth/signin'>
-            <a className='text-lg'>Sign in</a>
+            <a className='text-lg'>Sign In</a>
           </Link>
         )}
       {router.pathname !== "/auth/signup" &&
