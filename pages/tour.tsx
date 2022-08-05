@@ -22,7 +22,7 @@ const Tour: NextPage<Props> = ({ tour, tours, guide }) => {
       <div className='flex flex-col justify-center items-center gap-5'>
         <TourPageHeader backgroundImage={tour_photos[0]} title={title} />
         <TourDetails tour={tour} guide={guide} />
-        <div className='w-1/2 h-[1px] mx-auto bg-black'></div>
+        <div className='w-11/12 xl:w-1/2 h-[1px] mx-auto bg-black'></div>
         <RecommendedTours tours={tours} />
       </div>
     </Layout>

@@ -29,8 +29,8 @@ const TourDetails: React.FC<Props> = ({ tour, guide }) => {
   const { first_name, last_name, photo_url } = guide;
 
   return (
-    <div className='grid grid-cols-3 w-1/2 mx-auto mt-5'>
-      <div className='col-span-2 flex flex-col gap-6 p-5'>
+    <div className='grid grid-cols-1 lg:grid-cols-3 w-full xl:w-1/2 mx-auto mt-5'>
+      <div className='col-span-1 md:col-span-2 flex flex-col gap-6 p-5'>
         <h2 className='text-lg font-semibold ml-[3.5rem]'>About this tour</h2>
         <div className='flex items-center'>
           <InformationCircleIcon className='w-20 h-20' />
