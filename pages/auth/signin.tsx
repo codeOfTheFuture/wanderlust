@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { getProviders } from "next-auth/react";
 import AuthLayout from "../../components/AuthLayout";
 import LoginForm from "../../components/LoginForm";
@@ -12,16 +12,16 @@ const SignIn: NextPage<Props> = ({ providers }) => {
     <AuthLayout>
       <LoginForm providers={providers} />
     </AuthLayout>
-  )
-}
+  );
+};
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
   const providers = await getProviders();
   return {
     props: {
-      providers: providers
-    }
+      providers: providers,
+    },
   };
-}
+};
 
 export default SignIn;
