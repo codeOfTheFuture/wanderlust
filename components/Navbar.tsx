@@ -29,15 +29,6 @@ const Navbar: React.FC<Props> = props => {
     image = user?.image as string,
     firstName: string = name?.split(" ")[0];
 
-  const profileLinks = [
-    "My tours",
-    "Booked tours",
-    "Messages",
-    "Favorites",
-    "Settings",
-    "Logout",
-  ];
-
   return (
     <nav
       className={`fixed w-full top-0 left-0 px-4 py-2 z-50 flex justify-between items-center select-none text-white ${scrollPosition > 0 ? "bg-[#4285F4] shadow-xl" : "bg-transparent"
@@ -100,7 +91,7 @@ const Navbar: React.FC<Props> = props => {
                   className='rounded-full'
                 />
               </div>
-              <NavDropdown dropdownLinks={profileLinks} open={profileDropdownOpen} />
+              <NavDropdown open={profileDropdownOpen} />
             </div>
           </div>
         )}
