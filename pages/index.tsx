@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import SearchInput from "../components/SearchInput";
 import TourCardWrapper from "../components/TourCardWrapper";
 import { connectToDatabase } from "../lib/mongodb";
-import { Tour } from "../types/types";
+import { Tour } from "../types/typings";
 
 interface Props {
   tours: Tour[];

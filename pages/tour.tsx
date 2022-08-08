@@ -6,7 +6,7 @@ import RecommendedTours from "../components/RecommendedTours";
 import TourDetails from "../components/TourDetails";
 import TourPageHeader from "../components/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
-import { Tour, User } from "../types/types";
+import { Tour, User } from "../types/typings";
 
 interface Props {
   tours: Tour[];
@@ -19,10 +19,10 @@ const Tour: NextPage<Props> = ({ tour, tours, guide }) => {
 
   return (
     <Layout>
-      <div className='flex flex-col justify-center items-center gap-5'>
+      <div className="flex flex-col justify-center items-center gap-5">
         <TourPageHeader backgroundImage={tour_photos[0]} title={title} />
         <TourDetails tour={tour} guide={guide} />
-        <div className='w-11/12 xl:w-1/2 h-[1px] mx-auto bg-black'></div>
+        <div className="w-11/12 xl:w-1/2 h-[1px] mx-auto bg-black"></div>
         <RecommendedTours tours={tours} />
       </div>
     </Layout>

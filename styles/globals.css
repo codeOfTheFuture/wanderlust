@@ -17,4 +17,7 @@
   .btn-md {
     @apply w-56 h-14;
   }
+  .nav-dropdown-link {
+    @apply flex justify-center py-2 border-y text-slate-800 w-full cursor-pointer hover:bg-slate-100;
+  }
 }

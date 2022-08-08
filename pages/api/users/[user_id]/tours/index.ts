@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { Tour } from "../../../../../types/types";
+import { Tour } from "../../../../../types/typings";
 
 // export const createTour = async (req: NextApiRequest, res: NextApiResponse) => {
 //   const tour: Tour = {

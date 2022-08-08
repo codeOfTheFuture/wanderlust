@@ -1,5 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { User } from "../../../types/types";
+import { User } from "../../../types/typings";
+
+// const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
+//   try {
+//     const user: User = {
+//       offered_tours: [],
+//       ...req.body
+//     }
+
+//     const createdUser = await Users.create(user);
+//   } catch (error: any) {
+//     res.status(500).json({ message: error.message });
+//   }
+// }
 
 // export const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
 //   try {

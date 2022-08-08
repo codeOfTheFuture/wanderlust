@@ -2,15 +2,14 @@ import { ObjectId } from "mongodb";
 
 interface User {
   _id: ObjectId;
-  first_name: string;
-  last_name: string;
-  email?: string;
+  name: string;
+  email: string;
+  image?: string;
   address?: string;
   city?: string;
   state?: string;
   zip?: string;
   phone_number?: string;
-  photo_url?: string;
   offered_tours?: Tour[];
   booked_tours?: Tour[];
   favorite_tours?: Tour[];
