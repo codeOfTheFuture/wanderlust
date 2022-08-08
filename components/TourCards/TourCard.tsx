@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
-import { Tour } from "../types/typings";
+import { Tour } from "../../types/typings";
 
 interface Props {
   tour: Tour;

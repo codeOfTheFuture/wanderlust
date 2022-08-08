@@ -1,4 +1,4 @@
-import { Tour, User } from "../types/typings";
+import { Tour, User } from "../../types/typings";
 import {
   InformationCircleIcon,
   ClockIcon,

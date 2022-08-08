@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
-import Button from "./Button";
+import Button from "../Button";
 import LoginFormGroup from "./LoginFormGroup";
 import LoginHeading from "./LoginHeading";
 

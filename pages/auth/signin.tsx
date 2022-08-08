@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import { getProviders } from "next-auth/react";
-import AuthLayout from "../../components/AuthLayout";
-import LoginForm from "../../components/LoginForm";
+import AuthLayout from "../../components/Layouts/AuthLayout";
+import LoginForm from "../../components/AuthForm/LoginForm";
 
 interface Props {
   providers: any;

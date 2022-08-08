@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import LoginImage from "./LoginImage";
-import Navbar from "./Nav/Navbar";
+import LoginImage from "../AuthForm/LoginImage";
+import Navbar from "../Nav/Navbar";
 
 interface Props {
   children: React.ReactNode;

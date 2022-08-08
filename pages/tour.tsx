@@ -1,9 +1,9 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { ObjectId } from "mongodb";
-import Layout from "../components/Layout";
-import RecommendedTours from "../components/RecommendedTours";
-import TourDetails from "../components/TourDetails";
+import Layout from "../components/Layouts/Layout";
+import RecommendedTours from "../components/TourCards/RecommendedTours";
+import TourDetails from "../components/TourCards/TourDetails";
 import TourPageHeader from "../components/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour, User } from "../types/typings";

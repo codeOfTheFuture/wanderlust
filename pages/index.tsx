@@ -1,9 +1,9 @@
 import React from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Layout from '../components/Layout';
+import Layout from '../components/Layouts/Layout';
 import SearchInput from "../components/SearchInput";
-import TourCardWrapper from "../components/TourCardWrapper";
+import TourCardWrapper from "../components/TourCards/TourCardWrapper";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour } from "../types/typings";
 

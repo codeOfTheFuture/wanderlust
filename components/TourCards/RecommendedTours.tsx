@@ -1,4 +1,4 @@
-import { Tour } from "../types/typings";
+import { Tour } from "../../types/typings";
 import TourCard from "./TourCard";
 
 interface Props {
