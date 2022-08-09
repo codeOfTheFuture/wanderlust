@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import { Tour, User } from "../../types/typings";
 import {
   InformationCircleIcon,
@@ -15,7 +16,7 @@ interface Props {
   guide: User;
 }
 
-const TourDetails: React.FC<Props> = ({ tour, guide }) => {
+const TourDetails: FC<Props> = ({ tour, guide }) => {
   const {
     title,
     description,

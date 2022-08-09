@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 interface Props {
   label: string;
@@ -9,7 +9,7 @@ interface Props {
   onClick?: () => void;
 }
 
-const Button: React.FC<Props> = props => {
+const Button: FC<Props> = props => {
   const { label, className, size, type, disabled, onClick } = props;
 
   return (

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import NavDropdown from "./NavDropdown";
 import { User } from '../../types/typings';
 
-const NavProfile: React.FC = () => {
+const NavProfile: FC = () => {
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
   const { data: session } = useSession(),

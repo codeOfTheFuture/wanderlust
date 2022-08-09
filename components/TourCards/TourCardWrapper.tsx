@@ -1,12 +1,14 @@
-import { Tour } from "../../types/typings";
+import React, { FC } from "react";
 import TourCard from "./TourCard";
+import { Tour } from "../../types/typings";
 
 interface Props {
   tours: Tour[];
 }
 
-const TourCardWrapper: React.FC<Props> = ({ tours }) => {
+const TourCardWrapper: FC<Props> = ({ tours }) => {
   const page = 1;
+
   return (
     <div className="flex flex-col w-11/12 sm:w-5/6 lg:w-3/4 mt-20 mx-auto">
       <h3 className="text-2xl mb-10">Tour Results</h3>
@@ -15,7 +17,7 @@ const TourCardWrapper: React.FC<Props> = ({ tours }) => {
           <TourCard key={tour._id.toString()} tour={tour} />
         ))}
       </div>
-      <div className="flex justify-between items-center my-12 w-full">
+      <div className="flex justify-between items-center mt-12 mb-24 w-full">
         <div className={`${page === 1 && "opacity-0"}`}>Previous</div>
         <span className="font-semibold cursor-pointer">1</span>
         <div className="font-semibold cursor-pointer">Next</div>

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const AuthLink: React.FC = () => {
+const AuthLink: FC = () => {
   const router = useRouter();
 
   return (
@@ -23,7 +23,7 @@ const AuthLink: React.FC = () => {
         </div>
       )}
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default AuthLink;

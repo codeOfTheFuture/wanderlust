@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
 import { Tour } from "../../types/typings";
@@ -6,7 +7,7 @@ interface Props {
   tour: Tour;
 }
 
-const TourCard: React.FC<Props> = ({ tour }) => {
+const TourCard: FC<Props> = ({ tour }) => {
   const router: NextRouter = useRouter(),
     { _id, title, tour_photos, price } = tour;
 

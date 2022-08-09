@@ -1,12 +1,12 @@
+import React, { FC } from "react";
 import Link from "next/link";
-import React from "react";
 
 interface Props {
   label: string;
   link: string;
 }
 
-const NavDropdownLink: React.FC<Props> = props => {
+const NavDropdownLink: FC<Props> = props => {
   const { label, link } = props;
 
   return (

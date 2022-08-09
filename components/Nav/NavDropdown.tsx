@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import { signOut } from "next-auth/react";
 import NavDropdownLink from "./NavDropdownLink";
 
@@ -6,7 +7,7 @@ interface Props {
   setToggleDropdown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavDropdown: React.FC<Props> = props => {
+const NavDropdown: FC<Props> = props => {
   const { toggleDropdown, setToggleDropdown } = props;
 
   const logOut = () => {
@@ -22,7 +23,7 @@ const NavDropdown: React.FC<Props> = props => {
       <NavDropdownLink label="My tours" link="/my-tours" />
       <NavDropdownLink label="Booked tours" link="/booked-tours" />
       <NavDropdownLink label="Messages" link="/messages" />
-      <NavDropdownLink label="Favorites" link='/favorites' />
+      <NavDropdownLink label="Favorites" link="/favorites" />
       <NavDropdownLink label="Settings" link="/settings" />
       <div className="nav-dropdown-link" onClick={logOut}>
         Logout

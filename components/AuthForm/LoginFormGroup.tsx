@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 
 interface Props {
   id: string;
@@ -5,16 +6,16 @@ interface Props {
   type: string;
 }
 
-const LoginFormGroup: React.FC<Props> = (props) => {
+const LoginFormGroup: FC<Props> = props => {
   const { id, text, type } = props;
 
   return (
-    <div className='flex flex-col'>
+    <div className="flex flex-col">
       <label htmlFor={id}>{text}</label>
-      <input id={id} type={type} placeholder={text} className='p-2' />
+      <input id={id} type={type} placeholder={text} className="p-2" />
       <hr />
     </div>
-  )
-}
+  );
+};
 
 export default LoginFormGroup;

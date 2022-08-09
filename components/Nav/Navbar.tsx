@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import NavLogo from "./NavLogo";
 import NavCenter from "./NavCenter";
 import NavRight from "./NavRight";
@@ -7,7 +7,7 @@ interface Props {
   scrollPosition: number;
 }
 
-const Navbar: React.FC<Props> = props => {
+const Navbar: FC<Props> = props => {
   const { scrollPosition } = props;
 
   return (

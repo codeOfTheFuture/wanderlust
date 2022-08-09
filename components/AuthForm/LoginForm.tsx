@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
@@ -9,7 +10,7 @@ interface Props {
   providers: any;
 }
 
-const LoginForm: React.FC<Props> = ({ providers }) => {
+const LoginForm: FC<Props> = ({ providers }) => {
   const Router = useRouter(),
     Btn_Label = Router.pathname === "/auth/signup" ? "Sign Up" : "Sign In",
     Facebook_Provider_NAME = `${Btn_Label} with ${providers.facebook.name}`,
@@ -44,7 +45,9 @@ const LoginForm: React.FC<Props> = ({ providers }) => {
           className="btn-primary"
           size="btn-md"
           type="button"
-          onClick={() => signIn(Facebook_Provider_ID, { callbackUrl: "/", mode: "redirect" })}
+          onClick={() =>
+            signIn(Facebook_Provider_ID, { callbackUrl: "/", mode: "redirect" })
+          }
         />
         <Button
           label={Google_Provider_NAME}

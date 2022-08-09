@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 
-const NavCenter: React.FC = () => {
+const NavCenter: FC = () => {
   const router = useRouter();
 
   return (

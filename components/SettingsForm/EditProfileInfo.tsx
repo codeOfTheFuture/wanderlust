@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 
-const EditProfileInfo: React.FC = () => {
+const EditProfileInfo: FC = () => {
   return (
     <div className="border border-blue-500 col-span-3 w-full h-full">
       <h1>Edit Your Information</h1>

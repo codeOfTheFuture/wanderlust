@@ -1,7 +1,7 @@
+import React, { FC, useRef } from "react";
 import { UserIcon } from "@heroicons/react/solid";
-import React, { useRef } from "react";
 
-const ProfilePhotoPicker: React.FC = () => {
+const ProfilePhotoPicker: FC = () => {
   const profilePhotoPicker = useRef<HTMLInputElement>(null);
 
   return (

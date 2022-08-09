@@ -1,6 +1,6 @@
-import React from "react"
+import React, { FC } from "react"
 
-const SearchInput: React.FC = () => {
+const SearchInput: FC = () => {
   return (
     <div className="absolute -bottom-[2.4rem] flex w-full h-16 sm:h-20 shadow-md">
       <input type="text" className="relative w-full h-full px-20 text-lg border border-black" />
