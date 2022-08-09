@@ -11,6 +11,7 @@ module.exports = {
       backgroundImage: {
         "mountain-jump": "url(/assets/images/jumping-mountain.png)",
         "login-blurred": "url(/assets/images/login-blurred.png)",
+        "settings-blurred": "url(/assets/images/canyons-blurred.png)",
       },
     },
   },

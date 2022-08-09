@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import React from "react";
 import LoginImage from "../AuthForm/LoginImage";
 import Navbar from "../Nav/Navbar";
 
@@ -7,7 +7,6 @@ interface Props {
 }
 
 const AuthLayout: React.FC<Props> = ({ children }) => {
-  const router = useRouter();
 
   return (
     <div className='w-full h-screen bg-login-blurred bg-cover lg:bg-center lg:bg-no-repeat relative'>
