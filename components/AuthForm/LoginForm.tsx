@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
 import Button from "../Button";
-import LoginFormGroup from "./LoginFormGroup";
+import FormInput from "../FormInput";
 import LoginHeading from "./LoginHeading";
 
 interface Props {
@@ -24,8 +24,8 @@ const LoginForm: FC<Props> = ({ providers }) => {
 
       <form className="flex flex-col mt-6 gap-1 w-full">
         <div className="w-full lg:w-5/6 mx-auto p-5">
-          <LoginFormGroup id="email" text="Email" type="text" />
-          <LoginFormGroup id="password" text="Password" type="password" />
+          <FormInput name="email" label="Email" type="email" />
+          <FormInput name="password" label="Password" type="password" />
           <Button
             label={Btn_Label}
             className="btn-primary"
