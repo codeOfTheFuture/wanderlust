@@ -2,10 +2,10 @@ import { RefObject, useEffect, useRef } from "react";
 
 function useEventListener(
   eventType: string,
-  callback: (event: Event) => void,
+  callback: (e: Event) => void,
   element = window
 ) {
-  const callbackRef = useRef(callback);
+  const callbackRef = useRef<(e: Event) => void>(callback);
 
   useEffect(() => {
     callbackRef.current = callback;

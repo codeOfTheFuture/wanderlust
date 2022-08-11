@@ -6,16 +6,22 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold w-full mt-2 py-2 px-4;
+    @apply bg-primary-color text-light-text hover:bg-primary-dark-color;
   }
-  .btn-danger {
-    @apply bg-red-500 hover:bg-red-700 text-white font-bold w-56 h-14 py-2 px-4;
+  .btn-error {
+    @apply bg-error-color text-light-text hover:bg-error-dark-color;
+  }
+  .btn-xl {
+    @apply w-full font-bold p-2 rounded-sm shadow-md active:shadow-lg;
   }
   .btn-lg {
-    @apply w-full;
+    @apply font-bold px-10 py-4 rounded-sm shadow-md active:shadow-lg;
   }
   .btn-md {
-    @apply w-56 h-14;
+    @apply font-bold px-8 py-4 rounded-sm shadow-md active:shadow-lg;
+  }
+  .btn-sm {
+    @apply font-bold px-6 py-2 rounded-sm shadow-md active:shadow-lg;
   }
   .nav-dropdown-link {
     @apply flex justify-center py-2 border-y text-slate-800 w-full cursor-pointer hover:bg-slate-100;

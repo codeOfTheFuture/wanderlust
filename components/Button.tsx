@@ -1,25 +1,25 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 
 interface Props {
-  label: string;
-  className: string;
-  size: "btn-sm" | "btn-md" | "btn-lg";
-  type: "submit" | "button";
+  children: ReactNode;
+  color: "btn-primary" | "btn-error";
+  size: "btn-xl" | "btn-lg" | "btn-md" | "btn-sm";
+  type: "submit" | "button" | "reset";
   disabled?: boolean;
   onClick?: () => void;
 }
 
 const Button: FC<Props> = props => {
-  const { label, className, size, type, disabled, onClick } = props;
+  const { children, color, size, type, disabled, onClick } = props;
 
   return (
     <button
-      className={`${className} ${size}`}
+      className={`${color} ${size}`}
       type={type}
-      onClick={onClick}
       disabled={disabled}
+      onClick={onClick}
     >
-      {label}
+      {children}
     </button>
   );
 };
