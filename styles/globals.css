@@ -12,13 +12,13 @@
     @apply bg-error-color text-light-text hover:bg-error-dark-color;
   }
   .btn-xl {
-    @apply w-full font-bold p-2 rounded-sm shadow-md active:shadow-lg;
+    @apply w-full font-bold p-4 rounded-sm shadow-md active:shadow-lg;
   }
   .btn-lg {
     @apply font-bold px-10 py-4 rounded-sm shadow-md active:shadow-lg;
   }
   .btn-md {
-    @apply font-bold px-8 py-4 rounded-sm shadow-md active:shadow-lg;
+    @apply font-bold px-8 py-2 rounded-sm shadow-md active:shadow-lg;
   }
   .btn-sm {
     @apply font-bold px-6 py-2 rounded-sm shadow-md active:shadow-lg;

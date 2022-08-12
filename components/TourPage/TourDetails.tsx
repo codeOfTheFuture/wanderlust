@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/solid";
 import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
+import Button from "../Button";
 
 interface Props {
   tour: Tour;
@@ -79,9 +80,13 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
             <p>US $ {price}</p>
             <p>per person</p>
           </div>
-          <button className="px-8 py-2 bg-[#4285F4] text-white font-semibold rounded-sm">
+          <Button
+            color="btn-primary"
+            size="btn-md"
+            type="button"
+          >
             Book Now
-          </button>
+          </Button>
         </div>
         <div className="bg-black h-[1px] w-full"></div>
         <div className="flex items-center gap-2 cursor-pointer">
@@ -102,7 +107,7 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <p className="text-lg font-semibold">Message the guide</p>
-          <ChatAltIcon className="w-14 h-14 text-[#4285F4]" />
+          <ChatAltIcon className="w-14 h-14 text-primary-color" />
         </div>
       </div>
     </div>

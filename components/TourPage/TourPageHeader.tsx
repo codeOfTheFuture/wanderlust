@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import Image from "next/image";
+import Button from "../Button";
 
 interface Props {
   backgroundImage: string;
@@ -8,7 +9,7 @@ interface Props {
 
 const TourPageHeader: FC<Props> = ({ backgroundImage, title }) => {
   return (
-    <header className="relative w-full h-[50vh]">
+    <header className="relative flex justify-center items-center w-full h-[50vh]">
       <Image
         src={backgroundImage}
         alt={title}
@@ -16,11 +17,15 @@ const TourPageHeader: FC<Props> = ({ backgroundImage, title }) => {
         className="object-cover object-center"
       />
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="absolute inset-0 flex flex-col gap-4 items-start justify-center text-white">
-        <h1 className="text-4xl font-bold ml-32">{title}</h1>
-        <button className="text-lg font-semibold px-5 py-2 bg-[#4285F4] ml-32">
+      <div className="absolute lg:top-40 lg:left-60 flex flex-col gap-4 items-start">
+        <h1 className="text-4xl font-bold text-light-text">{title}</h1>
+        <Button
+          color="btn-primary"
+          size="btn-lg"
+          type="button"
+        >
           View Images
-        </button>
+        </Button>
       </div>
     </header>
   );

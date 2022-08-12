@@ -11,14 +11,14 @@ const AuthLink: FC = () => {
         <div className="flex mt-4 text-lg">
           <span>Already have an account? </span>
           <Link href={"/auth/signin"}>
-            <a className="text-blue-500 hover:text-blue-700 ml-2">Sign in</a>
+            <a className="text-blue-500 hover:text-blue-700 ml-2">Sign In</a>
           </Link>
         </div>
       ) : (
         <div className="flex mt-4 text-lg">
           <span>Don&apos;t have an account?</span>
           <Link href={"/auth/signup"}>
-            <a className="text-blue-500 hover:text-blue-700 ml-2">Sign up</a>
+            <a className="text-blue-500 hover:text-blue-700 ml-2">Sign Up</a>
           </Link>
         </div>
       )}

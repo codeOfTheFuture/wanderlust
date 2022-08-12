@@ -3,8 +3,8 @@ import { GetServerSideProps, NextPage } from "next";
 import { ObjectId } from "mongodb";
 import Layout from "../components/Layouts/Layout";
 import RecommendedTours from "../components/TourCards/RecommendedTours";
-import TourDetails from "../components/TourCards/TourDetails";
-import TourPageHeader from "../components/TourPageHeader";
+import TourDetails from "../components/TourPage/TourDetails";
+import TourPageHeader from "../components/TourPage/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour, User } from "../types/typings";
 

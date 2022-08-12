@@ -23,15 +23,12 @@ const LoginForm: FC<Props> = ({ providers }) => {
       <LoginHeading text={Btn_Label + " to Wanderlust"} />
 
       <form className="flex flex-col mt-6 gap-1 w-full">
-        <div className="w-full lg:w-5/6 mx-auto p-5">
+        <div className="flex flex-col justify-evenly items-center gap-4 w-full lg:w-5/6 mx-auto">
           <FormInput name="email" label="Email" type="email" />
           <FormInput name="password" label="Password" type="password" />
-          <Button
-            label={Btn_Label}
-            className="btn-primary"
-            size="btn-lg"
-            type="submit"
-          />
+          <Button color="btn-primary" size="btn-md" type="submit">
+            {Btn_Label}
+          </Button>
         </div>
         <div className="flex items-center gap-3 w-full mx-5">
           <span className="h-[1px] w-2/5 bg-gray-400"></span>
@@ -41,21 +38,21 @@ const LoginForm: FC<Props> = ({ providers }) => {
       </form>
       <div className="flex flex-col lg:flex-row justify-center items-center w-full mt-6 gap-4">
         <Button
-          label={Facebook_Provider_NAME}
-          className="btn-primary"
-          size="btn-md"
+          color="btn-primary"
+          size="btn-xl"
           type="button"
-          onClick={() =>
-            signIn(Facebook_Provider_ID, { callbackUrl: "/", mode: "redirect" })
-          }
-        />
+          onClick={() => signIn(Facebook_Provider_ID, { callbackUrl: "/" })}
+        >
+          {Facebook_Provider_NAME}
+        </Button>
         <Button
-          label={Google_Provider_NAME}
-          className="btn-danger"
-          size="btn-md"
+          color="btn-error"
+          size="btn-xl"
           type="button"
-          onClick={() => signIn(Google_Provider_ID)}
-        />
+          onClick={() => signIn(Google_Provider_ID, { callbackUrl: "/" })}
+        >
+          {Google_Provider_NAME}
+        </Button>
       </div>
       <AuthLink />
     </div>

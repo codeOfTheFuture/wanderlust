@@ -5,7 +5,7 @@ import FormInput from "../FormInput";
 
 const EditProfileInfo: FC = () => {
   return (
-    <div className="col-span-3 flex flex-col justify-evenly items-center w-full h-full p-10">
+    <div className="col-span-1 lg:col-span-3 flex flex-col justify-evenly items-center w-full h-full p-2 lg:p-10">
       <h1 className="text-xl font-semibold text-primary-color">
         Edit Your Information
       </h1>
