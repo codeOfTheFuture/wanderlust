@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Footer: FC = () => {
   return (
-    <div className="absolute bottom-0 flex justify-between items-center z-5 w-full p-5 border-y bg-slate-100 border-slate-800">
+    <div className="flex justify-between items-center z-5 w-full p-5 border-y bg-slate-100 border-slate-800">
       <span>&copy; Wanderlust 2022</span>
 
       <div className="flex gap-6">

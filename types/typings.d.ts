@@ -31,4 +31,6 @@ interface Tour {
   tour_photos: string[];
 }
 
-export { type User, type Tour };
+type HandleScroll = () => void;
+
+export { type User, type Tour, type HandleScroll };

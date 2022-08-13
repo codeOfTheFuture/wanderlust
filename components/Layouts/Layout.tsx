@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useEffect, useState } from "react";
+import { HandleScroll } from "../../types/typings";
 import Footer from "../Footer";
 import Navbar from "../Nav/Navbar";
 
@@ -7,7 +8,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-type HandleScroll = () => void;
+
 
 const Layout: FC<Props> = ({ children }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
