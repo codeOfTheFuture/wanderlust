@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, KeyboardEvent, useRef } from "react";
 
 interface Props {
   name: "description" | "what-to-bring";
@@ -6,32 +6,34 @@ interface Props {
 }
 
 const FormTextArea: FC<Props> = props => {
-  const { name, label } = props;
-  const text = useRef<HTMLTextAreaElement>(null);
-  const BulletPoint = "•";
+  const { name, label } = props,
+    Bullet_Point = "•",
+    text = useRef<HTMLTextAreaElement>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((name === "what-to-bring" && e.key) === "Enter") {
-      text!.current!.value = `${text.current?.value}\n${" " + BulletPoint} `;
-      e.preventDefault();
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (name === "what-to-bring" && e.key === "Enter") {
       e.stopPropagation();
+      e.preventDefault();
+      text!.current!.value = `${text.current?.value}\n${" " + Bullet_Point} `;
     }
   };
 
   return (
     <div className="flex flex-col">
-      <label htmlFor={name} hidden>{label}</label>
+      <label htmlFor={name} hidden>
+        {label}
+      </label>
       <textarea
         name={name}
         id={name}
-        cols={50}
+        cols={65}
         rows={6}
         placeholder={label}
         className="border border-blue-500"
         ref={text}
         onKeyDown={handleKeyDown}
       >
-        {name === "what-to-bring" ? " " + BulletPoint + " " : ""}
+        {name === "what-to-bring" ? ` ${Bullet_Point} ` : ""}
       </textarea>
     </div>
   );
