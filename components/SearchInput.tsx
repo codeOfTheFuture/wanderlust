@@ -7,7 +7,7 @@ const SearchInput: FC = () => {
         type="text"
         className="relative w-full h-full pl-10 pr-[48rem] text-lg border border-primary-text focus:outline-none"
       />
-      <div className="absolute top-2 right-2 flex justify-center items-center cursor-default w-28 h-12 sm:w-32 sm:h-16 bg-primary-color text-light-text text-lg border border-primary-text">
+      <div className="absolute top-2 right-2 flex justify-center items-center cursor-default w-20 h-12 sm:w-32 sm:h-16 bg-primary-color text-light-text text-lg border border-primary-text">
         Search
       </div>
     </div>
