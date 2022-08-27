@@ -20,8 +20,8 @@ const NavDropdown: FC<Props> = props => {
       className={`absolute flex flex-col top-12 right-1 w-44 bg-white bg-opacity-60 rounded-sm p-2 mx-1 ${toggleDropdown ? "opacity-100" : "opacity-0"
         }`}
     >
-      <NavDropdownLink label="My tours" link="/my-tours" />
-      <NavDropdownLink label="Booked tours" link="/booked-tours" />
+      <NavDropdownLink label="Offered Tours" link="/offered-tours" />
+      <NavDropdownLink label="Booked Tours" link="/booked-tours" />
       <NavDropdownLink label="Messages" link="/messages" />
       <NavDropdownLink label="Favorites" link="/favorites" />
       <NavDropdownLink label="Settings" link="/settings" />

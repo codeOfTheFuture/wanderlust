@@ -8,8 +8,9 @@ interface User {
   address?: string;
   city?: string;
   state?: string;
-  zip?: string;
+  zip_code?: string;
   phone_number?: string;
+  guide?: boolean;
   offered_tours?: Tour[];
   booked_tours?: Tour[];
   favorite_tours?: Tour[];

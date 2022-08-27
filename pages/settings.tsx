@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import SettingsForm from "../components/SettingsForm/SettingsForm";
 import Layout from "../components/Layouts/Layout";
 
-const settings: NextPage = () => {
+const Settings: NextPage = () => {
   return (
     <Layout>
       <div className="flex justify-center items-center w-full h-screen bg-settings-blurred bg-cover lg:bg-center lg:bg-no-repeat relative">
@@ -14,4 +14,4 @@ const settings: NextPage = () => {
   );
 };
 
-export default settings;
+export default Settings;

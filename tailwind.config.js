@@ -12,6 +12,7 @@ module.exports = {
         "mountain-jump": "url(/assets/images/jumping-mountain.png)",
         "login-blurred": "url(/assets/images/login-blurred.png)",
         "settings-blurred": "url(/assets/images/canyons-blurred.png)",
+        "running-in-forest": "url(/assets/images/running-in-forest.jpg)",
       },
       colors: {
         "primary-color": "#2196F3",
