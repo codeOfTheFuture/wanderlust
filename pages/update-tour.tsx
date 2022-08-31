@@ -1,29 +1,26 @@
-import React from "react";
-import { GetServerSideProps, NextPage } from "next";
-import SettingsForm from "../components/SettingsForm/SettingsForm";
+import React, { useState } from "react";
 import Layout from "../components/Layouts/Layout";
+import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
+import TourForm from "../components/TourForm";
 
 interface Props {
   user: User | null;
 }
 
-const Settings: NextPage<Props> = props => {
+const UpdateTour: NextPage<Props> = props => {
   const { user } = props;
 
   return (
     <Layout user={user}>
-      <div className="flex justify-center items-center w-full h-screen bg-settings-blurred bg-cover lg:bg-center lg:bg-no-repeat relative">
-        <div className="absolute w-full h-full bg-black opacity-30"></div>
-        <SettingsForm />
-      </div>
+      <TourForm user={user} />
     </Layout>
   );
 };
 
-export default Settings;
+export default UpdateTour;
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const session = await unstable_getServerSession(

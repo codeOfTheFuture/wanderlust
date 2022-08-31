@@ -1,16 +1,18 @@
 import React, { FC } from "react";
 import { useEffect, useState } from "react";
-import { HandleScroll } from "../../types/typings";
+import { User, HandleScroll } from "../../types/typings";
 import Footer from "../Footer";
 import Navbar from "../Nav/Navbar";
 
 interface Props {
+  user: User | null;
   children: React.ReactNode;
 }
 
 
 
-const Layout: FC<Props> = ({ children }) => {
+const Layout: FC<Props> = props => {
+  const { user, children } = props;
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ const Layout: FC<Props> = ({ children }) => {
 
   return (
     <>
-      <Navbar scrollPosition={scrollPosition} />
+      <Navbar user={user} scrollPosition={scrollPosition} />
       <main>{children}</main>
       <Footer />
     </>

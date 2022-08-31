@@ -7,18 +7,22 @@ import TourDetails from "../components/TourPage/TourDetails";
 import TourPageHeader from "../components/TourPage/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour, User } from "../types/typings";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 interface Props {
+  user: User | null;
   tours: Tour[];
   tour: Tour;
   guide: User;
 }
 
-const Tour: NextPage<Props> = ({ tour, tours, guide }) => {
-  const { title, tour_photos } = tour;
+const Tour: NextPage<Props> = props => {
+  const { user, tour, guide, tours } = props,
+    { title, tour_photos } = tour;
 
   return (
-    <Layout>
+    <Layout user={user}>
       <div className="flex flex-col justify-center items-center gap-5">
         <TourPageHeader backgroundImage={tour_photos[0]} title={title} />
         <TourDetails tour={tour} guide={guide} />
@@ -32,24 +36,28 @@ const Tour: NextPage<Props> = ({ tour, tours, guide }) => {
 export default Tour;
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { db } = await connectToDatabase();
-  const tourId = context.query.tour as string;
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
 
-  const tour = await db.collection("tours").findOne({
-    _id: new ObjectId(tourId),
-  });
-
-  const guide = await db.collection("users").findOne({
-    _id: tour?.guide_id,
-  });
-
-  const tours = await db.collection("tours").find({}).toArray();
+  const { db } = await connectToDatabase(),
+    tourId = context.query.tour as string,
+    tour = await db.collection("tours").findOne({
+      _id: new ObjectId(tourId),
+    }),
+    guide = await db.collection("users").findOne({
+      _id: tour?.guide_id,
+    }),
+    tours = await db.collection("tours").find({}).toArray();
 
   return {
     props: {
+      user: session?.user ? session.user : null,
       tour: JSON.parse(JSON.stringify(tour)),
       guide: JSON.parse(JSON.stringify(guide)),
       tours: JSON.parse(JSON.stringify(tours)),
     },
-  } as { props: { tour: Tour; guide: User; tours: Tour[] } };
+  };
 };

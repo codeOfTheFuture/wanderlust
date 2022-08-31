@@ -4,17 +4,21 @@ import Layout from "../components/Layouts/Layout";
 import SearchInput from "../components/SearchInput";
 import TourCardWrapper from "../components/TourCards/TourCardWrapper";
 import { connectToDatabase } from "../lib/mongodb";
-import { Tour } from "../types/typings";
+import { User, Tour } from "../types/typings";
 import Button from "../components/Button";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 interface Props {
+  user: User | null;
   tours: Tour[];
 }
 
-const Home: NextPage<Props> = ({ tours }) => {
+const Home: NextPage<Props> = props => {
+  const { user, tours } = props;
 
   return (
-    <Layout>
+    <Layout user={user}>
       <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-bottom h-[80vh] w-full"></div>
 
       <div className="absolute top-0 left-0 bg-black opacity-60 h-[80vh] w-full"></div>
@@ -38,14 +42,20 @@ const Home: NextPage<Props> = ({ tours }) => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { db } = await connectToDatabase();
+export const getServerSideProps: GetServerSideProps = async context => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
 
+  const { db } = await connectToDatabase();
   const tours = await db.collection("tours").find({}).toArray();
 
   return {
     props: {
+      user: session?.user ? session.user : null,
       tours: JSON.parse(JSON.stringify(tours)),
     },
-  } as { props: { tours: Tour[] } };
+  };
 };

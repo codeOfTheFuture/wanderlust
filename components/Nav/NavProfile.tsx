@@ -5,13 +5,15 @@ import Image from 'next/image';
 import NavDropdown from "./NavDropdown";
 import { User } from '../../types/typings';
 
-const NavProfile: FC = () => {
+interface Props {
+  user: User;
+}
+
+const NavProfile: FC<Props> = props => {
+  const { user: { name, image } } = props;
+  const firstName = name.split(" ")[0];
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
-  const { data: session } = useSession(),
-    user = session?.user as User,
-    firstName = user.name?.split(" ")[0],
-    image = user?.image;
 
   return (
     <div className='flex justify-center items-center h-full mx-4'>
