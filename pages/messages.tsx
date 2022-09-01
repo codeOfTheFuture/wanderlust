@@ -4,6 +4,7 @@ import Layout from "../components/Layouts/Layout";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
+import Message from "../components/Messages/Message";
 
 interface Props {
   user: User | null;
@@ -21,6 +22,11 @@ const Messages: NextPage<Props> = props => {
             <br />
             Here are your messages.
           </h1>
+        </div>
+
+        <div className="max-w-5xl mx-auto flex flex-col gap-5 my-10">
+          <Message userImg={user!.image!} />
+          <Message userImg={user!.image!} />
         </div>
       </div>
     </Layout>
