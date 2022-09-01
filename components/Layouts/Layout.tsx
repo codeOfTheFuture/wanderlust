@@ -9,8 +9,6 @@ interface Props {
   children: React.ReactNode;
 }
 
-
-
 const Layout: FC<Props> = props => {
   const { user, children } = props;
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -28,11 +26,11 @@ const Layout: FC<Props> = props => {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar user={user} scrollPosition={scrollPosition} />
-      <main>{children}</main>
+      <main className="min-h-[92vh]">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 };
 

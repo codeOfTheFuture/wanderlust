@@ -17,9 +17,11 @@ const NavDropdown: FC<Props> = props => {
 
   return (
     <div
-      className={`absolute flex flex-col top-12 right-1 w-44 bg-white bg-opacity-60 rounded-sm p-2 mx-1 ${toggleDropdown ? "opacity-100" : "opacity-0"
-        }`}
+      className={`absolute flex flex-col top-12 right-1 w-44 bg-white rounded-md p-5 mx-1 shadow-xl ${
+        toggleDropdown ? "opacity-100" : "opacity-0"
+      }`}
     >
+      <NavDropdownLink label="Create Tour" link="/create-tour" />
       <NavDropdownLink label="Offered Tours" link="/offered-tours" />
       <NavDropdownLink label="Booked Tours" link="/booked-tours" />
       <NavDropdownLink label="Messages" link="/messages" />

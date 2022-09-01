@@ -6,49 +6,42 @@ import Button from "../components/Button";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
+import PageHeading from "../components/PageHeading";
 
 interface Props {
   user: User | null;
 }
 
-const OfferedTours: NextPage<Props> = props => {
-  const { user } = props;
-
+const OfferedTours: NextPage<Props> = ({ user }) => {
   return (
     <Layout user={user}>
-      <div className="h-screen">
-        <div className="relative bg-running-in-forest bg-cover bg-center bg-no-repeat flex items-end h-3/5">
-          <div className="absolute w-full h-full bg-black opacity-50"></div>
-          <h1 className="absolute ml-20 mb-20 text-light-text text-6xl font-semibold">
-            Hi {user?.name.split(" ")[0]},
-            <br />
-            Here you can add, edit, and delete your offered tours.
-          </h1>
-        </div>
+      <PageHeading
+        user={user}
+        headingText="Here you can add, edit, and delete your offered tours."
+      />
 
-        <div className="flex flex-col justify-center items-center gap-5 h-2/5">
-          <h2>
-            {!user?.guide
-              ? "Please register as a guide in your settings if you would like to create a tour"
-              : !user.offered_tours?.length &&
+      <section className="flex flex-col justify-center items-center gap-5 h-2/5">
+        <h2>
+          {!user?.guide
+            ? "Please register as a guide in your settings if you would like to create a tour"
+            : !user.offered_tours?.length &&
               "You currently have no offered tours"}
-          </h2>
+        </h2>
 
-          {!user?.guide ? (
-            <Link href="/settings">
-              <Button color="btn-primary" size="btn-lg" type="button">
-                Settings
-              </Button>
-            </Link>
-          ) : (
-            <Link href="/create-tour">
-              <Button color="btn-primary" size="btn-lg" type="button">
-                Create Tour
-              </Button>
-            </Link>
-          )}
-        </div>
-      </div>
+        {!user?.guide ? (
+          <Link href="/settings">
+            <Button color="btn-primary" size="btn-lg" type="button">
+              Settings
+            </Button>
+          </Link>
+        ) : (
+          <Link href="/create-tour">
+            <Button color="btn-primary" size="btn-lg" type="button">
+              Create Tour
+            </Button>
+          </Link>
+        )}
+      </section>
     </Layout>
   );
 };

@@ -15,7 +15,7 @@ const Settings: NextPage<Props> = props => {
 
   return (
     <Layout user={user}>
-      <div className="flex justify-center items-center w-full h-screen bg-settings-blurred bg-cover lg:bg-center lg:bg-no-repeat relative">
+      <div className="relative flex justify-center items-center w-full h-[92vh] bg-settings-blurred bg-cover lg:bg-center lg:bg-no-repeat ">
         <div className="absolute w-full h-full bg-black opacity-30"></div>
         <SettingsForm />
       </div>

@@ -19,11 +19,11 @@ const Home: NextPage<Props> = props => {
 
   return (
     <Layout user={user}>
-      <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-bottom h-[80vh] w-full"></div>
+      <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-top h-[60vh] w-full"></div>
 
-      <div className="absolute top-0 left-0 bg-black opacity-60 h-[80vh] w-full"></div>
+      <div className="absolute top-0 left-0 bg-black opacity-70 h-[60vh] w-full"></div>
 
-      <div className="relative flex flex-col justify-center md:justify-center items-center w-full sm:w-5/6 lg:w-3/4 mx-auto h-[80vh] z-10">
+      <div className="relative flex flex-col justify-center md:justify-center items-center w-full sm:w-5/6 lg:w-3/4 mx-auto h-[60vh] z-10">
         <div className="flex flex-col items-start w-full justify-center pl-5 md:pl-0">
           <h1 className="text-4xl md:text-6xl  xl:text-8xl font-semibold text-light-text mt-52 sm:mt-44">
             Zion National Park

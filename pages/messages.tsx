@@ -5,6 +5,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
 import Message from "../components/Messages/Message";
+import PageHeading from "../components/PageHeading";
 
 interface Props {
   user: User | null;
@@ -14,21 +15,12 @@ const Messages: NextPage<Props> = props => {
   const { user } = props;
   return (
     <Layout user={user}>
-      <div className="h-screen">
-        <div className="relative bg-running-in-forest bg-cover bg-center bg-no-repeat flex items-end h-3/5">
-          <div className="absolute w-full h-full bg-black opacity-50"></div>
-          <h1 className="absolute ml-20 mb-20 text-light-text text-6xl font-semibold">
-            Hi {user?.name.split(" ")[0]},
-            <br />
-            Here are your messages.
-          </h1>
-        </div>
+      <PageHeading user={user} headingText="Here are your messages." />
 
-        <div className="max-w-5xl mx-auto flex flex-col gap-5 my-10">
-          <Message userImg={user!.image!} />
-          <Message userImg={user!.image!} />
-        </div>
-      </div>
+      <section className="w-full flex flex-col items-center gap-5 my-10">
+        <Message userImg={user!.image!} />
+        <Message userImg={user!.image!} />
+      </section>
     </Layout>
   );
 };
