@@ -19,7 +19,7 @@ const TourCard: FC<Props> = ({ tour }) => {
 
   return (
     <div
-      className="relative flex flex-col justify-end items-center w-full h-[300px] bg-slate-200 cursor-pointer border-2 border-slate-700 shadow-md rounded-sm px-2"
+      className="relative flex flex-col justify-end items-center w-full h-[300px] bg-slate-200 cursor-pointer border-2 border-slate-700 shadow-lg hover:shadow-xl rounded-sm px-2 hover:scale-105 transition-transform duration-300 ease-in-out"
       onClick={handleClick}
     >
       {tour.tour_photos.length > 0 && (

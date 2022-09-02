@@ -17,7 +17,7 @@ const NavDropdown: FC<Props> = props => {
 
   return (
     <div
-      className={`absolute flex flex-col top-12 right-1 w-44 bg-white rounded-md p-5 mx-1 shadow-xl ${
+      className={`absolute flex flex-col top-12 right-1 w-52 bg-white rounded-md p-3 mx-1 shadow-xl transition-opacity duration-150 ease-in-out ${
         toggleDropdown ? "opacity-100" : "opacity-0"
       }`}
     >

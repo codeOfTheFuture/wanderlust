@@ -29,7 +29,7 @@ const FormTextArea: FC<Props> = props => {
         cols={65}
         rows={6}
         placeholder={label}
-        className="border border-blue-500"
+        className="border border-blue-500 w-full"
         ref={text}
         onKeyDown={handleKeyDown}
       >

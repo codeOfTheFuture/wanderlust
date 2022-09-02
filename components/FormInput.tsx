@@ -8,8 +8,10 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 const FormInput: FC<Props> = ({ name, label, ...rest }) => {
   return (
-    <div className="flex flex-col w-full">
-      <label htmlFor={name} hidden>{label}</label>
+    <div className="flex flex-col max-w-full">
+      <label htmlFor={name} hidden>
+        {label}
+      </label>
       <input className="p-2" id={name} {...rest} placeholder={label} />
     </div>
   );
