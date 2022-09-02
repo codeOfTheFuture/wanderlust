@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import Button from "../Button";
-import Checkbox from "../Checkbox";
-import FormInput from "../FormInput";
+import Button from "../UI/Button";
+import Checkbox from "../UI/Checkbox";
+import FormInput from "../UI/FormInput";
 
 const EditProfileInfo: FC = () => {
   return (

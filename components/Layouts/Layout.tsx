@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useEffect, useState } from "react";
 import { User, HandleScroll } from "../../types/typings";
-import Footer from "../Footer";
+import Footer from "../UI/Footer";
 import Navbar from "../Nav/Navbar";
 
 interface Props {

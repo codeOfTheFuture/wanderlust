@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/solid";
 import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
-import Button from "../Button";
+import Button from "../UI/Button";
 
 interface Props {
   tour: Tour;
@@ -80,11 +80,7 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
             <p>US $ {price}</p>
             <p>per person</p>
           </div>
-          <Button
-            color="btn-primary"
-            size="btn-md"
-            type="button"
-          >
+          <Button color="btn-primary" size="btn-md" type="button">
             Book Now
           </Button>
         </div>

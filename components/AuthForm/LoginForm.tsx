@@ -2,8 +2,8 @@ import React, { FC } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
-import Button from "../Button";
-import FormInput from "../FormInput";
+import Button from "../UI/Button";
+import FormInput from "../UI/FormInput";
 import LoginHeading from "./LoginHeading";
 
 interface Props {

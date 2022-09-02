@@ -4,7 +4,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
-import TourForm from "../components/TourForm";
+import TourForm from "../components/TourForm/TourForm";
 
 interface Props {
   user: User | null;

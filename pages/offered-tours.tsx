@@ -2,11 +2,11 @@ import React from "react";
 import Layout from "../components/Layouts/Layout";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
-import Button from "../components/Button";
+import Button from "../components/UI/Button";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
-import PageHeading from "../components/PageHeading";
+import PageHeading from "../components/UI/PageHeading";
 
 interface Props {
   user: User | null;

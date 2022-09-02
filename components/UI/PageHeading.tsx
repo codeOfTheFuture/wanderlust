@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { User } from "../types/typings";
+import { User } from "../../types/typings";
 
 interface Props {
   user: User | null;

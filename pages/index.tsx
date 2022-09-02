@@ -1,11 +1,11 @@
 import React from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import Layout from "../components/Layouts/Layout";
-import SearchInput from "../components/SearchInput";
+import SearchInput from "../components/UI/SearchInput";
 import TourCardWrapper from "../components/TourCards/TourCardWrapper";
 import { connectToDatabase } from "../lib/mongodb";
 import { User, Tour } from "../types/typings";
-import Button from "../components/Button";
+import Button from "../components/UI/Button";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 

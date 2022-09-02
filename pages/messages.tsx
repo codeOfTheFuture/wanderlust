@@ -5,7 +5,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
 import Message from "../components/Messages/Message";
-import PageHeading from "../components/PageHeading";
+import PageHeading from "../components/UI/PageHeading";
 
 interface Props {
   user: User | null;

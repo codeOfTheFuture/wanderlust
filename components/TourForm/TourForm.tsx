@@ -1,18 +1,18 @@
 import React, { FC } from "react";
-import TourImageUpload from "./CreateTourPage/TourImageUpload";
-import TourTitleInput from "./CreateTourPage/TourTitleInput";
-import FormSelect from "./FormSelect";
+import TourImageUpload from "./TourImageUpload";
+import TourTitleInput from "./TourTitleInput";
+import FormSelect from "../UI/FormSelect";
 import { ClockIcon, LocationMarkerIcon } from "@heroicons/react/outline";
 import {
   DocumentTextIcon,
   InformationCircleIcon,
   UsersIcon,
 } from "@heroicons/react/solid";
-import FormTextArea from "./FormTextArea";
-import FormInput from "./FormInput";
+import FormTextArea from "../UI/FormTextArea";
+import FormInput from "../UI/FormInput";
 import CurrencyFormat from "react-currency-format";
 import Image from "next/image";
-import { User } from "../types/typings";
+import { User } from "../../types/typings";
 
 interface Props {
   user: User | null;
