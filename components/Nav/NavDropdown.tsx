@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, RefObject } from "react";
 import { signOut } from "next-auth/react";
 import NavDropdownLink from "./NavDropdownLink";
 
@@ -18,7 +18,9 @@ const NavDropdown: FC<Props> = props => {
   return (
     <div
       className={`absolute flex flex-col top-12 right-1 w-52 bg-white rounded-md p-3 mx-1 shadow-xl transition-opacity duration-150 ease-in-out ${
-        toggleDropdown ? "opacity-100" : "opacity-0"
+        toggleDropdown
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
       }`}
     >
       <NavDropdownLink label="Create Tour" link="/create-tour" />

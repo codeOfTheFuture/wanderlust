@@ -1,9 +1,9 @@
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 function useEventListener(
   eventType: string,
   callback: (e: Event) => void,
-  element = window
+  element: (Window & typeof globalThis) | null
 ) {
   const callbackRef = useRef<(e: Event) => void>(callback);
 
@@ -13,9 +13,9 @@ function useEventListener(
 
   useEffect(() => {
     const handler = (e: Event) => callbackRef.current(e);
-    element.addEventListener(eventType, handler);
+    element?.addEventListener(eventType, handler);
 
-    return () => element.removeEventListener(eventType, handler);
+    return () => element?.removeEventListener(eventType, handler);
   }, [eventType, element]);
 }
 
@@ -23,6 +23,14 @@ export default function useClickOutside(
   ref: RefObject<HTMLElement>,
   cb: (e: Event) => void
 ) {
+  const [element, setElement] = useState<(Window & typeof globalThis) | null>(
+    null
+  );
+
+  useEffect(() => {
+    setElement(window);
+  }, []);
+
   useEventListener(
     "click",
     e => {
@@ -30,6 +38,6 @@ export default function useClickOutside(
         return;
       cb(e);
     },
-    window
+    element
   );
 }
