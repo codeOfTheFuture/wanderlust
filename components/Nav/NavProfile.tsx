@@ -1,5 +1,4 @@
 import React, { FC, useState, useRef } from "react";
-import { useSession } from "next-auth/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import NavDropdown from "./NavDropdown";
@@ -12,10 +11,8 @@ interface Props {
 
 const NavProfile: FC<Props> = props => {
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
-  const {
-      user: { name, image },
-    } = props,
-    firstName = name.split(" ")[0];
+  const { user } = props;
+  const firstName = user.name.split(" ")[0];
   const dropsDownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropsDownRef, () => setToggleDropdown(false));
@@ -25,13 +22,12 @@ const NavProfile: FC<Props> = props => {
       <div
         className="relative flex justify-center items-center cursor-pointer"
         onClick={() => setToggleDropdown(prevState => !prevState)}
-        ref={dropsDownRef}
-      >
+        ref={dropsDownRef}>
         <span>{firstName}</span>
         <ChevronDownIcon className="h-6 mr-2" />
         <div className="flex h-full cursor-pointer rounded-full">
           <Image
-            src={image!}
+            src={user.image!}
             width={40}
             height={40}
             alt={firstName}

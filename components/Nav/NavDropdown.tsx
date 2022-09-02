@@ -21,13 +21,12 @@ const NavDropdown: FC<Props> = props => {
         toggleDropdown
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
-      }`}
-    >
+      }`}>
       <NavDropdownLink label="Create Tour" link="/create-tour" />
       <NavDropdownLink label="Offered Tours" link="/offered-tours" />
       <NavDropdownLink label="Booked Tours" link="/booked-tours" />
       <NavDropdownLink label="Messages" link="/messages" />
-      <NavDropdownLink label="Favorites" link="/favorites" />
+      <NavDropdownLink label="Favorites" link="/favorite-tours" />
       <NavDropdownLink label="Settings" link="/settings" />
       <div className="nav-dropdown-link" onClick={logOut}>
         Logout
