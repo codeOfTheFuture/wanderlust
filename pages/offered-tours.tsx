@@ -20,8 +20,8 @@ const OfferedTours: NextPage<Props> = ({ user }) => {
         headingText="Here you can add, edit, and delete your offered tours."
       />
 
-      <section className="flex flex-col justify-center items-center gap-5 h-2/5">
-        <h2>
+      <section className="flex flex-col justify-center items-center gap-5 h-[40vh]">
+        <h2 className="text-xl font-medium">
           {!user?.guide
             ? "Please register as a guide in your settings if you would like to create a tour"
             : !user.offered_tours?.length &&
