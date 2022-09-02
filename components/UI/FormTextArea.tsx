@@ -19,20 +19,17 @@ const FormTextArea: FC<Props> = props => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <label htmlFor={name} hidden>
         {label}
       </label>
       <textarea
         name={name}
         id={name}
-        cols={65}
-        rows={6}
         placeholder={label}
-        className="border border-blue-500 w-full"
+        className="block border border-blue-500 w-full h-40 resize-none"
         ref={text}
-        onKeyDown={handleKeyDown}
-      >
+        onKeyDown={handleKeyDown}>
         {name === "what-to-bring" ? ` ${Bullet_Point} ` : ""}
       </textarea>
     </div>

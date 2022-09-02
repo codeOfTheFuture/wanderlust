@@ -12,7 +12,12 @@ const FormInput: FC<Props> = ({ name, label, ...rest }) => {
       <label htmlFor={name} hidden>
         {label}
       </label>
-      <input className="p-2 w-full" id={name} {...rest} placeholder={label} />
+      <input
+        className="p-2 w-full border border-black rounded-md"
+        id={name}
+        {...rest}
+        placeholder={label}
+      />
     </div>
   );
 };
