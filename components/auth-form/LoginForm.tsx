@@ -2,8 +2,8 @@ import React, { FC } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
-import Button from "../UI/Button";
-import FormInput from "../UI/FormInput";
+import Button from "../ui/Button";
+import FormInput from "../ui/FormInput";
 import LoginHeading from "./LoginHeading";
 
 interface Props {
@@ -41,16 +41,14 @@ const LoginForm: FC<Props> = ({ providers }) => {
           color="btn-primary"
           size="btn-xl"
           type="button"
-          onClick={() => signIn(Facebook_Provider_ID, { callbackUrl: "/" })}
-        >
+          onClick={() => signIn(Facebook_Provider_ID, { callbackUrl: "/" })}>
           {Facebook_Provider_NAME}
         </Button>
         <Button
           color="btn-error"
           size="btn-xl"
           type="button"
-          onClick={() => signIn(Google_Provider_ID, { callbackUrl: "/" })}
-        >
+          onClick={() => signIn(Google_Provider_ID, { callbackUrl: "/" })}>
           {Google_Provider_NAME}
         </Button>
       </div>

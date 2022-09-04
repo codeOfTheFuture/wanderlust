@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Image from "next/image";
-import Button from "../UI/Button";
+import Button from "../ui/Button";
 
 interface Props {
   backgroundImage: string;

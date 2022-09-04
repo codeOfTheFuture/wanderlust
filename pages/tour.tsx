@@ -1,10 +1,10 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { ObjectId } from "mongodb";
-import Layout from "../components/Layouts/Layout";
-import RecommendedTours from "../components/TourCards/RecommendedTours";
-import TourDetails from "../components/TourPage/TourDetails";
-import TourPageHeader from "../components/TourPage/TourPageHeader";
+import Layout from "../components/layouts/Layout";
+import RecommendedTours from "../components/tour-cards/RecommendedTours";
+import TourDetails from "../components/tour-page/TourDetails";
+import TourPageHeader from "../components/tour-page/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour, User } from "../types/typings";
 import { unstable_getServerSession } from "next-auth";

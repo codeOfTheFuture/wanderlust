@@ -1,10 +1,10 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
-import PageHeading from "../components/UI/PageHeading";
+import PageHeading from "../components/ui/PageHeading";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
-import Layout from "../components/Layouts/Layout";
+import Layout from "../components/layouts/Layout";
 
 interface Props {
   user: User;

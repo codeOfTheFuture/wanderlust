@@ -1,10 +1,10 @@
 import React from "react";
-import Layout from "../components/Layouts/Layout";
+import Layout from "../components/layouts/Layout";
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
-import TourForm from "../components/TourForm/TourForm";
+import TourForm from "../components/tour-form/TourForm";
 
 interface Props {
   user: User | null;
@@ -12,6 +12,8 @@ interface Props {
 
 const CreateTour: NextPage<Props> = props => {
   const { user } = props;
+
+  console.log("User: ", user);
 
   return (
     <Layout user={user}>

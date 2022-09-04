@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import LoginImage from "../AuthForm/LoginImage";
-import Navbar from "../Nav/Navbar";
+import LoginImage from "../auth-form/LoginImage";
+import Navbar from "../nav/Navbar";
 
 interface Props {
   children: React.ReactNode;

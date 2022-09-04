@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
-import SettingsForm from "../components/SettingsForm/SettingsForm";
-import Layout from "../components/Layouts/Layout";
+import SettingsForm from "../components/settings-form/SettingsForm";
+import Layout from "../components/layouts/Layout";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
