@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import { useDropzone } from "react-dropzone";
 import { CloudUploadIcon } from "@heroicons/react/outline";
-import useOnDrop from "../../hooks/useOnDrop";
 
-const DropZone: FC = () => {
-  const { uploadedFiles, onDrop } = useOnDrop();
+interface Props {
+  onDrop: (acceptedFiles: File[]) => void;
+}
 
+const DropZone: FC<Props> = ({ onDrop }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -16,12 +17,10 @@ const DropZone: FC = () => {
     multiple: false,
   });
 
-  console.log(uploadedFiles);
-
   return (
     <div
       {...getRootProps()}
-      className={`flex flex-col gap-2 justify-center items-center border-4 rounded-xl w-full h-1/2 outline-none ${
+      className={`flex flex-col gap-2 justify-center items-center border-4 rounded w-full h-1/2 outline-none ${
         isDragActive
           ? "border-solid border-primary-dark-color text-primary-dark-color"
           : "border-dashed border-primary-color text-primary-color"
