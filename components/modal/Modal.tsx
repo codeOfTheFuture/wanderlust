@@ -43,10 +43,10 @@ const Modal: FC = () => {
               leave="ease-in duration-200"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95">
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex flex-col justify-center items-center gap-6 w-[600px] h-[600px] p-6">
+              <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <div className="flex flex-col justify-start lg:justify-center lg:items-center gap-6 w-[250px] sm:w-[300px] md:w-[450px] lg:w-[600px] h-[500px] md:h-[600px] p-6">
                   <DropZone onDrop={onDrop} />
-                  <div className="flex justify-evenly items-center gap-2 w-full text-gray-800">
+                  <div className="hidden lg:flex justify-evenly items-center gap-2 w-full text-gray-800">
                     <div className="w-full h-[2px] bg-gray-800 mt-2"></div>
                     <div className="text-2xl font-medium text-center">or</div>
                     <div className="w-full h-[2px] bg-gray-800 mt-2"></div>
@@ -55,7 +55,7 @@ const Modal: FC = () => {
                     Browse
                   </Button>
 
-                  <div className="flex justify-start items-center gap-2 w-full p-2 rounded border border-primary-color">
+                  <div className="flex justify-start items-center gap-2 w-full">
                     {uploadedFiles.map(uploadedFile => (
                       <div
                         key={uploadedFile.asset_id}

@@ -20,10 +20,10 @@ const DropZone: FC<Props> = ({ onDrop }) => {
   return (
     <div
       {...getRootProps()}
-      className={`flex flex-col gap-2 justify-center items-center border-4 rounded w-full h-1/2 outline-none ${
+      className={`hidden lg:flex flex-col gap-2 justify-center items-center border-4 rounded w-full h-1/2 outline-none ${
         isDragActive
-          ? "border-solid border-primary-dark-color text-primary-dark-color"
-          : "border-dashed border-primary-color text-primary-color"
+          ? "border-solid border-primary-dark-color cursor-grabbing text-primary-dark-color"
+          : "border-dashed border-primary-color text-primary-color cursor-default"
       }`}>
       <input {...getInputProps()} />
       <h2 className="text-lg font-semibold">Drag and Drop</h2>
