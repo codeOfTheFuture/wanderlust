@@ -3,8 +3,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { closeModal } from "../../slices/modalSlice";
-import { CloudUploadIcon } from "@heroicons/react/outline";
 import Button from "../ui/Button";
+import DropZone from "./DropZone";
 
 const Modal: FC = () => {
   const modalOpen = useSelector((state: RootState) => state.modal.modalOpen),
@@ -39,10 +39,7 @@ const Modal: FC = () => {
               leaveTo="opacity-0 scale-95">
               <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex flex-col justify-center items-center gap-6 w-[600px] h-[500px] p-6">
-                  <div className="flex flex-col gap-2 justify-center items-center border border-dashed border-gray-400 rounded-xl w-full h-1/2 text-gray-400 ">
-                    <h2 className="text-lg font-semibold">Drag and Drop</h2>
-                    <CloudUploadIcon className="w-12 h-12" />
-                  </div>
+                  <DropZone />
                   <span className="text-lg font-medium">or</span>
                   <Button type="button" size="btn-xl" color="btn-primary">
                     Browse

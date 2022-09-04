@@ -32,6 +32,29 @@ interface Tour {
   tour_photos: string[];
 }
 
+interface CloudinaryImage {
+  api_key: string;
+  asset_id: string;
+  bytes: number;
+  created_at: string;
+  etag: string;
+  folder: string;
+  format: string;
+  height: number;
+  width: number;
+  original_filename: string;
+  placeholder: boolean;
+  public_id: string;
+  resource_type: string;
+  secure_url: string;
+  signature: string;
+  tags: string[];
+  type: string;
+  url: string;
+  version: number;
+  version_id: string;
+}
+
 type HandleScroll = () => void;
 
-export { type User, type Tour, type HandleScroll };
+export { type User, type Tour, type HandleScroll, type CloudinaryImage };
