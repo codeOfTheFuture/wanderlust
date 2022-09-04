@@ -1,35 +1,10 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC } from "react";
 import { useDropzone } from "react-dropzone";
 import { CloudUploadIcon } from "@heroicons/react/outline";
-import getSignature from "../../utils/getSignature";
-import { CloudinaryImage } from "../../types/typings";
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string,
-  CLOUDINARY_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_KEY as string,
-  URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+import useOnDrop from "../../hooks/useOnDrop";
 
 const DropZone: FC = () => {
-  const [uploadedFiles, setUploadedFiles] = useState<CloudinaryImage[]>([]);
-
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    acceptedFiles.forEach(async acceptedFile => {
-      const { signature, timestamp } = await getSignature();
-
-      const formData = new FormData();
-      formData.append("file", acceptedFile);
-      formData.append("signature", signature);
-      formData.append("timestamp", timestamp);
-      formData.append("api_key", CLOUDINARY_KEY);
-
-      const response = await fetch(URL, {
-          method: "post",
-          body: formData,
-        }),
-        data: CloudinaryImage = await response.json();
-
-      setUploadedFiles(prevState => [...prevState, data]);
-    });
-  }, []);
+  const { uploadedFiles, onDrop } = useOnDrop();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
