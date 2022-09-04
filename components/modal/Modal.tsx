@@ -1,45 +1,59 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store";
+import { closeModal } from "../../slices/modalSlice";
+import { CloudUploadIcon } from "@heroicons/react/outline";
+import Button from "../ui/Button";
 
 const Modal: FC = () => {
-  const [modelOpen, setModelOpen] = useState<boolean>(false);
+  const modalOpen = useSelector((state: RootState) => state.modal.modalOpen),
+    dispatch = useDispatch();
 
   return (
-    <Transition.Root show={modelOpen} as={Fragment}>
+    <Transition appear show={modalOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed z-10 inset-0 overflow-y-auto"
-        onClose={() => setModelOpen(false)}>
-        <div className="flex items-end justify-center min-h-[800px] sm:min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0">
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
-          {/* This element is to trick the browser into centering the model contents */}
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true">
-            &#8203;
-          </span>
+        className="relative z-10"
+        onClose={() => dispatch(closeModal(false))}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0">
+          <div className="fixed inset-0 bg-black bg-opacity-25" />
+        </Transition.Child>
 
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 translate-y-4 sm:translate-y-0 sm:scale-95">
-            Modal Content
-          </Transition.Child>
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <div className="flex flex-col justify-center items-center gap-6 w-[600px] h-[500px] p-6">
+                  <div className="flex flex-col gap-2 justify-center items-center border border-dashed border-gray-400 rounded-xl w-full h-1/2 text-gray-400 ">
+                    <h2 className="text-lg font-semibold">Drag and Drop</h2>
+                    <CloudUploadIcon className="w-12 h-12" />
+                  </div>
+                  <span className="text-lg font-medium">or</span>
+                  <Button type="button" size="btn-xl" color="btn-primary">
+                    Browse
+                  </Button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   );
 };
 

@@ -5,6 +5,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
 import TourForm from "../components/tour-form/TourForm";
+import Modal from "../components/modal/Modal";
 
 interface Props {
   user: User | null;
@@ -18,6 +19,7 @@ const CreateTour: NextPage<Props> = props => {
   return (
     <Layout user={user}>
       <TourForm user={user} />
+      <Modal />
     </Layout>
   );
 };
