@@ -6,13 +6,31 @@ import { closeModal } from "../../slices/modalSlice";
 import Button from "../ui/Button";
 import DropZone from "./DropZone";
 import useOnDrop from "../../hooks/useOnDrop";
-import Image from "next/image";
+import PreviewThumbnails from "./PreviewThumbnails";
+import ModalDivider from "./ModalDivider";
+import deleteImage from "../../utils/deleteImage";
+import { useDropzone } from "react-dropzone";
 
 const Modal: FC = () => {
   const modalOpen = useSelector((state: RootState) => state.modal.modalOpen),
     dispatch = useDispatch();
 
-  const { uploadedFiles, onDrop } = useOnDrop();
+  const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop();
+
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [],
+    },
+    multiple: false,
+  });
+
+  const removeImage = async (public_id: string, signature: string) => {
+    await deleteImage(public_id, signature);
+    setUploadedFiles(prevState =>
+      prevState.filter(file => file.public_id !== public_id)
+    );
+  };
 
   console.log(uploadedFiles);
 
@@ -45,30 +63,26 @@ const Modal: FC = () => {
               leaveTo="opacity-0 scale-95">
               <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex flex-col justify-start lg:justify-center lg:items-center gap-6 w-[250px] sm:w-[300px] md:w-[450px] lg:w-[600px] h-[500px] md:h-[600px] p-6">
-                  <DropZone onDrop={onDrop} />
-                  <div className="hidden lg:flex justify-evenly items-center gap-2 w-full text-gray-800">
-                    <div className="w-full h-[2px] bg-gray-800 mt-2"></div>
-                    <div className="text-2xl font-medium text-center">or</div>
-                    <div className="w-full h-[2px] bg-gray-800 mt-2"></div>
-                  </div>
-                  <Button type="button" size="btn-xl" color="btn-primary">
+                  <DropZone
+                    getRootProps={getRootProps}
+                    getInputProps={getInputProps}
+                    isDragActive={isDragActive}
+                  />
+
+                  <ModalDivider />
+
+                  <Button
+                    type="button"
+                    size="btn-xl"
+                    color="btn-primary"
+                    onClick={open}>
                     Browse
                   </Button>
 
-                  <div className="flex justify-start items-center gap-2 w-full">
-                    {uploadedFiles.map(uploadedFile => (
-                      <div
-                        key={uploadedFile.asset_id}
-                        className="w-28 h-28 relative rounded shadow-md">
-                        <Image
-                          src={uploadedFile.secure_url}
-                          alt={uploadedFile.original_filename}
-                          layout="fill"
-                          className="object-cover object-center rounded"
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  <PreviewThumbnails
+                    uploadedFiles={uploadedFiles}
+                    removeImage={removeImage}
+                  />
                 </div>
               </Dialog.Panel>
             </Transition.Child>

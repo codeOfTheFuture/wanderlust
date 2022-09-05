@@ -28,7 +28,7 @@ const useOnDrop = () => {
       setUploadedFiles(prevState => [...prevState, data]);
     });
   }, []);
-  return { uploadedFiles, onDrop };
+  return { uploadedFiles, setUploadedFiles, onDrop };
 };
 
 export default useOnDrop;
