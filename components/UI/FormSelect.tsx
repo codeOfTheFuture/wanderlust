@@ -14,7 +14,7 @@ const FormSelect: FC<Props> = props => {
     <div className={selectStyles}>
       <label htmlFor={name}>Select</label>
       <select name={name} id={name} className="p-5 bg-transparent">
-        <option value="" disabled selected>
+        <option value={defaultText} disabled selected>
           {defaultText}
         </option>
         {optionsList.map(option => (

@@ -9,10 +9,10 @@ module.exports = {
         poppins: ["Poppins", "sans-serif"],
       },
       backgroundImage: {
-        "mountain-jump": "url(/assets/images/jumping-mountain.png)",
-        "login-blurred": "url(/assets/images/login-blurred.png)",
-        "settings-blurred": "url(/assets/images/canyons-blurred.png)",
-        "running-in-forest": "url(/assets/images/running-in-forest.jpg)",
+        "mountain-jump": "url(/assets/images/jumping-mountain.webp)",
+        "login-blurred": "url(/assets/images/login-blurred.webp)",
+        "settings-blurred": "url(/assets/images/canyons-blurred.webp)",
+        "running-in-forest": "url(/assets/images/running-in-forest.webp)",
       },
       colors: {
         "primary-color": "#2196F3",
