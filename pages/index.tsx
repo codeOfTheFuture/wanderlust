@@ -43,19 +43,59 @@ const Home: NextPage<Props> = props => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async context => {
+  // Get current session
   const session = await unstable_getServerSession(
     context.req,
     context.res,
     authOptions
   );
 
+  // Connect to MongoDb
   const { db } = await connectToDatabase();
-  const tours = await db.collection("tours").find({}).toArray();
+
+  // // Query user by email
+  // const queryUser = await db.collection("users").findOne({
+  //   email: session?.user?.email,
+  // });
+
+  // let user;
+
+  // console.log("Query User >>>>>", queryUser);
+
+  // // Check to see if user exists in db and it is their first time signing in.
+  // if (queryUser?.signedInBefore === null) {
+  //   console.log("It works!!!!!!");
+  //   user = await db.collection("users").findOneAndUpdate(
+  //     { _id: queryUser._id },
+  //     {
+  //       $set: {
+  //         address: null,
+  //         city: null,
+  //         state: null,
+  //         zip_code: null,
+  //         phone_number: null,
+  //         guide: false,
+  //         offered_tours: [],
+  //         favorite_tours: [],
+  //         messages: [],
+  //         signedInBefore: true,
+  //       },
+  //     },
+  //     { returnDocument: "after" }
+  //   );
+  // }
+
+  // if (queryUser?.signedInBefore === true) {
+  //   user = session?.user;
+  // }
+
+  const queryTours = await db.collection("tours").find({}).toArray(),
+    tours = JSON.parse(JSON.stringify(queryTours));
 
   return {
     props: {
-      user: session?.user ? session.user : null,
-      tours: JSON.parse(JSON.stringify(tours)),
+      user: session?.user || null,
+      tours,
     },
   };
 };

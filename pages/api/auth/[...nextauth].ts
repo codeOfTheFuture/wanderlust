@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { connectToDatabase } from "../../../lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
@@ -9,7 +10,8 @@ export const authOptions: NextAuthOptions = {
     (async () => {
       const { client } = await connectToDatabase();
       return client;
-    })()
+    })(),
+    {}
   ),
   providers: [
     FacebookProvider({
@@ -27,6 +29,21 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    async signIn({ user }) {
+      if (!user.signedInBefore) {
+        user.address = null;
+        user.city = null;
+        user.state = null;
+        user.zip_code = null;
+        user.phone_number = null;
+        user.guide = false;
+        user.offered_tours = [];
+        user.favorite_tours = [];
+        user.messages = [];
+        user.signedInBefore = true;
+      }
+      return true;
+    },
     async session({ session, user }) {
       session.user = user;
       return session;

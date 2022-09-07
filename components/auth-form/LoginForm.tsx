@@ -1,22 +1,26 @@
 import React, { FC } from "react";
-import { signIn } from "next-auth/react";
+import { ClientSafeProvider, LiteralUnion, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
 import Button from "../ui/Button";
 import FormInput from "../ui/FormInput";
 import LoginHeading from "./LoginHeading";
+import { BuiltInProviderType } from "next-auth/providers";
 
 interface Props {
-  providers: any;
+  providers: Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null;
 }
 
 const LoginForm: FC<Props> = ({ providers }) => {
   const Router = useRouter(),
     Btn_Label = Router.pathname === "/auth/signup" ? "Sign Up" : "Sign In",
-    Facebook_Provider_NAME = `${Btn_Label} with ${providers.facebook.name}`,
-    Google_Provider_NAME = `${Btn_Label} with ${providers.google.name}`,
-    Facebook_Provider_ID: string = providers.facebook.id,
-    Google_Provider_ID: string = providers.google.id;
+    Facebook_Provider_NAME = `${Btn_Label} with ${providers?.facebook.name}`,
+    Google_Provider_NAME = `${Btn_Label} with ${providers?.google.name}`,
+    Facebook_Provider_ID = providers?.facebook.id,
+    Google_Provider_ID = providers?.google.id;
 
   return (
     <div className="bottom-28 md:bottom-36 lg:bottom-auto flex flex-col items-center w-[300px] md:w-[400px] lg:w-[550px] p-4 lg:p-10 bg-white z-10 rounded-sm shadow-xl shadow-black">
@@ -24,8 +28,20 @@ const LoginForm: FC<Props> = ({ providers }) => {
 
       <form className="flex flex-col mt-6 gap-1 w-full">
         <div className="flex flex-col justify-evenly items-center gap-4 w-full lg:w-5/6 mx-auto">
-          <FormInput name="email" label="Email" type="email" />
-          <FormInput name="password" label="Password" type="password" />
+          <FormInput
+            name="email"
+            label="Email"
+            type="email"
+            value=""
+            handleChange={() => {}}
+          />
+          <FormInput
+            name="password"
+            label="Password"
+            type="password"
+            value=""
+            handleChange={() => {}}
+          />
           <Button color="btn-primary" size="btn-md" type="submit">
             {Btn_Label}
           </Button>
@@ -41,14 +57,14 @@ const LoginForm: FC<Props> = ({ providers }) => {
           color="btn-primary"
           size="btn-xl"
           type="button"
-          onClick={() => signIn(Facebook_Provider_ID, { callbackUrl: "/" })}>
+          onClick={() => signIn(Facebook_Provider_ID)}>
           {Facebook_Provider_NAME}
         </Button>
         <Button
           color="btn-error"
           size="btn-xl"
           type="button"
-          onClick={() => signIn(Google_Provider_ID, { callbackUrl: "/" })}>
+          onClick={() => signIn(Google_Provider_ID)}>
           {Google_Provider_NAME}
         </Button>
       </div>

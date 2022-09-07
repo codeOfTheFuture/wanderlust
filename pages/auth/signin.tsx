@@ -1,22 +1,50 @@
 import { GetServerSideProps, NextPage } from "next";
-import { getProviders } from "next-auth/react";
+import {
+  ClientSafeProvider,
+  getProviders,
+  LiteralUnion,
+} from "next-auth/react";
 import AuthLayout from "../../components/layouts/AuthLayout";
-import LoginForm from "../../components/auth-form/LoginForm";
+import AuthForm from "../../components/auth-form/LoginForm";
+import { BuiltInProviderType } from "next-auth/providers";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth";
 
 interface Props {
-  providers: any;
+  providers: Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null;
 }
 
 const SignIn: NextPage<Props> = ({ providers }) => {
   return (
     <AuthLayout>
-      <LoginForm providers={providers} />
+      <AuthForm providers={providers} />
     </AuthLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const providers = await getProviders();
+export const getServerSideProps: GetServerSideProps = async context => {
+  const providers = await getProviders(),
+    session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
+
+  if (session) {
+    return {
+      props: {
+        providers: providers,
+      },
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       providers: providers,
