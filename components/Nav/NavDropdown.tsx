@@ -1,10 +1,10 @@
-import React, { FC, RefObject } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { signOut } from "next-auth/react";
 import NavDropdownLink from "./NavDropdownLink";
 
 interface Props {
   toggleDropdown: boolean;
-  setToggleDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+  setToggleDropdown: Dispatch<SetStateAction<boolean>>;
 }
 
 const NavDropdown: FC<Props> = props => {

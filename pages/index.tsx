@@ -6,19 +6,20 @@ import TourCardWrapper from "../components/tour-cards/TourCardWrapper";
 import { connectToDatabase } from "../lib/mongodb";
 import { User, Tour } from "../types/typings";
 import Button from "../components/ui/Button";
-import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth";
+import { wrapper } from "../store";
+import { setUser } from "../slices/userSlice";
 
 interface Props {
-  user: User | null;
   tours: Tour[];
 }
 
 const Home: NextPage<Props> = props => {
-  const { user, tours } = props;
+  const { tours } = props;
 
   return (
-    <Layout user={user}>
+    <Layout>
       <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-top h-[70vh] w-full"></div>
 
       <div className="absolute top-0 left-0 bg-black opacity-70 h-[70vh] w-full"></div>
@@ -42,60 +43,26 @@ const Home: NextPage<Props> = props => {
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  // Get current session
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(store => async context => {
+    // Get current session
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  // Connect to MongoDb
-  const { db } = await connectToDatabase();
+    session && store.dispatch(setUser(session.user as User));
 
-  // // Query user by email
-  // const queryUser = await db.collection("users").findOne({
-  //   email: session?.user?.email,
-  // });
+    // Connect to MongoDb
+    const { db } = await connectToDatabase();
 
-  // let user;
+    const queryTours = await db.collection("tours").find({}).toArray(),
+      tours = JSON.parse(JSON.stringify(queryTours));
 
-  // console.log("Query User >>>>>", queryUser);
-
-  // // Check to see if user exists in db and it is their first time signing in.
-  // if (queryUser?.signedInBefore === null) {
-  //   console.log("It works!!!!!!");
-  //   user = await db.collection("users").findOneAndUpdate(
-  //     { _id: queryUser._id },
-  //     {
-  //       $set: {
-  //         address: null,
-  //         city: null,
-  //         state: null,
-  //         zip_code: null,
-  //         phone_number: null,
-  //         guide: false,
-  //         offered_tours: [],
-  //         favorite_tours: [],
-  //         messages: [],
-  //         signedInBefore: true,
-  //       },
-  //     },
-  //     { returnDocument: "after" }
-  //   );
-  // }
-
-  // if (queryUser?.signedInBefore === true) {
-  //   user = session?.user;
-  // }
-
-  const queryTours = await db.collection("tours").find({}).toArray(),
-    tours = JSON.parse(JSON.stringify(queryTours));
-
-  return {
-    props: {
-      user: session?.user || null,
-      tours,
-    },
-  };
-};
+    return {
+      props: {
+        tours,
+      },
+    };
+  });

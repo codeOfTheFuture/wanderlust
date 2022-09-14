@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { connectToDatabase } from "../../../lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";

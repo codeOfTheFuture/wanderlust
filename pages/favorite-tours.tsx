@@ -3,22 +3,23 @@ import { GetServerSideProps, NextPage } from "next";
 import PageHeading from "../components/ui/PageHeading";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { User } from "../types/typings";
 import Layout from "../components/layouts/Layout";
+import { wrapper } from "../store";
+import { selectUser, setUser } from "../slices/userSlice";
+import { User } from "../types/typings";
+import { useSelector } from "react-redux";
 
-interface Props {
-  user: User;
-}
+const FavoriteTours: NextPage = () => {
+  const user = useSelector(selectUser);
 
-const FavoriteTours: NextPage<Props> = ({ user }) => {
   return (
-    <Layout user={user}>
-      <PageHeading user={user} headingText="here are your favorite tours" />
+    <Layout>
+      <PageHeading headingText="here are your favorite tours" />
 
       <section className="w-full h-[40vh] flex justify-center items-center">
-        {!user.favorite_tours?.length && (
+        {!user?.favorite_tours?.length && (
           <h2 className="text-lg font-medium">
-            You currently don&apos;t have any favorite tours.
+            You don&apos;t have any favorite tours.
           </h2>
         )}
       </section>
@@ -28,16 +29,17 @@ const FavoriteTours: NextPage<Props> = ({ user }) => {
 
 export default FavoriteTours;
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(store => async context => {
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  return {
-    props: {
-      user: session?.user ? session.user : null,
-    },
-  };
-};
+    session && store.dispatch(setUser(session.user as User));
+
+    return {
+      props: {},
+    };
+  });

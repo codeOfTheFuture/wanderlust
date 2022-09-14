@@ -1,8 +1,7 @@
 import React, { FC, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store";
-import { closeModal } from "../../slices/modalSlice";
+import { closeModal, selectModalOpen } from "../../slices/modalSlice";
 import Button from "../ui/Button";
 import DropZone from "./DropZone";
 import useOnDrop from "../../hooks/useOnDrop";
@@ -12,7 +11,7 @@ import deleteImage from "../../utils/deleteImage";
 import { useDropzone } from "react-dropzone";
 
 const Modal: FC = () => {
-  const modalOpen = useSelector((state: RootState) => state.modal.modalOpen),
+  const { modalOpen } = useSelector(selectModalOpen),
     dispatch = useDispatch();
 
   const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop();

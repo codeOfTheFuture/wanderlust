@@ -6,16 +6,16 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
 import Message from "../components/messages/Message";
 import PageHeading from "../components/ui/PageHeading";
+import { selectUser, setUser } from "../slices/userSlice";
+import { wrapper } from "../store";
+import { useSelector } from "react-redux";
 
-interface Props {
-  user: User | null;
-}
+const Messages: NextPage = () => {
+  const user = useSelector(selectUser);
 
-const Messages: NextPage<Props> = props => {
-  const { user } = props;
   return (
-    <Layout user={user}>
-      <PageHeading user={user} headingText="Here are your messages." />
+    <Layout>
+      <PageHeading headingText="Here are your messages." />
 
       <section className="w-full flex flex-col items-center gap-5 my-10">
         <Message userImg={user!.image!} />
@@ -27,16 +27,17 @@ const Messages: NextPage<Props> = props => {
 
 export default Messages;
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(store => async context => {
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  return {
-    props: {
-      user: session?.user ? session.user : null,
-    },
-  };
-};
+    session && store.dispatch(setUser(session.user as User));
+
+    return {
+      props: {},
+    };
+  });

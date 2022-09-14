@@ -1,14 +1,23 @@
 import { GetServerSideProps, NextPage } from "next";
-import { getProviders } from "next-auth/react";
+import {
+  ClientSafeProvider,
+  getProviders,
+  LiteralUnion,
+} from "next-auth/react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import AuthForm from "../../components/auth-form/LoginForm";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { BuiltInProviderType } from "next-auth/providers";
+import { wrapper } from "../../store";
+import { setUser } from "../../slices/userSlice";
 import { User } from "../../types/typings";
-import { connectToDatabase } from "../../lib/mongodb";
 
 interface Props {
-  providers: any;
+  providers: Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null;
 }
 
 const SignUp: NextPage<Props> = ({ providers }) => {

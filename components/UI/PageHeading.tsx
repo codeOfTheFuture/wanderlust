@@ -1,12 +1,14 @@
 import React, { FC } from "react";
-import { User } from "../../types/typings";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../slices/userSlice";
 
 interface Props {
-  user: User | null;
   headingText: string;
 }
 
-const PageHeading: FC<Props> = ({ user, headingText }) => {
+const PageHeading: FC<Props> = ({ headingText }) => {
+  const user = useSelector(selectUser);
+
   return (
     <section className="relative w-full h-[50vh] bg-running-in-forest bg-cover bg-center bg-no-repeat flex items-end shadow-xl">
       <div className="absolute w-full h-full bg-black opacity-70"></div>

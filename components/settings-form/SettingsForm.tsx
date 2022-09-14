@@ -1,13 +1,18 @@
 import React, { FC, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../slices/userSlice";
 import Button from "../ui/Button";
 import Checkbox from "../ui/Checkbox";
 import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
 
 const SettingsForm: FC = () => {
+  const { user } = useSelector(selectUser);
+
   const [profileImage, setProfileImage] = useState<string>(""),
+    [address, setAddress] = useState<string>(""),
     [phoneNumber, setPhoneNumber] = useState<string>(""),
-    [address, setAddress] = useState<string>("");
+    [registerAsGuide, setRegisterAsGuide] = useState<boolean>(false);
 
   return (
     <form className="grid grid-cols-1 lg:grid-cols-5 w-full lg:w-1/2 h-auto lg:h-3/4 z-10 bg-white rounded-xl p-8 mx-2 lg:mx-0 lg:p-14">
@@ -29,7 +34,8 @@ const SettingsForm: FC = () => {
           name="email"
           label="Email"
           type="email"
-          value=""
+          value={user?.email!}
+          disabled
           handleChange={() => {}}
         />
         <FormInput
@@ -49,7 +55,10 @@ const SettingsForm: FC = () => {
 
         <div className="flex justify-between items-center w-full">
           <span>Register as guide</span>
-          <Checkbox />
+          <Checkbox
+            checked={registerAsGuide}
+            handleChange={setRegisterAsGuide}
+          />
         </div>
         <Button color="btn-primary" size="btn-xl" type="submit">
           Save

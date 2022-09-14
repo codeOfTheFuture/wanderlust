@@ -2,15 +2,14 @@ import React, { FC } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import NavProfile from "./NavProfile";
-import { User } from "../../types/typings";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../slices/userSlice";
 
-interface Props {
-  user: User | null;
-}
+const NavRight: FC = () => {
+  const user = useSelector(selectUser),
+    router = useRouter();
 
-const NavRight: FC<Props> = props => {
-  const router = useRouter();
-  const { user } = props;
+  console.log(user);
 
   return (
     <>
@@ -33,7 +32,7 @@ const NavRight: FC<Props> = props => {
         )}
       {router.pathname !== "/auth/signup" &&
         router.pathname !== "/auth/signin" &&
-        user && <NavProfile user={user} />}
+        user && <NavProfile />}
     </>
   );
 };

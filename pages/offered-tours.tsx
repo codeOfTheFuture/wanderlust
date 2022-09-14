@@ -7,18 +7,16 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
 import PageHeading from "../components/ui/PageHeading";
+import { wrapper } from "../store";
+import { selectUser, setUser } from "../slices/userSlice";
+import { useSelector } from "react-redux";
 
-interface Props {
-  user: User | null;
-}
+const OfferedTours: NextPage = () => {
+  const user = useSelector(selectUser);
 
-const OfferedTours: NextPage<Props> = ({ user }) => {
   return (
-    <Layout user={user}>
-      <PageHeading
-        user={user}
-        headingText="Here you can add, edit, and delete your offered tours."
-      />
+    <Layout>
+      <PageHeading headingText="Here you can add, edit, and delete your offered tours." />
 
       <section className="flex flex-col justify-center items-center gap-5 h-[40vh]">
         <h2 className="text-xl font-medium">
@@ -48,16 +46,17 @@ const OfferedTours: NextPage<Props> = ({ user }) => {
 
 export default OfferedTours;
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(store => async context => {
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  return {
-    props: {
-      user: session?.user ? session.user : null,
-    },
-  };
-};
+    session && store.dispatch(setUser(session.user as User));
+
+    return {
+      props: {},
+    };
+  });

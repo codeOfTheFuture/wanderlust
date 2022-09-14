@@ -6,19 +6,13 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { User } from "../types/typings";
 import TourForm from "../components/tour-form/TourForm";
 import Modal from "../components/modal/Modal";
+import { wrapper } from "../store";
+import { setUser } from "../slices/userSlice";
 
-interface Props {
-  user: User | null;
-}
-
-const CreateTour: NextPage<Props> = props => {
-  const { user } = props;
-
-  console.log("User: ", user);
-
+const CreateTour: NextPage = () => {
   return (
-    <Layout user={user}>
-      <TourForm user={user} />
+    <Layout>
+      <TourForm />
       <Modal />
     </Layout>
   );
@@ -26,16 +20,19 @@ const CreateTour: NextPage<Props> = props => {
 
 export default CreateTour;
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(store => async context => {
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  return {
-    props: {
-      user: session?.user ? session.user : null,
-    },
-  };
-};
+    session && store.dispatch(setUser(session.user as User));
+
+    return {
+      props: {
+        user: session?.user ? session.user : null,
+      },
+    };
+  });

@@ -2,15 +2,13 @@ import React, { FC } from "react";
 import NavLogo from "./NavLogo";
 import NavCenter from "./NavCenter";
 import NavRight from "./NavRight";
-import { User } from "../../types/typings";
 
 interface Props {
-  user?: User | null;
   scrollPosition: number;
 }
 
 const Navbar: FC<Props> = props => {
-  const { user, scrollPosition } = props;
+  const { scrollPosition } = props;
 
   return (
     <nav
@@ -19,7 +17,7 @@ const Navbar: FC<Props> = props => {
       }`}>
       <NavLogo />
       <NavCenter />
-      <NavRight user={user!} />
+      <NavRight />
     </nav>
   );
 };

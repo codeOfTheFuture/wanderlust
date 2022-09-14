@@ -12,13 +12,12 @@ import FormTextArea from "../ui/FormTextArea";
 import FormInput from "../ui/FormInput";
 import CurrencyFormat from "react-currency-format";
 import Image from "next/image";
-import { User } from "../../types/typings";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../slices/userSlice";
 
-interface Props {
-  user: User | null;
-}
+const TourForm: FC = () => {
+  const user = useSelector(selectUser);
 
-const TourForm: FC<Props> = ({ user }) => {
   return (
     <form className="mb-10">
       <div className="flex justify-center items-center w-full h-[70vh] md:h-[50vh] bg-gray-400">
@@ -59,7 +58,13 @@ const TourForm: FC<Props> = ({ user }) => {
           {/* Duration Input */}
           <div className="flex items-center gap-2">
             <ClockIcon className="w-10 h-10" />
-            <FormInput label="Duration" name="duration" type="number" />
+            <FormInput
+              label="Duration"
+              name="duration"
+              type="number"
+              value=""
+              handleChange={() => {}}
+            />
           </div>
 
           {/* Recommended Ages */}
@@ -82,7 +87,13 @@ const TourForm: FC<Props> = ({ user }) => {
           {/* Address */}
           <div className="flex items-center gap-2">
             <LocationMarkerIcon className="w-10 h-10" />
-            <FormInput name="address" label="Address" type="text" />
+            <FormInput
+              name="address"
+              label="Address"
+              type="text"
+              value=""
+              handleChange={() => {}}
+            />
           </div>
         </div>
 
@@ -103,10 +114,22 @@ const TourForm: FC<Props> = ({ user }) => {
 
             <hr />
             {/* Date Picker  */}
-            <FormInput name="date" label="Date" type="text" />
+            <FormInput
+              name="date"
+              label="Date"
+              type="text"
+              value=""
+              handleChange={() => {}}
+            />
 
             {/* Time Picker */}
-            <FormInput name="time" label="Time" type="text" />
+            <FormInput
+              name="time"
+              label="Time"
+              type="text"
+              value=""
+              handleChange={() => {}}
+            />
           </div>
 
           {/* Guide Image */}
