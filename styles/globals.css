@@ -26,4 +26,8 @@
   .nav-dropdown-link {
     @apply flex justify-center py-2 border-y text-slate-800 w-full cursor-pointer hover:bg-primary-color hover:text-light-text;
   }
+
+  .form-input {
+    @apply p-2 w-full border border-black rounded-md;
+  }
 }

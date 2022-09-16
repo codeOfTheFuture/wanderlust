@@ -5,10 +5,9 @@ import Link from "next/link";
 import Button from "../components/ui/Button";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { User } from "../types/typings";
 import PageHeading from "../components/ui/PageHeading";
 import { wrapper } from "../store";
-import { selectUser, setUser } from "../slices/userSlice";
+import { selectUser } from "../slices/userSlice";
 import { useSelector } from "react-redux";
 
 const OfferedTours: NextPage = () => {
@@ -53,8 +52,6 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-
-    session && store.dispatch(setUser(session.user as User));
 
     return {
       props: {},

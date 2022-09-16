@@ -4,9 +4,7 @@ import SettingsForm from "../components/settings-form/SettingsForm";
 import Layout from "../components/layouts/Layout";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { User } from "../types/typings";
 import { wrapper } from "../store";
-import { setUser } from "../slices/userSlice";
 
 const Settings: NextPage = () => {
   return (
@@ -28,8 +26,6 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-
-    session && store.dispatch(setUser(session.user as User));
 
     return {
       props: {},

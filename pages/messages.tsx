@@ -3,10 +3,9 @@ import { GetServerSideProps, NextPage } from "next";
 import Layout from "../components/layouts/Layout";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { User } from "../types/typings";
 import Message from "../components/messages/Message";
 import PageHeading from "../components/ui/PageHeading";
-import { selectUser, setUser } from "../slices/userSlice";
+import { selectUser } from "../slices/userSlice";
 import { wrapper } from "../store";
 import { useSelector } from "react-redux";
 
@@ -34,8 +33,6 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-
-    session && store.dispatch(setUser(session.user as User));
 
     return {
       props: {},

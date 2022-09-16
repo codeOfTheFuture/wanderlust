@@ -3,10 +3,8 @@ import Layout from "../components/layouts/Layout";
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { User } from "../types/typings";
 import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
-import { setUser } from "../slices/userSlice";
 
 const UpdateTour: NextPage = () => {
   return (
@@ -25,8 +23,6 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-
-    session && store.dispatch(setUser(session.user as User));
 
     return {
       props: {},
