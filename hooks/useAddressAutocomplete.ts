@@ -1,13 +1,13 @@
 import { ChangeEvent, useState } from "react";
 
 const useAddressAutocomplete = (initialValue: string) => {
-  const [address, setAddress] = useState<string>(initialValue),
+  const [value, setValue] = useState<string>(initialValue),
     [suggestions, setSuggestions] = useState<any[]>([]);
 
-  const MAPBOX_ENDPOINT = `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}&country=US&autocomplete=true`;
+  const MAPBOX_ENDPOINT = `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}&country=US&types=address&autocomplete=true`;
 
   const handleAddressChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    setAddress(event.target.value);
+    setValue(event.target.value);
 
     try {
       const response = await fetch(MAPBOX_ENDPOINT);
@@ -20,7 +20,7 @@ const useAddressAutocomplete = (initialValue: string) => {
   };
 
   return {
-    address,
+    value,
     onChange: handleAddressChange,
     suggestions,
   };

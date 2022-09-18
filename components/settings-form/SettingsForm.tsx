@@ -1,22 +1,33 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import { useSelector } from "react-redux";
-import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
+import useParseAddress from "../../hooks/useParseAddress";
 import { selectUser } from "../../slices/userSlice";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
 import Checkbox from "../ui/Checkbox";
 import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
+import CurrencyFormat from "react-currency-format";
 
 const SettingsForm: FC = () => {
   const user = useSelector(selectUser);
 
   const [profileImage, setProfileImage] = useState<string>(""),
-    [selectedAddress, setSelectedAddress] = useState(""),
+    [email, setEmail] = useState<string>(user?.email!),
+    [selectedAddress, setSelectedAddress] = useState<any>(null),
     [phoneNumber, setPhoneNumber] = useState<string>(""),
     [registerAsGuide, setRegisterAsGuide] = useState<boolean>(false);
 
-  console.log("selected address >>>", selectedAddress);
+  const {
+    streetAddress,
+    city,
+    state,
+    zipCode,
+    setStreetAddress,
+    setCity,
+    setState,
+    setZipCode,
+  } = useParseAddress(selectedAddress?.place_name || "");
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 xl:w-3/4 max-w-5xl h-11/12 sm:h-5/6 z-10 bg-white rounded-xl mx-2 p-2 sm:p-8 lg:p-14">
@@ -42,6 +53,10 @@ const SettingsForm: FC = () => {
             <input
               id="email"
               type="email"
+              value={email}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setEmail(event.target.value)
+              }
               placeholder="Email"
               className="form-input"
             />
@@ -60,6 +75,10 @@ const SettingsForm: FC = () => {
               <input
                 id="city"
                 type="text"
+                value={city}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setCity(event.target.value)
+                }
                 placeholder="City"
                 className="form-input"
               />
@@ -72,6 +91,10 @@ const SettingsForm: FC = () => {
               <input
                 id="state"
                 type="text"
+                value={state}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setState(event.target.value)
+                }
                 placeholder="State"
                 className="form-input"
               />
@@ -84,6 +107,10 @@ const SettingsForm: FC = () => {
               <input
                 id="zipCode"
                 type="text"
+                value={zipCode}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setZipCode(event.target.value)
+                }
                 placeholder="Zip Code"
                 className="form-input"
               />
@@ -92,12 +119,21 @@ const SettingsForm: FC = () => {
 
           <div>
             <label htmlFor="phoneNumber"></label>
-            <input
+            <CurrencyFormat
+              value={phoneNumber}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setPhoneNumber(event.target.value)
+              }
+              format="+1 (###) ###-####"
+              mask="_"
+              className="form-input"
+            />
+            {/* <input
               id="phoneNumber"
               type="text"
               placeholder="Phone Number"
               className="form-input"
-            />
+            /> */}
           </div>
         </form>
 

@@ -59,4 +59,12 @@ interface CloudinaryImage {
 
 type HandleScroll = () => void;
 
-export { type User, type Tour, type HandleScroll, type CloudinaryImage };
+type States = [StateName: string, StateAbbr: string][];
+
+export {
+  type User,
+  type Tour,
+  type HandleScroll,
+  type CloudinaryImage,
+  type States,
+};
