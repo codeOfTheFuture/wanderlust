@@ -1,7 +1,7 @@
 import { CameraIcon } from "@heroicons/react/solid";
 import React, { FC } from "react";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../slices/modalSlice";
+import { openModal } from "../../store/slices/modalSlice";
 
 const TourImageUpload: FC = () => {
   const dispatch = useDispatch();

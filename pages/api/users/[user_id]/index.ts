@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "../../../../lib/mongodb";
 
 export default nc<NextApiRequest, NextApiResponse>()
   // Get a single user - GET /api/users/:user_id

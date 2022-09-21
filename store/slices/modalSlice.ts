@@ -1,4 +1,4 @@
-import { AppState } from "./../store/index";
+import { AppState } from "../index";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 

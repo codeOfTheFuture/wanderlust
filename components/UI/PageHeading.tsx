@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../slices/userSlice";
+import { selectUser } from "../../store/slices/userSlice";
 
 interface Props {
   headingText: string;

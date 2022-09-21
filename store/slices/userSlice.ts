@@ -1,7 +1,7 @@
-import { AppState } from "./../store/index";
+import { AppState } from "../index";
 import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
-import { User } from "../types/typings";
+import { User } from "../../types/typings";
 
 export interface UserState {
   user: User | null;

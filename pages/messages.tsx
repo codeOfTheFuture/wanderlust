@@ -5,7 +5,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Message from "../components/messages/Message";
 import PageHeading from "../components/ui/PageHeading";
-import { selectUser } from "../slices/userSlice";
+import { selectUser } from "../store/slices/userSlice";
 import { wrapper } from "../store";
 import { useSelector } from "react-redux";
 

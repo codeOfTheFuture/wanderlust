@@ -1,7 +1,7 @@
 import React, { FC, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { closeModal, selectModalOpen } from "../../slices/modalSlice";
+import { closeModal, selectModalOpen } from "../../store/slices/modalSlice";
 import Button from "../ui/Button";
 import DropZone from "./DropZone";
 import useOnDrop from "../../hooks/useOnDrop";

@@ -5,7 +5,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Layout from "../components/layouts/Layout";
 import { wrapper } from "../store";
-import { selectUser } from "../slices/userSlice";
+import { selectUser } from "../store/slices/userSlice";
 import { useSelector } from "react-redux";
 
 const BookedTours: NextPage = () => {

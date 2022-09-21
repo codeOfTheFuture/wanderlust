@@ -9,7 +9,7 @@ import Button from "../components/ui/Button";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
 import { wrapper } from "../store";
-import { setUser } from "../slices/userSlice";
+import { setUser } from "../store/slices/userSlice";
 
 interface Props {
   tours: Tour[];

@@ -10,7 +10,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { BuiltInProviderType } from "next-auth/providers";
 import { wrapper } from "../../store";
-import { setUser } from "../../slices/userSlice";
+import { setUser } from "../../store/slices/userSlice";
 import { User } from "../../types/typings";
 
 interface Props {

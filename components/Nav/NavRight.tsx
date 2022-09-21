@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import NavProfile from "./NavProfile";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../slices/userSlice";
+import { selectUser } from "../../store/slices/userSlice";
 
 const NavRight: FC = () => {
   const user = useSelector(selectUser),

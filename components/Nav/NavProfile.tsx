@@ -3,7 +3,7 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import NavDropdown from "./NavDropdown";
 import useClickOutside from "../../hooks/useClickOutside";
-import { selectUser } from "../../slices/userSlice";
+import { selectUser } from "../../store/slices/userSlice";
 import { useSelector } from "react-redux";
 
 const NavProfile: FC = () => {

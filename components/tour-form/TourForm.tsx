@@ -13,7 +13,7 @@ import FormInput from "../ui/FormInput";
 import CurrencyFormat from "react-currency-format";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../slices/userSlice";
+import { selectUser } from "../../store/slices/userSlice";
 
 const TourForm: FC = () => {
   const user = useSelector(selectUser);

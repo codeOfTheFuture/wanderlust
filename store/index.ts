@@ -1,7 +1,7 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import userReducer from "../slices/userSlice";
-import modalReducer from "../slices/modalSlice";
+import userReducer from "./slices/userSlice";
+import modalReducer from "./slices/modalSlice";
 
 export const makeStore = () =>
   configureStore({
