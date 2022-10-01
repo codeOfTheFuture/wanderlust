@@ -1,6 +1,8 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { Combobox } from "@headlessui/react";
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/slices/userSlice";
 
 interface Props {
   selectedAddress: string;
@@ -11,7 +13,8 @@ const AddressAutocomplete: FC<Props> = ({
   selectedAddress,
   setSelectedAddress,
 }) => {
-  const { value, onChange, suggestions } = useAddressAutocomplete("");
+  const user = useSelector(selectUser),
+    { value, onChange, suggestions } = useAddressAutocomplete("");
 
   return (
     <Combobox
@@ -27,7 +30,8 @@ const AddressAutocomplete: FC<Props> = ({
         value={value}
         onChange={onChange}
         displayValue={(suggestion: any) =>
-          suggestion && suggestion.place_name.split(",")[0]
+          (suggestion && suggestion.place_name.split(",")[0]) ||
+          user?.streetAddress
         }
         className="form-input"
         placeholder="Address"

@@ -1,30 +1,46 @@
-import React, { ChangeEvent, FC, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
 import useParseAddress from "../../hooks/useParseAddress";
-import { selectUser } from "../../store/slices/userSlice";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
 import Checkbox from "../ui/Checkbox";
 import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
 import CurrencyFormat from "react-currency-format";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/slices/userSlice";
 
-const SettingsForm: FC = () => {
+interface Props {
+  submitForm: any;
+}
+
+const SettingsForm: FC<Props> = ({ submitForm }) => {
   const user = useSelector(selectUser);
+
+  const photoPickerRef = useRef<HTMLInputElement>(null);
 
   const [email, setEmail] = useState<string>(user?.email!),
     [selectedAddress, setSelectedAddress] = useState<any>(null),
-    [phoneNumber, setPhoneNumber] = useState<string>(""),
-    [registerAsGuide, setRegisterAsGuide] = useState<boolean>(false);
+    [phoneNumber, setPhoneNumber] = useState<string>(user?.phoneNumber || ""),
+    [registerAsGuide, setRegisterAsGuide] = useState<boolean>(
+      user?.registerAsGuide || false
+    );
 
   const { streetAddress, city, state, zipCode, setCity, setState, setZipCode } =
     useParseAddress(selectedAddress?.place_name || "");
 
-  const photoPickerRef = useRef<HTMLInputElement>(null);
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
 
-  const handleSubmit = async () => {};
-
-  console.log(phoneNumber);
+    await submitForm({
+      email,
+      streetAddress,
+      city,
+      state,
+      zipCode,
+      phoneNumber,
+      registerAsGuide,
+    });
+  };
 
   return (
     <form

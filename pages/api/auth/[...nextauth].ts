@@ -29,15 +29,15 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user }) {
-      if (!user.signedInBefore) {
-        user.address = null;
+      if (user.signedInBefore == null) {
+        user.streetAddress = null;
         user.city = null;
         user.state = null;
-        user.zip_code = null;
-        user.phone_number = null;
-        user.guide = false;
-        user.offered_tours = [];
-        user.favorite_tours = [];
+        user.zipCode = null;
+        user.phoneNumber = null;
+        user.registerAsGuide = false;
+        user.offeredTours = [];
+        user.favoriteTours = [];
         user.messages = [];
         user.signedInBefore = true;
       }

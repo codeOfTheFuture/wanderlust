@@ -1,19 +1,19 @@
 import { ObjectId } from "mongodb";
 
 interface User {
-  _id: ObjectId;
+  id: ObjectId;
   name: string;
   email: string;
   image: string;
-  address: string | null;
+  streetAddress: string | null;
   city: string | null;
   state: string | null;
-  zip_code: string | null;
-  phone_number: string | null;
-  guide: boolean;
-  offered_tours: Tour[];
-  booked_tours: Tour[];
-  favorite_tours: Tour[];
+  zipCode: string | null;
+  phoneNumber: string | null;
+  registerAsGuide: boolean;
+  offeredTours: Tour[];
+  bookedTours: Tour[];
+  favoriteTours: Tour[];
   messages: any[];
   signedInBefore: boolean;
   created_at: Date;

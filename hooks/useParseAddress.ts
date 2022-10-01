@@ -1,12 +1,17 @@
+import { useSelector } from "react-redux";
 import { stateAbbrLookup } from "./../utils/stateAbbrLookup";
 import { useState } from "react";
 import { useEffect } from "react";
+import { selectUser } from "../store/slices/userSlice";
+import { User } from "../types/typings";
 
 const useParseAddress = (selectedAddress: string) => {
+  const user = useSelector(selectUser) as User;
+
   const [streetAddress, setStreetAddress] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [state, setState] = useState<string>("");
-  const [zipCode, setZipCode] = useState<string>("");
+  const [city, setCity] = useState<string>(user?.city || "");
+  const [state, setState] = useState<string>(user?.state || "");
+  const [zipCode, setZipCode] = useState<string>(user?.zipCode || "");
 
   useEffect(() => {
     if (selectedAddress) {
