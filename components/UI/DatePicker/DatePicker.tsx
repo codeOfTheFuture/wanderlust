@@ -1,19 +1,40 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Calendar as CalendarData } from "calendar";
 import Calendar from "./Calendar";
 import DatePanel from "./DatePanel";
+import TimePicker from "./TimePicker";
+import { SelectedDate } from "../../tour-form/TourForm";
 
-const DatePicker = () => {
+interface Props {
+  datePickerOpen: boolean;
+  currentSelectedDate: SelectedDate | null;
+  selectedDates: SelectedDate[];
+  addDate: (date: Date) => void;
+  removeDate: (date: Date) => void;
+  selectDate: (date: SelectedDate) => void;
+  changeTime: (date: Date, hour: number, minute: number) => void;
+}
+
+const DatePicker: FC<Props> = ({
+  datePickerOpen,
+  currentSelectedDate,
+  selectedDates,
+  addDate,
+  removeDate,
+  selectDate,
+  changeTime,
+}) => {
   const [calendar, setCalendar] = useState<number[]>([]),
     [month, setMonth] = useState<number>(new Date().getMonth()),
-    [year, setYear] = useState<number>(new Date().getFullYear()),
-    [selectedDates, setSelectedDates] = useState<Date[]>([]);
+    [year, setYear] = useState<number>(new Date().getFullYear());
 
   useEffect(() => {
-    const cal = new CalendarData();
+    const calendarData = new CalendarData();
 
     setCalendar(
-      cal.monthDays(year, month).reduce((month, week) => month.concat(week), [])
+      calendarData
+        .monthDays(year, month)
+        .reduce((month, week) => month.concat(week), [])
     );
   }, [month, year]);
 
@@ -41,38 +62,37 @@ const DatePicker = () => {
     }
   };
 
-  const selectDate = (date: Date) => {
-    setSelectedDates(prevState => [...prevState, date]);
-  };
-
-  const removeDate = (date: Date) => {
-    setSelectedDates(prevState =>
-      prevState.filter(
-        d => d.toLocaleDateString() !== date.toLocaleDateString()
-      )
-    );
-  };
-
   return (
-    <div className="absolute top-11 select-none shadow-md">
+    <div
+      className={`absolute top-11 bg-white z-10 select-none shadow-md origin-top transition-transform duration-150 ease-in-out ${
+        datePickerOpen ? "scale-y-100" : "scale-y-0"
+      }`}>
       {/* DatePicker header */}
 
-      <div className="flex h-[406px]">
+      <div className="flex">
         <Calendar
           calendar={calendar}
           month={month}
           year={year}
           getPrevMonth={getPrevMonth}
           getNextMonth={getNextMonth}
-          selectDate={selectDate}
+          addDate={addDate}
           removeDate={removeDate}
           selectedDates={selectedDates}
         />
 
-        <DatePanel selectedDates={selectedDates} removeDate={removeDate} />
+        <DatePanel
+          currentSelectedDate={currentSelectedDate}
+          selectedDates={selectedDates}
+          removeDate={removeDate}
+          selectDate={selectDate}
+        />
       </div>
 
-      {/* Time Picker */}
+      <TimePicker
+        currentSelectedDate={currentSelectedDate}
+        changeTime={changeTime}
+      />
     </div>
   );
 };

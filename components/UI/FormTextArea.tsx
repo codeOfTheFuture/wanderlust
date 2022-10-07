@@ -1,13 +1,28 @@
-import React, { FC, KeyboardEvent, useRef, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  KeyboardEvent,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 
 interface Props {
   name: "description" | "what-to-bring";
   label: string;
+  formId: string;
+  value: string;
+  handleChange: Dispatch<SetStateAction<string>>;
 }
 
-const FormTextArea: FC<Props> = props => {
-  const { name, label } = props,
-    Bullet_Point = "•",
+const FormTextArea: FC<Props> = ({
+  name,
+  label,
+  formId,
+  value,
+  handleChange,
+}) => {
+  const bullet_point = "•",
     text = useRef<HTMLTextAreaElement>(null);
 
   const [focused, setFocused] = useState<boolean>(false);
@@ -16,7 +31,7 @@ const FormTextArea: FC<Props> = props => {
     if (name === "what-to-bring" && e.key === "Enter") {
       e.stopPropagation();
       e.preventDefault();
-      text!.current!.value = `${text.current?.value}\n${" " + Bullet_Point} `;
+      text!.current!.value = `${text.current?.value}\n${" " + bullet_point} `;
     }
   };
 
@@ -31,11 +46,14 @@ const FormTextArea: FC<Props> = props => {
         placeholder={label}
         className="block border border-blue-500 w-full h-40 resize-none"
         ref={text}
+        form={formId}
+        value={value}
+        onChange={e => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         defaultValue={
-          name === "what-to-bring" && focused ? ` ${Bullet_Point} ` : ""
+          name === "what-to-bring" && focused ? ` ${bullet_point} ` : ""
         }></textarea>
     </div>
   );

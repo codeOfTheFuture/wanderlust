@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
+import { SelectedDate } from "../../tour-form/TourForm";
 
 interface Props {
   day: number;
   month: number;
   year: number;
-  selectedDates: Date[];
-  selectDate: (date: Date) => void;
+  selectedDates: SelectedDate[];
+  addDate: (date: Date) => void;
   removeDate: (date: Date) => void;
 }
 
@@ -14,16 +15,19 @@ const DatePickerDay: FC<Props> = ({
   month,
   year,
   selectedDates,
-  selectDate,
+  addDate,
   removeDate,
 }) => {
   const [dateSelected, setDateSelected] = useState(false);
+
+  const calenderDate = new Date(year, month, day),
+    todaysDate = new Date();
 
   useEffect(() => {
     setDateSelected(
       selectedDates.find(
         d =>
-          d.toLocaleDateString() ===
+          d.date.toLocaleDateString() ===
           new Date(year, month, day).toLocaleDateString()
       ) != null
     );
@@ -33,13 +37,15 @@ const DatePickerDay: FC<Props> = ({
     <div></div>
   ) : (
     <div
-      className={`${
-        dateSelected && "bg-primary-color text-white"
-      } flex justify-center items-center w-11 h-11 text-center cursor-pointer rounded-full z-20 hover:bg-primary-light-color hover:text-white`}
+      className={`${dateSelected && "bg-primary-color text-white"} ${
+        calenderDate < todaysDate
+          ? "text-gray-300 cursor-not-allowed"
+          : "text-black hover:bg-primary-light-color hover:text-white"
+      } flex justify-center items-center w-11 h-11 text-center cursor-pointer rounded-full`}
       onClick={() =>
         dateSelected
           ? removeDate(new Date(year, month, day))
-          : selectDate(new Date(year, month, day))
+          : calenderDate >= todaysDate && addDate(new Date(year, month, day))
       }>
       {day}
     </div>

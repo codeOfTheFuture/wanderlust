@@ -22,7 +22,7 @@ const FormSelect: FC<Props> = props => {
         className="p-5 bg-transparent"
         value={value}
         onChange={e => handleChange(e.target.value)}>
-        <option value={defaultText} disabled selected>
+        <option value="" disabled selected>
           {defaultText}
         </option>
         {optionsList.map(option => (
