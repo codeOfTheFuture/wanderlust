@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, FormEvent, useRef, useState } from "react";
 import TourImageUpload from "./TourImageUpload";
 import TourTitleInput from "./TourTitleInput";
 import FormSelect from "../ui/FormSelect";
@@ -20,6 +20,12 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
 import DatePicker from "../ui/DatePicker/DatePicker";
 import useClickOutside from "../../hooks/useClickOutside";
+import Modal from "../modal/Modal";
+import useOnDrop from "../../hooks/useOnDrop";
+import AddressAutocomplete from "../ui/AddressAutocomplete";
+import Button from "../ui/Button";
+import { Address } from "../../types/typings";
+import { ObjectId } from "mongodb";
 
 export type SelectedDate = {
   date: Date;
@@ -32,22 +38,22 @@ export type SelectedDate = {
 const TourForm: FC = () => {
   const user = useSelector(selectUser);
 
+  const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop();
+
+  const datePickerRef = useRef<HTMLDivElement>(null);
+
   const [tourTitle, setTourTitle] = useState<string>(""),
     [category, setCategory] = useState<string>(""),
     [description, setDescription] = useState<string>(""),
     [duration, setDuration] = useState<string>(""),
     [recommendedAges, setRecommendedAges] = useState<string>(""),
     [whatToBring, setWhatToBring] = useState<string>(""),
-    [address, setAddress] = useState<string>(""),
+    [selectedAddress, setSelectedAddress] = useState<any>(null),
     [price, setPrice] = useState<string>("0"),
     [datePickerOpen, setDatePickerOpen] = useState<boolean>(false),
     [selectedDates, setSelectedDates] = useState<SelectedDate[]>([]),
     [currentSelectedDate, setCurrentSelectedDate] =
       useState<SelectedDate | null>(null);
-
-  const datePickerRef = useRef<HTMLDivElement>(null);
-
-  console.log("price", price);
 
   useClickOutside(datePickerRef, () => {
     setDatePickerOpen(false);
@@ -84,8 +90,42 @@ const TourForm: FC = () => {
     setDatePickerOpen(true);
   };
 
+  const submitForm = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const tour = {
+      guideId: new ObjectId(user?.id),
+      title: tourTitle,
+      category: category,
+      description: description,
+      duration: duration,
+      recommendedAges: recommendedAges,
+      whatToBring: whatToBring,
+      address: {
+        placeName: selectedAddress?.place_name,
+        coordinates: selectedAddress?.geometry.coordinates,
+      },
+      price: price,
+      tourDates: selectedDates,
+      tourPhotos: uploadedFiles,
+      bookedTourists: [],
+    };
+
+    const response = await fetch("/api/tours", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tour),
+    });
+
+    const addedTour = response.json();
+
+    console.log(addedTour);
+  };
+
   return (
-    <form className="mb-10" id="tourForm">
+    <form className="mb-10" id="tourForm" onSubmit={submitForm}>
       <div className="flex justify-center items-center w-full h-[70vh] md:h-[50vh] bg-gray-400">
         <div className="flex flex-col md:flex-row justify-center items-center gap-10 w-5/6 lg:w-2/3">
           <div className="flex flex-col gap-2 mt-10 md:mt-0 w-full">
@@ -111,6 +151,11 @@ const TourForm: FC = () => {
 
           {/* Image Upload */}
           <TourImageUpload />
+          <Modal
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+            onDrop={onDrop}
+          />
         </div>
       </div>
 
@@ -179,12 +224,10 @@ const TourForm: FC = () => {
           {/* Address */}
           <div className="flex items-center gap-2">
             <LocationMarkerIcon className="w-10 h-10" />
-            <FormInput
-              name="address"
-              label="Address"
-              type="text"
-              value=""
-              handleChange={() => {}}
+            <AddressAutocomplete
+              displayFullAddress={true}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
             />
           </div>
         </div>
@@ -248,6 +291,14 @@ const TourForm: FC = () => {
             </div>
           )}
         </div>
+      </div>
+      <div className="flex justify-center items-center gap-10 mt-10">
+        <Button color="btn-primary" type="submit" size="btn-lg">
+          Save
+        </Button>
+        <Button color="btn-error" type="button" size="btn-lg">
+          Clear
+        </Button>
       </div>
     </form>
   );

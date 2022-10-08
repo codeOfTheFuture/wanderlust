@@ -9,22 +9,21 @@ interface Props {
 
 const TourCard: FC<Props> = ({ tour }) => {
   const router: NextRouter = useRouter(),
-    { _id, title, tour_photos, price } = tour;
+    { _id, title, tourPhotos, price } = tour;
 
-  const SINGLE_TOUR_URL = `/tour?tour=${_id}`;
+  const url = `/tour?tour=${_id}`;
 
   const handleClick = () => {
-    router.push(SINGLE_TOUR_URL);
+    router.push(url);
   };
 
   return (
     <div
       className="relative flex flex-col justify-end items-center w-full h-[300px] bg-slate-200 cursor-pointer border-2 border-slate-700 shadow-lg hover:shadow-xl rounded-sm px-2 hover:scale-105 transition-transform duration-300 ease-in-out"
-      onClick={handleClick}
-    >
-      {tour.tour_photos.length > 0 && (
+      onClick={handleClick}>
+      {tour.tourPhotos.length > 0 && (
         <Image
-          src={tour_photos[0]}
+          src={tourPhotos[0].secure_url}
           alt={title}
           layout="fill"
           className="absolute"

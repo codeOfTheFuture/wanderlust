@@ -21,17 +21,27 @@ interface User {
 
 interface Tour {
   _id: ObjectId;
-  guide_id: ObjectId;
+  guideId: string;
   title: string;
   description: string;
   price: number;
-  duration: number;
-  tour_date: Date;
+  duration: string;
+  recommendedAges: string;
+  address: {
+    placeName: string;
+    coordinates: number[];
+  };
+  bookedTourists: User[];
+  whatToBring: string;
+  tourPhotos: CloudinaryImage[];
   created_at: Date;
-  tour_location: { lat: number; lng: number };
-  booked_tourists: User[];
-  items_to_bring: string[];
-  tour_photos: string[];
+  tourDates: {
+    date: Date;
+    time: {
+      hour: number;
+      minute: number;
+    };
+  };
 }
 
 interface CloudinaryImage {
@@ -61,10 +71,17 @@ type HandleScroll = () => void;
 
 type States = [StateName: string, StateAbbr: string][];
 
+type Address = {
+  id: string;
+  placeName: string;
+  coordinates: Number[];
+};
+
 export {
   type User,
   type Tour,
   type HandleScroll,
   type CloudinaryImage,
   type States,
+  type Address,
 };

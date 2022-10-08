@@ -3,18 +3,29 @@ import { Combobox } from "@headlessui/react";
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
+import { useInView } from "react-intersection-observer";
+import { Address, User } from "../../types/typings";
 
 interface Props {
-  selectedAddress: string;
-  setSelectedAddress: Dispatch<SetStateAction<string>>;
+  displayFullAddress: boolean;
+  selectedAddress: Address | null;
+  setSelectedAddress: Dispatch<SetStateAction<Address | null>>;
 }
 
 const AddressAutocomplete: FC<Props> = ({
+  displayFullAddress,
   selectedAddress,
   setSelectedAddress,
 }) => {
-  const user = useSelector(selectUser),
-    { value, onChange, suggestions } = useAddressAutocomplete("");
+  const user = useSelector(selectUser) as User;
+
+  const { value, handleAddressChange, suggestions } =
+    useAddressAutocomplete("");
+
+  const [optionsRef, optionsInView] = useInView({
+    threshold: 1,
+    rootMargin: "70px",
+  });
 
   return (
     <Combobox
@@ -28,27 +39,35 @@ const AddressAutocomplete: FC<Props> = ({
       <Combobox.Input
         as="input"
         value={value}
-        onChange={onChange}
-        displayValue={(suggestion: any) =>
-          (suggestion && suggestion.place_name.split(",")[0]) ||
-          user?.streetAddress
-        }
+        onChange={handleAddressChange}
+        displayValue={(suggestion: any) => {
+          if (displayFullAddress) return suggestion?.place_name || "";
+          else if (user) return user.streetAddress as string;
+          return suggestion?.place_name.split(",")[0] || "";
+        }}
         className="form-input"
         placeholder="Address"
       />
       <Combobox.Options
         as="ul"
-        className={`${
+        className={`flex-col justify-center items-start absolute w-full bg-white border border-black rounded-md ${
           suggestions.length ? "flex" : "hidden"
-        } flex-col justify-center items-start absolute w-full mt-1 bg-white border border-black rounded-md`}>
+        } ${optionsInView ? "-top-52 mt-1" : "mt-1"}`}
+        ref={optionsRef}>
         {suggestions.map(suggestion => (
           <Combobox.Option
             as="li"
             key={suggestion.id}
             value={suggestion}
-            onClick={() => setSelectedAddress(suggestion.place_name)}
+            onClick={() =>
+              setSelectedAddress({
+                id: suggestion.id,
+                placeName: suggestion?.place_name,
+                coordinates: suggestion?.geometry.coordinates,
+              })
+            }
             className="cursor-pointer p-2 rounded hover:bg-gray-200">
-            {suggestion.place_name}
+            {suggestion?.place_name}
           </Combobox.Option>
         ))}
       </Combobox.Options>

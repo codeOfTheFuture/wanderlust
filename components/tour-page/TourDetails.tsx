@@ -23,9 +23,11 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
     description,
     price,
     duration,
-    tour_date,
-    items_to_bring,
-    tour_photos,
+    recommendedAges,
+    address,
+    tourDates,
+    whatToBring,
+    tourPhotos,
   } = tour;
 
   const { name, image } = guide;
@@ -41,15 +43,13 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
         <div className="flex items-center">
           <ClockIcon className="w-12 h-12" />
           <div className="ml-2">
-            <span>Duration: </span>
-            <span>{duration} hours</span>
+            <span>Duration: {duration}</span>
           </div>
         </div>
         <div className="flex items-center">
           <UserIcon className="w-12 h-12" />
           <div className="ml-2">
-            <span>Recommended ages: </span>
-            <span>All ages</span>
+            <span>Recommended ages: {recommendedAges}</span>
           </div>
         </div>
         <div className="flex items-center">
@@ -57,9 +57,9 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
           <div className="flex flex-col ml-2">
             <p>What to Bring</p>
             <ul className="ml-8">
-              {items_to_bring.map((item, index) => (
+              {whatToBring.split("\n").map((item, index) => (
                 <li key={index} className="list-disc">
-                  {item}
+                  {item.match(/[a-zA-Z]/gi)}
                 </li>
               ))}
             </ul>
@@ -69,8 +69,7 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
           <LocationMarkerIcon className="w-12 h-12" />
           <div className="ml-2">
             <p>Location</p>
-            <p>1234 Main</p>
-            <p>Yosemite National Park, CA 95389</p>
+            <p>{address.placeName}</p>
           </div>
         </div>
       </div>

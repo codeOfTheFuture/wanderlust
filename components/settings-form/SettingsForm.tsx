@@ -8,9 +8,10 @@ import ProfilePhotoPicker from "./ProfilePhotoPicker";
 import CurrencyFormat from "react-currency-format";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
+import { Address } from "../../types/typings";
 
 interface Props {
-  submitForm: any;
+  submitForm: (formData: any) => Promise<void>;
 }
 
 const SettingsForm: FC<Props> = ({ submitForm }) => {
@@ -19,17 +20,17 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
   const photoPickerRef = useRef<HTMLInputElement>(null);
 
   const [email, setEmail] = useState<string>(user?.email!),
-    [selectedAddress, setSelectedAddress] = useState<any>(null),
+    [selectedAddress, setSelectedAddress] = useState<Address | null>(null),
     [phoneNumber, setPhoneNumber] = useState<string>(user?.phoneNumber || ""),
     [registerAsGuide, setRegisterAsGuide] = useState<boolean>(
       user?.registerAsGuide || false
     );
 
   const { streetAddress, city, state, zipCode, setCity, setState, setZipCode } =
-    useParseAddress(selectedAddress?.place_name || "");
+    useParseAddress(selectedAddress?.placeName || "");
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
     await submitForm({
       email,
@@ -70,6 +71,7 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
           />
 
           <AddressAutocomplete
+            displayFullAddress={false}
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
           />

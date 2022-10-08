@@ -66,7 +66,7 @@ const DatePicker: FC<Props> = ({
     <div
       className={`absolute top-11 bg-white z-10 select-none shadow-md origin-top transition-transform duration-150 ease-in-out ${
         datePickerOpen ? "scale-y-100" : "scale-y-0"
-      }`}>
+      } `}>
       {/* DatePicker header */}
 
       <div className="flex">

@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from "react";
+import React, { Dispatch, FC, Fragment, SetStateAction } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { closeModal, selectModalOpen } from "../../store/slices/modalSlice";
@@ -9,12 +9,17 @@ import PreviewThumbnails from "./PreviewThumbnails";
 import ModalDivider from "./ModalDivider";
 import deleteImage from "../../utils/deleteImage";
 import { useDropzone } from "react-dropzone";
+import { CloudinaryImage } from "../../types/typings";
 
-const Modal: FC = () => {
+interface Props {
+  uploadedFiles: CloudinaryImage[];
+  setUploadedFiles: Dispatch<SetStateAction<CloudinaryImage[]>>;
+  onDrop: (acceptedFiles: File[]) => void;
+}
+
+const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
   const { modalOpen } = useSelector(selectModalOpen),
     dispatch = useDispatch();
-
-  const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop();
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     onDrop,

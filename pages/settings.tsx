@@ -11,7 +11,6 @@ import { User } from "../types/typings";
 
 const Settings: NextPage = () => {
   const user = useSelector(selectUser);
-  console.log(user?.id);
 
   const submitForm = async (formData: any) => {
     try {

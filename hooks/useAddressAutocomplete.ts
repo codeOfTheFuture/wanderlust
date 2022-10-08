@@ -21,7 +21,7 @@ const useAddressAutocomplete = (initialValue: string) => {
 
   return {
     value,
-    onChange: handleAddressChange,
+    handleAddressChange,
     suggestions,
   };
 };
