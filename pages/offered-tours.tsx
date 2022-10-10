@@ -34,9 +34,9 @@ const OfferedTours: NextPage<Props> = ({ offeredTours }) => {
 
         {offeredTours?.length > 0 && <TourCards tours={offeredTours} />}
 
-        <Link href={!register ? "/settings" : "/create-tour"}>
+        <Link href={!registerAsGuide ? "/settings" : "/create-tour"}>
           <Button color="btn-primary" size="btn-lg" type="button">
-            {!register ? "Go to settings" : "Create Tour"}
+            {!registerAsGuide ? "Go to settings" : "Create Tour"}
           </Button>
         </Link>
       </section>
