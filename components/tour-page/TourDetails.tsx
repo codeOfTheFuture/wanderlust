@@ -19,7 +19,6 @@ interface Props {
 
 const TourDetails: FC<Props> = ({ tour, guide }) => {
   const {
-    title,
     description,
     price,
     duration,

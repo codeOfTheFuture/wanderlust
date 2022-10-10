@@ -6,7 +6,7 @@ interface Props {
   tours: Tour[];
 }
 
-const TourCardWrapper: FC<Props> = ({ tours }) => {
+const TourCards: FC<Props> = ({ tours }) => {
   const page = 1;
 
   return (
@@ -26,4 +26,4 @@ const TourCardWrapper: FC<Props> = ({ tours }) => {
   );
 };
 
-export default TourCardWrapper;
+export default TourCards;
