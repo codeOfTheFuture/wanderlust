@@ -1,7 +1,5 @@
-import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { ObjectId } from "mongodb";
-import Layout from "../components/layouts/Layout";
 import RecommendedTours from "../components/tour-cards/RecommendedTours";
 import TourDetails from "../components/tour-page/TourDetails";
 import TourPageHeader from "../components/tour-page/TourPageHeader";
@@ -22,7 +20,7 @@ const Tour: NextPage<Props> = props => {
     { title, tourPhotos } = tour;
 
   return (
-    <Layout>
+    <>
       <div className="flex flex-col justify-center items-center gap-5">
         <TourPageHeader
           backgroundImage={tourPhotos[0].secure_url}
@@ -32,7 +30,7 @@ const Tour: NextPage<Props> = props => {
         <div className="w-11/12 xl:w-1/2 h-[1px] mx-auto bg-black"></div>
         <RecommendedTours tours={tours} />
       </div>
-    </Layout>
+    </>
   );
 };
 

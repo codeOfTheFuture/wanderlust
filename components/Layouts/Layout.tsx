@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { useEffect, useState } from "react";
 import { HandleScroll } from "../../types/typings";
 import Footer from "../ui/Footer";

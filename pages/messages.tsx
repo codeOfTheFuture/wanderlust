@@ -1,6 +1,4 @@
-import React from "react";
 import { GetServerSideProps, NextPage } from "next";
-import Layout from "../components/layouts/Layout";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Message from "../components/messages/Message";
@@ -13,14 +11,14 @@ const Messages: NextPage = () => {
   const user = useSelector(selectUser);
 
   return (
-    <Layout>
+    <>
       <PageHeading headingText="Here are your messages." />
 
       <section className="w-full flex flex-col items-center gap-5 my-10">
         <Message userImg={user!.image!} />
         <Message userImg={user!.image!} />
       </section>
-    </Layout>
+    </>
   );
 };
 

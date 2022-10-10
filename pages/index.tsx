@@ -1,5 +1,4 @@
 import type { GetServerSideProps, NextPage } from "next";
-import Layout from "../components/layouts/Layout";
 import SearchInput from "../components/ui/SearchInput";
 import { connectToDatabase } from "../lib/mongodb";
 import { User, Tour } from "../types/typings";
@@ -14,11 +13,9 @@ interface Props {
   tours: Tour[];
 }
 
-const Home: NextPage<Props> = props => {
-  const { tours } = props;
-
+const Home: NextPage<Props> = ({ tours }) => {
   return (
-    <Layout>
+    <>
       <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-top h-[70vh] w-full"></div>
 
       <div className="absolute top-0 left-0 bg-black opacity-70 h-[70vh] w-full"></div>
@@ -36,7 +33,7 @@ const Home: NextPage<Props> = props => {
       </div>
 
       <TourCards tours={tours} />
-    </Layout>
+    </>
   );
 };
 

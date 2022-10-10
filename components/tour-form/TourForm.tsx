@@ -94,7 +94,7 @@ const TourForm: FC = () => {
     e.preventDefault();
 
     const tour = {
-      guideId: new ObjectId(user?.id),
+      guideId: user?.id,
       title: tourTitle,
       category: category,
       description: description,

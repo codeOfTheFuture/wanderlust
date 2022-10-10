@@ -1,5 +1,3 @@
-import React from "react";
-import Layout from "../components/layouts/Layout";
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -8,9 +6,9 @@ import { wrapper } from "../store";
 
 const UpdateTour: NextPage = () => {
   return (
-    <Layout>
+    <>
       <TourForm />
-    </Layout>
+    </>
   );
 };
 

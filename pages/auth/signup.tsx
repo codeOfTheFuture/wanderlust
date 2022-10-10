@@ -4,14 +4,10 @@ import {
   getProviders,
   LiteralUnion,
 } from "next-auth/react";
-import AuthLayout from "../../components/layouts/AuthLayout";
 import AuthForm from "../../components/auth-form/LoginForm";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { BuiltInProviderType } from "next-auth/providers";
-import { wrapper } from "../../store";
-import { setUser } from "../../store/slices/userSlice";
-import { User } from "../../types/typings";
 
 interface Props {
   providers: Record<
@@ -22,9 +18,9 @@ interface Props {
 
 const SignUp: NextPage<Props> = ({ providers }) => {
   return (
-    <AuthLayout>
+    <>
       <AuthForm providers={providers} />
-    </AuthLayout>
+    </>
   );
 };
 
