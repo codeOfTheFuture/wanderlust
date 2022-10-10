@@ -19,8 +19,6 @@ interface Props {
 const OfferedTours: NextPage<Props> = ({ offeredTours }) => {
   const { registerAsGuide } = useSelector(selectUser) as User;
 
-  let register = true;
-  let tours = 2;
   return (
     <div>
       <PageHeading headingText="Here you can add, edit, and delete your offered tours." />
