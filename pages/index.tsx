@@ -15,12 +15,12 @@ interface Props {
 
 const Home: NextPage<Props> = ({ tours }) => {
   return (
-    <>
+    <div className="w-full sm:w-5/6 lg:w-3/4 mx-auto">
       <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-top h-[70vh] w-full"></div>
 
       <div className="absolute top-0 left-0 bg-black opacity-70 h-[70vh] w-full"></div>
 
-      <div className="relative flex flex-col justify-center md:justify-center items-center w-full sm:w-5/6 lg:w-3/4 mx-auto h-[70vh] z-10">
+      <div className="relative flex flex-col justify-center md:justify-center items-center h-[70vh] z-10">
         <div className="flex flex-col items-start w-full justify-center gap-2 pl-5 md:pl-0">
           <h1 className="text-4xl md:text-6xl  xl:text-8xl font-semibold text-light-text mt-52 sm:mt-44">
             Zion National Park
@@ -32,8 +32,11 @@ const Home: NextPage<Props> = ({ tours }) => {
         <SearchInput />
       </div>
 
-      <TourCards tours={tours} />
-    </>
+      <section className="w-full my-20">
+        <h3 className="text-2xl mb-10">Popular</h3>
+        <TourCards tours={tours} />
+      </section>
+    </div>
   );
 };
 
@@ -54,7 +57,7 @@ export const getServerSideProps: GetServerSideProps =
     const { db } = await connectToDatabase();
 
     const queryTours = await db.collection("tours").find({}).toArray(),
-      tours = JSON.parse(JSON.stringify(queryTours));
+      tours = await JSON.parse(JSON.stringify(queryTours));
 
     return {
       props: {

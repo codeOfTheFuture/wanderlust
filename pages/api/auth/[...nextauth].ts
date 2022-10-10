@@ -3,6 +3,7 @@ import { connectToDatabase } from "../../../lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
+import { User } from "../../../types/typings";
 
 export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(

@@ -24,9 +24,9 @@ const Layout: FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col justify-between min-h-screen">
       <Navbar scrollPosition={scrollPosition} />
-      <main className="min-h-[92vh]">{children}</main>
+      <main className="w-full h-full">{children}</main>
       <Footer />
     </div>
   );
