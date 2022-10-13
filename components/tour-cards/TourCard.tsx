@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TourCard: FC<Props> = ({ tour }) => {
-  const { id } = useSelector(selectUser) as User;
+  const user = useSelector(selectUser) as User;
   const { _id, guideId, title, tourPhotos, price } = tour;
   const router: NextRouter = useRouter();
 
@@ -19,7 +19,10 @@ const TourCard: FC<Props> = ({ tour }) => {
   const updateTourUrl = `/update-tour?tour=${_id}`;
 
   const handleClick = () => {
-    if (id.toString() === guideId && router.pathname === "/offered-tours") {
+    if (
+      user?.id.toString() === guideId &&
+      router.pathname === "/offered-tours"
+    ) {
       router.push(updateTourUrl);
     } else {
       router.push(tourPageUrl);
@@ -40,7 +43,8 @@ const TourCard: FC<Props> = ({ tour }) => {
         />
       )}
 
-      {id.toString() === guideId && router.pathname === "/offered-tours" ? (
+      {user?.id.toString() === guideId &&
+      router.pathname === "/offered-tours" ? (
         <PencilAltIcon className="absolute top-2 right-2 w-10 text-black opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
       ) : (
         <HeartIcon className="absolute top-2 right-2 w-10 text-gray-50 opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />

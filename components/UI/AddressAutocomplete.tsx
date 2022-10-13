@@ -17,6 +17,7 @@ const AddressAutocomplete: FC<Props> = ({
   selectedAddress,
   setSelectedAddress,
 }) => {
+  console.log("selected address>>>>", selectedAddress);
   const user = useSelector(selectUser) as User;
 
   const { value, handleAddressChange, suggestions } =
@@ -41,7 +42,10 @@ const AddressAutocomplete: FC<Props> = ({
         value={value}
         onChange={handleAddressChange}
         displayValue={(suggestion: any) => {
-          if (displayFullAddress) return suggestion?.place_name || "";
+          if (displayFullAddress)
+            return selectedAddress?.placeName
+              ? selectedAddress.placeName
+              : suggestion?.place_name || "";
           else if (user) return user.streetAddress as string;
           return suggestion?.place_name.split(",")[0] || "";
         }}

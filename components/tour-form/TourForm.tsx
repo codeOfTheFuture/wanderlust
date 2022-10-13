@@ -24,8 +24,8 @@ import Modal from "../modal/Modal";
 import useOnDrop from "../../hooks/useOnDrop";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
-import { Address } from "../../types/typings";
-import { ObjectId } from "mongodb";
+import { Tour } from "../../types/typings";
+import { useRouter } from "next/router";
 
 export type SelectedDate = {
   date: Date;
@@ -35,36 +35,53 @@ export type SelectedDate = {
   };
 };
 
-const TourForm: FC = () => {
-  const user = useSelector(selectUser);
+interface Props {
+  tour?: Tour;
+  submitForm: (tour: any) => Promise<void>;
+  deleteTour?: () => Promise<void>;
+}
 
-  const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop();
+const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
+  const user = useSelector(selectUser),
+    router = useRouter();
 
-  const datePickerRef = useRef<HTMLDivElement>(null);
-
-  const [tourTitle, setTourTitle] = useState<string>(""),
-    [category, setCategory] = useState<string>(""),
-    [description, setDescription] = useState<string>(""),
-    [duration, setDuration] = useState<string>(""),
-    [recommendedAges, setRecommendedAges] = useState<string>(""),
-    [whatToBring, setWhatToBring] = useState<string>(""),
-    [selectedAddress, setSelectedAddress] = useState<any>(null),
-    [price, setPrice] = useState<string>("0"),
+  const [tourTitle, setTourTitle] = useState<string>(tour?.title || ""),
+    [category, setCategory] = useState<string>(tour?.category || ""),
+    [description, setDescription] = useState<string>(tour?.description || ""),
+    [duration, setDuration] = useState<string>(tour?.duration || ""),
+    [recommendedAges, setRecommendedAges] = useState<string>(
+      tour?.recommendedAges || ""
+    ),
+    [whatToBring, setWhatToBring] = useState<string>(tour?.whatToBring || ""),
+    [selectedAddress, setSelectedAddress] = useState<any>(
+      tour?.address || null
+    ),
+    [price, setPrice] = useState<string>(tour?.price || ""),
     [datePickerOpen, setDatePickerOpen] = useState<boolean>(false),
-    [selectedDates, setSelectedDates] = useState<SelectedDate[]>([]),
+    [selectedDates, setSelectedDates] = useState<SelectedDate[]>(
+      tour?.tourDates || []
+    ),
     [currentSelectedDate, setCurrentSelectedDate] =
       useState<SelectedDate | null>(null);
+
+  const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop(
+    tour?.tourPhotos
+  );
+
+  const datePickerRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(datePickerRef, () => {
     setDatePickerOpen(false);
   });
 
+  // Add a new date to selected dates
   const addDate = (date: Date) => {
     const newDate = { date: date, time: { hour: 1, minute: 0 } };
     setSelectedDates(prevDates => [...prevDates, newDate]);
     setCurrentSelectedDate(newDate);
   };
 
+  // Remove a date from selected dates
   const removeDate = (date: Date) => {
     setSelectedDates(prevDates => prevDates.filter(d => d.date !== date));
 
@@ -73,10 +90,12 @@ const TourForm: FC = () => {
     }
   };
 
+  // Set the currently selected date
   const selectDate = (selectedDate: SelectedDate) => {
     setCurrentSelectedDate(selectedDate);
   };
 
+  // Change the time of the tour
   const changeTime = (date: Date, hour: number, minute: number) => {
     setSelectedDates(prevDates =>
       prevDates.map(d => {
@@ -86,11 +105,13 @@ const TourForm: FC = () => {
     );
   };
 
+  // Open the date picker
   const openDatePicker = () => {
     setDatePickerOpen(true);
   };
 
-  const submitForm = async (e: FormEvent) => {
+  // Handle the form submit
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const tour = {
@@ -103,7 +124,7 @@ const TourForm: FC = () => {
       whatToBring: whatToBring,
       address: {
         placeName: selectedAddress?.place_name,
-        coordinates: selectedAddress?.geometry.coordinates,
+        coordinates: selectedAddress?.geometry?.coordinates,
       },
       price: price,
       tourDates: selectedDates,
@@ -111,21 +132,24 @@ const TourForm: FC = () => {
       bookedTourists: [],
     };
 
-    const response = await fetch("/api/tours", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(tour),
-    });
+    submitForm(tour);
+  };
 
-    const addedTour = response.json();
-
-    console.log(addedTour);
+  const clearForm = () => {
+    setTourTitle("");
+    setCategory("");
+    setDescription("");
+    setDuration("");
+    setRecommendedAges("");
+    setWhatToBring("");
+    setSelectedAddress(null);
+    setPrice("");
+    setSelectedDates([]);
+    setCurrentSelectedDate(null);
   };
 
   return (
-    <form className="mb-10" id="tourForm" onSubmit={submitForm}>
+    <form className="mb-10" id="tourForm" onSubmit={handleSubmit}>
       <div className="flex justify-center items-center w-full h-[70vh] md:h-[50vh] bg-gray-400">
         <div className="flex flex-col md:flex-row justify-center items-center gap-10 w-5/6 lg:w-2/3">
           <div className="flex flex-col gap-2 mt-10 md:mt-0 w-full">
@@ -259,7 +283,8 @@ const TourForm: FC = () => {
                 label="Select Dates and Time"
                 type="text"
                 value={selectedDates.reduce(
-                  (acc, curr) => acc + curr.date.toLocaleDateString() + ", ",
+                  (acc, curr) =>
+                    acc + new Date(curr.date).toLocaleDateString() + ", ",
                   ""
                 )}
                 Icon={CalendarIcon}
@@ -294,10 +319,14 @@ const TourForm: FC = () => {
       </div>
       <div className="flex justify-center items-center gap-10 mt-10">
         <Button color="btn-primary" type="submit" size="btn-lg">
-          Save
+          {router.pathname === "/create-tour" ? "Save" : "Update"}
         </Button>
-        <Button color="btn-error" type="button" size="btn-lg">
-          Clear
+        <Button
+          color="btn-error"
+          type="button"
+          size="btn-lg"
+          onClick={deleteTour != null ? deleteTour : clearForm}>
+          {router.pathname === "/create-tour" ? "Clear" : "Delete"}
         </Button>
       </div>
     </form>

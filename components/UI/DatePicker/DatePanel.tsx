@@ -36,7 +36,7 @@ const DatePanel: FC<Props> = ({
               } `}
               onClick={() => selectDate(selectedDate)}>
               <div className="flex flex-col items-center">
-                <div>{date.toLocaleDateString()}</div>
+                <div>{new Date(date).toLocaleDateString()}</div>
                 <div>
                   <span>{hour < 10 ? "0" + hour : hour}</span>
                   <span>:</span>

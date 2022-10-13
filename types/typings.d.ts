@@ -23,8 +23,9 @@ interface Tour {
   _id: ObjectId;
   guideId: string;
   title: string;
+  category: string;
   description: string;
-  price: number;
+  price: string;
   duration: string;
   recommendedAges: string;
   address: {
@@ -41,7 +42,7 @@ interface Tour {
       hour: number;
       minute: number;
     };
-  };
+  }[];
 }
 
 interface CloudinaryImage {

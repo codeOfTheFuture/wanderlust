@@ -6,12 +6,12 @@ import { connectToDatabase } from "../../../../lib/mongodb";
 export default nc<NextApiRequest, NextApiResponse>()
   // Get a single user - GET /api/users/:user_id
   .get(async (req, res) => {
-    const USER_ID: string = req.query.user_id as string;
+    const user_id: string = req.query.user_id as string;
 
     try {
       const { db } = await connectToDatabase(),
         user = await db.collection("users").findOne({
-          _id: new ObjectId(USER_ID),
+          _id: new ObjectId(user_id),
         });
       res.status(200).json(user);
     } catch (error: any) {
@@ -20,13 +20,13 @@ export default nc<NextApiRequest, NextApiResponse>()
   })
   // Update an existing user - PUT /api/users/:user_id
   .put(async (req, res) => {
-    const USER_ID = req.query.user_id as string;
+    const user_id = req.query.user_id as string;
 
     try {
       const { db } = await connectToDatabase();
       await db.collection("users").findOneAndUpdate(
         {
-          _id: new ObjectId(USER_ID),
+          _id: new ObjectId(user_id),
         },
         {
           $set: {
@@ -36,7 +36,7 @@ export default nc<NextApiRequest, NextApiResponse>()
       );
 
       const updatedUser = await db.collection("users").findOne({
-        _id: new ObjectId(USER_ID),
+        _id: new ObjectId(user_id),
       });
 
       res.status(200).json(updatedUser);

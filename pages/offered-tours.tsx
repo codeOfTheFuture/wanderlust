@@ -60,8 +60,6 @@ export const getServerSideProps: GetServerSideProps =
 
     const guide = session?.user as User;
 
-    console.log("guide>>>", guide);
-
     const queryOfferedTours = await db
         .collection("tours")
         .find({
@@ -71,8 +69,6 @@ export const getServerSideProps: GetServerSideProps =
       offeredTours = (await JSON.parse(
         JSON.stringify(queryOfferedTours)
       )) as Tour[];
-
-    console.log("offeredTours>>>>", offeredTours);
 
     return {
       props: {

@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../lib/mongodb";
@@ -17,6 +18,8 @@ export default nc<NextApiRequest, NextApiResponse>()
   })
   // Add a new tour - POST /api/tours
   .post(async (req, res) => {
+    req.body.guideId = new ObjectId(req.body.guideId);
+
     try {
       const { db } = await connectToDatabase();
       const newTour = await db.collection("tours").insertOne({
@@ -25,6 +28,6 @@ export default nc<NextApiRequest, NextApiResponse>()
       res.status(201).json(newTour);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Server error", error });
+      res.status(500).json({ message: "Internal server error", error });
     }
   });

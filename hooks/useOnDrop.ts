@@ -6,8 +6,10 @@ const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string,
   CLOUDINARY_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_KEY as string,
   URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-const useOnDrop = () => {
-  const [uploadedFiles, setUploadedFiles] = useState<CloudinaryImage[]>([]);
+const useOnDrop = (tourPhotos: CloudinaryImage[] | undefined) => {
+  const [uploadedFiles, setUploadedFiles] = useState<CloudinaryImage[]>(
+    tourPhotos || []
+  );
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach(async acceptedFile => {

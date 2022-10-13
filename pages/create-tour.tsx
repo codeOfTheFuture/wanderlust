@@ -5,29 +5,45 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
-import { User } from "../types/typings";
+import { Tour, User } from "../types/typings";
 
 const CreateTour: NextPage = () => {
+  const submitForm = async (newTour: Tour) => {
+    const response = await fetch("/api/tours", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTour),
+    });
+
+    const addedTour = response.json();
+
+    console.log("added tour>>>>>", addedTour);
+  };
+
   return (
     <>
-      <TourForm />
+      <TourForm submitForm={submitForm} />
     </>
   );
 };
 
 export default CreateTour;
 
-// export const getServerSideProps: GetServerSideProps =
-//   wrapper.getServerSideProps(store => async context => {
-//     const session = await unstable_getServerSession(
-//       context.req,
-//       context.res,
-//       authOptions
-//     );
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(store => async context => {
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-//     session && store.dispatch(setUser(session.user as User));
+    console.log("user>>>>>>>", session?.user);
 
-//     return {
-//       props: {},
-//     };
-//   });
+    session && store.dispatch(setUser(session.user as User));
+
+    return {
+      props: {},
+    };
+  });

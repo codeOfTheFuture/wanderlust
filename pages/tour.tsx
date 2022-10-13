@@ -8,6 +8,7 @@ import { Tour, User } from "../types/typings";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { wrapper } from "../store";
+import { setUser } from "../store/slices/userSlice";
 
 interface Props {
   tours: Tour[];
@@ -43,6 +44,8 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
+
+    session && store.dispatch(setUser(session.user as User));
 
     const { db } = await connectToDatabase(),
       tourId = context.query.tour as string,

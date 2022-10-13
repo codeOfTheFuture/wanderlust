@@ -27,8 +27,8 @@ const DatePickerDay: FC<Props> = ({
     setDateSelected(
       selectedDates.find(
         d =>
-          d.date.toLocaleDateString() ===
-          new Date(year, month, day).toLocaleDateString()
+          new Date(d.date).toDateString() ===
+          new Date(year, month, day).toDateString()
       ) != null
     );
   }, [selectedDates, day, month, year]);
