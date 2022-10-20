@@ -2,14 +2,12 @@ import React, { FC } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import NavProfile from "./NavProfile";
-import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
+import { useAppSelector } from "../../store";
 
 const NavRight: FC = () => {
-  const user = useSelector(selectUser),
+  const user = useAppSelector(selectUser),
     router = useRouter();
-
-  console.log(user);
 
   return (
     <>

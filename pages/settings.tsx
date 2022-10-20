@@ -2,26 +2,22 @@ import { GetServerSideProps, NextPage } from "next";
 import SettingsForm from "../components/settings-form/SettingsForm";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { wrapper } from "../store";
-import { selectUser, setUser } from "../store/slices/userSlice";
-import { useSelector } from "react-redux";
-import { User } from "../types/typings";
+import { useAppDispatch, useAppSelector, wrapper } from "../store";
+import {
+  selectUser,
+  setUser,
+  updateUserSettings,
+} from "../store/slices/userSlice";
+import { SessionUser, User } from "../types/typings";
+import { connectToDatabase } from "../lib/mongodb";
+import { ObjectId } from "mongodb";
 
 const Settings: NextPage = () => {
-  const user = useSelector(selectUser);
+  const { _id } = useAppSelector(selectUser) as User,
+    dispatch = useAppDispatch();
 
-  const submitForm = async (formData: any) => {
-    try {
-      await fetch(`/api/users/${user?.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  const submitForm = (formData: any) => {
+    dispatch(updateUserSettings({ userId: _id.toString(), formData }));
   };
 
   return (
@@ -44,7 +40,18 @@ export const getServerSideProps: GetServerSideProps =
       authOptions
     );
 
-    session && store.dispatch(setUser(session.user as User));
+    if (session && store.getState().user.user == null) {
+      const { db } = await connectToDatabase();
+      const { id } = session.user as SessionUser;
+
+      const user = await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+
+      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+    }
+
+    // session && store.dispatch(setUser(session.user as User));
 
     return {
       props: {},

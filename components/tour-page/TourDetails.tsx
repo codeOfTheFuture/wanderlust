@@ -11,6 +11,8 @@ import {
 import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import Button from "../ui/Button";
+import { addTourToFavorites, selectUser } from "../../store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 interface Props {
   tour: Tour;
@@ -19,6 +21,7 @@ interface Props {
 
 const TourDetails: FC<Props> = ({ tour, guide }) => {
   const {
+    _id,
     description,
     price,
     duration,
@@ -29,7 +32,18 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
     tourPhotos,
   } = tour;
 
-  const { name, image } = guide;
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+
+  const userId = user?._id.toString() as string,
+    tourId = _id.toString();
+
+  const favoriteTour =
+    user?.favoriteTours.find(t => t._id === tour._id) != null;
+
+  const handleClick = () => {
+    dispatch(addTourToFavorites({ userId, tourId }));
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 w-full xl:w-1/2 mx-auto mt-5">
@@ -83,15 +97,19 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
           </Button>
         </div>
         <div className="bg-black h-[1px] w-full"></div>
-        <div className="flex items-center gap-2 cursor-pointer">
-          <HeartIcon className="w-8 h-8" />
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={handleClick}>
+          <HeartIcon
+            className={`${favoriteTour && "text-error-color"} w-8 h-8`}
+          />
           <span className="text-lg font-semibold">Add to favorites</span>
         </div>
         <div className="mt-20">
           <div className="w-[200px] rounded-full">
             <Image
-              src={image!}
-              alt={name}
+              src={guide.image}
+              alt={guide.name}
               layout="responsive"
               width={100}
               height={100}

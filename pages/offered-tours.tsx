@@ -53,23 +53,21 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-
-    session && store.dispatch(setUser(session.user as User));
+    const { id } = session?.user as User;
 
     const { db } = await connectToDatabase();
-
-    const guide = session?.user as User;
 
     const queryOfferedTours = await db
         .collection("tours")
         .find({
-          guideId: new ObjectId(guide.id),
+          guideId: new ObjectId(id),
         })
         .toArray(),
       offeredTours = (await JSON.parse(
         JSON.stringify(queryOfferedTours)
       )) as Tour[];
 
+    session && store.dispatch(setUser(session.user as User));
     return {
       props: {
         offeredTours,

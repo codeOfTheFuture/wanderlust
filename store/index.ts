@@ -1,23 +1,34 @@
-import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  configureStore,
+  combineReducers,
+  ThunkDispatch,
+  Store,
+} from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import userReducer from "./slices/userSlice";
 import modalReducer from "./slices/modalSlice";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+
+const combinedReducers = combineReducers({
+  user: userReducer,
+  modal: modalReducer,
+});
+
+export type RootState = ReturnType<typeof combinedReducers>;
+
+export type AppThunkDispatch = ThunkDispatch<RootState, any, AnyAction>;
+
+export type AppStore = Omit<Store<RootState, AnyAction>, "dispatch"> & {
+  dispatch: AppThunkDispatch;
+};
 
 export const makeStore = () =>
   configureStore({
-    reducer: {
-      user: userReducer,
-      modalOpen: modalReducer,
-    },
+    reducer: combinedReducers,
   });
 
 export const wrapper = createWrapper(makeStore, { debug: true });
 
-export type AppStore = ReturnType<typeof makeStore>;
-export type AppState = ReturnType<AppStore["getState"]>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  AppState,
-  unknown,
-  Action
->;
+export const useAppDispatch = () => useDispatch<AppThunkDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

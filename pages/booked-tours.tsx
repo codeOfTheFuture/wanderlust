@@ -2,19 +2,19 @@ import { GetServerSideProps, NextPage } from "next";
 import PageHeading from "../components/ui/PageHeading";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { wrapper } from "../store";
+import { useAppSelector, wrapper } from "../store";
 import { selectUser } from "../store/slices/userSlice";
-import { useSelector } from "react-redux";
+import { User } from "../types/typings";
 
 const BookedTours: NextPage = () => {
-  const user = useSelector(selectUser);
+  const { bookedTours } = useAppSelector(selectUser) as User;
 
   return (
     <>
       <PageHeading headingText="here are the the tours you've booked." />
 
       <section className="w-full h-[40vh] flex justify-center items-center">
-        {!user?.bookedTours?.length && (
+        {bookedTours?.length && (
           <h2 className="text-lg font-medium">
             You currently don&apos;t have any tours booked
           </h2>

@@ -6,16 +6,17 @@ import Checkbox from "../ui/Checkbox";
 import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
 import CurrencyFormat from "react-currency-format";
-import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
-import { Address } from "../../types/typings";
+import { Address, User } from "../../types/typings";
+import { useAppSelector } from "../../store";
 
 interface Props {
-  submitForm: (formData: any) => Promise<void>;
+  // TODO: FORM DATA TYPING
+  submitForm: (formData: any) => void;
 }
 
 const SettingsForm: FC<Props> = ({ submitForm }) => {
-  const user = useSelector(selectUser);
+  const user = useAppSelector(selectUser);
 
   const photoPickerRef = useRef<HTMLInputElement>(null);
 
@@ -29,10 +30,10 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
   const { streetAddress, city, state, zipCode, setCity, setState, setZipCode } =
     useParseAddress(selectedAddress?.placeName || "");
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    await submitForm({
+    submitForm({
       email,
       streetAddress,
       city,

@@ -6,7 +6,7 @@ import { connectToDatabase } from "../../../../lib/mongodb";
 export default nc<NextApiRequest, NextApiResponse>()
   // Get a single user - GET /api/users/:user_id
   .get(async (req, res) => {
-    const user_id: string = req.query.user_id as string;
+    const user_id = req.query.user_id as string;
 
     try {
       const { db } = await connectToDatabase(),

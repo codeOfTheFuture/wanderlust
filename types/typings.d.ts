@@ -1,7 +1,14 @@
 import { ObjectId } from "mongodb";
 
-interface User {
+interface SessionUser {
   id: ObjectId;
+  name: string;
+  email: string;
+  image: string;
+}
+
+interface User {
+  _id: ObjectId;
   name: string;
   email: string;
   image: string;
@@ -79,6 +86,7 @@ type Address = {
 };
 
 export {
+  type SessionUser,
   type User,
   type Tour,
   type HandleScroll,

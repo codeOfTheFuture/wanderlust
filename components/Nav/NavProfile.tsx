@@ -4,11 +4,11 @@ import Image from "next/image";
 import NavDropdown from "./NavDropdown";
 import useClickOutside from "../../hooks/useClickOutside";
 import { selectUser } from "../../store/slices/userSlice";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../store";
 
 const NavProfile: FC = () => {
-  const user = useSelector(selectUser),
-    firstName = user?.name.match(/^[^\s]+/)?.join() as string,
+  const user = useAppSelector(selectUser),
+    firstName = user?.name?.match(/^[^\s]+/)?.join() as string,
     dropsDownRef = useRef<HTMLDivElement>(null),
     [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
@@ -24,13 +24,15 @@ const NavProfile: FC = () => {
           <span>{firstName}</span>
           <ChevronDownIcon className="h-6 mr-2" />
           <div className="flex h-full cursor-pointer rounded-full">
-            <Image
-              src={user.image}
-              width={40}
-              height={40}
-              alt={firstName}
-              className="rounded-full"
-            />
+            {user.image && (
+              <Image
+                src={user.image}
+                width={40}
+                height={40}
+                alt={firstName}
+                className="rounded-full"
+              />
+            )}
           </div>
           <NavDropdown
             toggleDropdown={toggleDropdown}

@@ -1,13 +1,14 @@
 import type { GetServerSideProps, NextPage } from "next";
 import SearchInput from "../components/ui/SearchInput";
 import { connectToDatabase } from "../lib/mongodb";
-import { User, Tour } from "../types/typings";
+import { Tour, SessionUser } from "../types/typings";
 import Button from "../components/ui/Button";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
 import { wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
 import TourCards from "../components/tour-cards/TourCards";
+import { ObjectId } from "mongodb";
 
 interface Props {
   tours: Tour[];
@@ -51,10 +52,19 @@ export const getServerSideProps: GetServerSideProps =
       authOptions
     );
 
-    session && store.dispatch(setUser(session.user as User));
-
     // Connect to MongoDb
     const { db } = await connectToDatabase();
+
+    // Only runs if session exists and user in redux is null
+    if (session && store.getState().user.user == null) {
+      const { id } = session.user as SessionUser;
+
+      const user = await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+
+      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+    }
 
     const queryTours = await db.collection("tours").find({}).toArray(),
       tours = await JSON.parse(JSON.stringify(queryTours));

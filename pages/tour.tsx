@@ -4,7 +4,7 @@ import RecommendedTours from "../components/tour-cards/RecommendedTours";
 import TourDetails from "../components/tour-page/TourDetails";
 import TourPageHeader from "../components/tour-page/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
-import { Tour, User } from "../types/typings";
+import { SessionUser, Tour, User } from "../types/typings";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { wrapper } from "../store";
@@ -16,16 +16,13 @@ interface Props {
   guide: User;
 }
 
-const Tour: NextPage<Props> = props => {
-  const { tour, guide, tours } = props,
-    { title, tourPhotos } = tour;
-
+const Tour: NextPage<Props> = ({ tour, guide, tours }) => {
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-5">
         <TourPageHeader
-          backgroundImage={tourPhotos[0].secure_url}
-          title={title}
+          backgroundImage={tour.tourPhotos[0].secure_url}
+          title={tour.title}
         />
         <TourDetails tour={tour} guide={guide} />
         <div className="w-11/12 xl:w-1/2 h-[1px] mx-auto bg-black"></div>
@@ -45,10 +42,20 @@ export const getServerSideProps: GetServerSideProps =
       authOptions
     );
 
-    session && store.dispatch(setUser(session.user as User));
+    const { db } = await connectToDatabase();
 
-    const { db } = await connectToDatabase(),
-      tourId = context.query.tour as string,
+    // Only runs if session exists and user in redux is null
+    if (session && store.getState().user.user == null) {
+      const { id } = session.user as SessionUser;
+
+      const user = await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+
+      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+    }
+
+    const tourId = context.query.tour as string,
       tour = await db.collection("tours").findOne({
         _id: new ObjectId(tourId),
       }),

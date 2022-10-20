@@ -3,7 +3,6 @@ import { connectToDatabase } from "../../../lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import { User } from "../../../types/typings";
 
 export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(
@@ -15,12 +14,12 @@ export const authOptions: NextAuthOptions = {
   ),
   providers: [
     FacebookProvider({
-      clientId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID!,
-      clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_APP_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string,
+      clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_APP_SECRET as string,
     }),
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_APP_ID!,
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_APP_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_APP_ID as string,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_APP_SECRET as string,
     }),
   ],
   pages: {
@@ -50,7 +49,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
 
-  secret: process.env.NEXT_PUBLIC_AUTH_SECRET!,
+  secret: process.env.NEXT_PUBLIC_AUTH_SECRET as string,
 };
 
 export default NextAuth(authOptions);
