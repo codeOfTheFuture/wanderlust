@@ -3,17 +3,19 @@ import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
 import { Tour, User } from "../../types/typings";
 import { HeartIcon, PencilAltIcon } from "@heroicons/react/solid";
-import { selectUser } from "../../store/slices/userSlice";
-import { useAppSelector } from "../../store";
+import { addTourToFavorites, selectUser } from "../../store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 interface Props {
   tour: Tour;
 }
 
 const TourCard: FC<Props> = ({ tour }) => {
-  const { _id: userId } = useAppSelector(selectUser) as User;
+  const { _id: userId, favoriteTours } = useAppSelector(selectUser) as User;
   const { _id, guideId, title, tourPhotos, price } = tour;
   const router: NextRouter = useRouter();
+
+  const dispatch = useAppDispatch();
 
   const tourPageUrl = `/tour?tour=${_id}`;
   const updateTourUrl = `/update-tour?tour=${_id}`;
@@ -43,7 +45,22 @@ const TourCard: FC<Props> = ({ tour }) => {
       {userId.toString() === guideId && router.pathname === "/offered-tours" ? (
         <PencilAltIcon className="absolute top-2 right-2 w-10 text-black opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
       ) : (
-        <HeartIcon className="absolute top-2 right-2 w-10 text-gray-50 opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
+        <HeartIcon
+          className={`${
+            favoriteTours.find((t: Tour) => t._id === tour._id) != null
+              ? "text-error-color"
+              : "text-gray-50"
+          } absolute top-2 right-2 w-10  opacity-90 hover:scale-125 transition-all duration-300 ease-in-out`}
+          onClick={e => {
+            e.stopPropagation();
+            dispatch(
+              addTourToFavorites({
+                userId: userId.toString(),
+                tourId: _id.toString(),
+              })
+            );
+          }}
+        />
       )}
 
       <div className="flex flex-col items-start w-full mt-4 p-2 z-10 bg-slate-200">

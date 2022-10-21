@@ -7,7 +7,7 @@ import PageHeading from "../components/ui/PageHeading";
 import { wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
 import { useSelector } from "react-redux";
-import { Tour, User } from "../types/typings";
+import { SessionUser, Tour, User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
@@ -20,7 +20,7 @@ const OfferedTours: NextPage<Props> = ({ offeredTours }) => {
   const { registerAsGuide } = useSelector(selectUser) as User;
 
   return (
-    <div>
+    <>
       <PageHeading headingText="Here you can add, edit, and delete your offered tours." />
 
       <section className="flex flex-col justify-center items-center gap-10 w-full sm:w-5/6 lg:w-3/4 min-h-[33vh] mx-auto my-20">
@@ -40,7 +40,7 @@ const OfferedTours: NextPage<Props> = ({ offeredTours }) => {
           </Button>
         </Link>
       </section>
-    </div>
+    </>
   );
 };
 
@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-    const { id } = session?.user as User;
+    const { id } = session?.user as SessionUser;
 
     const { db } = await connectToDatabase();
 
