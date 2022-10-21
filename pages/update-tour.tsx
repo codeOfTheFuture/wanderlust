@@ -5,7 +5,7 @@ import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
 import { connectToDatabase } from "../lib/mongodb";
 import { ObjectId } from "mongodb";
-import { Tour, User } from "../types/typings";
+import { SessionUser, Tour, User } from "../types/typings";
 import { setUser } from "../store/slices/userSlice";
 
 interface Props {
@@ -54,9 +54,18 @@ export const getServerSideProps: GetServerSideProps =
       authOptions
     );
 
-    session && store.dispatch(setUser(session.user as User));
-
     const { db } = await connectToDatabase();
+
+    // Only runs if session exists and user in redux is null
+    if (session && store.getState().user.user == null) {
+      const { id } = session.user as SessionUser;
+
+      const user = await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+
+      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+    }
 
     const tour = await db.collection("tours").findOne({
       _id: new ObjectId(context.query.tour as string),

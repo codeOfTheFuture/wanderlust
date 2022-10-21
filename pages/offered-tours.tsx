@@ -67,7 +67,17 @@ export const getServerSideProps: GetServerSideProps =
         JSON.stringify(queryOfferedTours)
       )) as Tour[];
 
-    session && store.dispatch(setUser(session.user as User));
+    // Only runs if session exists and user in redux is null
+    if (session && store.getState().user.user == null) {
+      const { id } = session.user as SessionUser;
+
+      const user = await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+
+      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+    }
+
     return {
       props: {
         offeredTours,

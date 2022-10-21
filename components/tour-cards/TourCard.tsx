@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TourCard: FC<Props> = ({ tour }) => {
-  const { _id: userId, favoriteTours } = useAppSelector(selectUser) as User;
+  const user = useAppSelector(selectUser);
   const { _id, guideId, title, tourPhotos, price } = tour;
   const router: NextRouter = useRouter();
 
@@ -21,7 +21,10 @@ const TourCard: FC<Props> = ({ tour }) => {
   const updateTourUrl = `/update-tour?tour=${_id}`;
 
   const handleClick = () => {
-    if (userId.toString() === guideId && router.pathname === "/offered-tours") {
+    if (
+      user?._id.toString() === guideId &&
+      router.pathname === "/offered-tours"
+    ) {
       router.push(updateTourUrl);
     } else {
       router.push(tourPageUrl);
@@ -42,12 +45,13 @@ const TourCard: FC<Props> = ({ tour }) => {
         />
       )}
 
-      {userId.toString() === guideId && router.pathname === "/offered-tours" ? (
+      {user?._id.toString() === guideId &&
+      router.pathname === "/offered-tours" ? (
         <PencilAltIcon className="absolute top-2 right-2 w-10 text-black opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
       ) : (
         <HeartIcon
           className={`${
-            favoriteTours.find((t: Tour) => t._id === tour._id) != null
+            user?.favoriteTours.find((t: Tour) => t._id === tour._id) != null
               ? "text-error-color"
               : "text-gray-50"
           } absolute top-2 right-2 w-10  opacity-90 hover:scale-125 transition-all duration-300 ease-in-out`}
@@ -55,7 +59,7 @@ const TourCard: FC<Props> = ({ tour }) => {
             e.stopPropagation();
             dispatch(
               addTourToFavorites({
-                userId: userId.toString(),
+                userId: user?._id.toString() as string,
                 tourId: _id.toString(),
               })
             );
