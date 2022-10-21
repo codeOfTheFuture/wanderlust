@@ -16,7 +16,6 @@ import FormTextArea from "../ui/FormTextArea";
 import FormInput from "../ui/FormInput";
 import CurrencyFormat from "react-currency-format";
 import Image from "next/image";
-import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
 import DatePicker from "../ui/DatePicker/DatePicker";
 import useClickOutside from "../../hooks/useClickOutside";
@@ -24,8 +23,9 @@ import Modal from "../modal/Modal";
 import useOnDrop from "../../hooks/useOnDrop";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
-import { Tour } from "../../types/typings";
+import { Tour, User } from "../../types/typings";
 import { useRouter } from "next/router";
+import { useAppSelector } from "../../store";
 
 export type SelectedDate = {
   date: Date;
@@ -42,7 +42,7 @@ interface Props {
 }
 
 const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
-  const user = useSelector(selectUser),
+  const user = useAppSelector(selectUser) as User,
     router = useRouter();
 
   const [tourTitle, setTourTitle] = useState<string>(tour?.title || ""),
@@ -115,7 +115,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
     e.preventDefault();
 
     const tour = {
-      guideId: user?.id,
+      guideId: user?._id,
       title: tourTitle,
       category: category,
       description: description,
@@ -307,7 +307,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           {user && (
             <div className="relative mx-auto rounded-full">
               <Image
-                src={user.image!}
+                src={user.image}
                 alt="guide"
                 width={240}
                 height={240}

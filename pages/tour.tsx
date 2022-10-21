@@ -64,6 +64,9 @@ export const getServerSideProps: GetServerSideProps =
       }),
       tours = await db.collection("tours").find({}).toArray();
 
+    console.log("tour guide id>>>>>", tour?.guideId);
+    console.log("tour guide>>>>>", guide);
+
     return {
       props: {
         tour: JSON.parse(JSON.stringify(tour)),

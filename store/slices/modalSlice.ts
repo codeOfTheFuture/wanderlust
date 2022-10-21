@@ -1,4 +1,4 @@
-import { AppState } from "../index";
+import { RootState } from "../index";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
@@ -24,7 +24,7 @@ export const modalSlice = createSlice({
 
   extraReducers: {
     [HYDRATE]: (state, action) => {
-      if (!action.payload.modal) {
+      if (action.payload.modal != null) {
         return state;
       }
       state.modalOpen = action.payload.modal;
@@ -35,6 +35,6 @@ export const modalSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { openModal, closeModal } = modalSlice.actions;
 
-export const selectModalOpen = (state: AppState) => state.modalOpen;
+export const selectModalOpen = (state: RootState) => state.modal.modalOpen;
 
 export default modalSlice.reducer;

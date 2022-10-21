@@ -10,6 +10,7 @@ import ModalDivider from "./ModalDivider";
 import deleteImage from "../../utils/deleteImage";
 import { useDropzone } from "react-dropzone";
 import { CloudinaryImage } from "../../types/typings";
+import { useAppSelector } from "../../store";
 
 interface Props {
   uploadedFiles: CloudinaryImage[];
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
-  const { modalOpen } = useSelector(selectModalOpen),
+  const modalOpen = useAppSelector(selectModalOpen),
     dispatch = useDispatch();
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({

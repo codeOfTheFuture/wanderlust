@@ -5,7 +5,9 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
-import { Tour, User } from "../types/typings";
+import { SessionUser, Tour, User } from "../types/typings";
+import { ObjectId } from "mongodb";
+import { connectToDatabase } from "../lib/mongodb";
 
 const CreateTour: NextPage = () => {
   const submitForm = async (newTour: Tour) => {
@@ -39,9 +41,19 @@ export const getServerSideProps: GetServerSideProps =
       authOptions
     );
 
-    console.log("user>>>>>>>", session?.user);
+    // Connect to MongoDb
+    const { db } = await connectToDatabase();
 
-    session && store.dispatch(setUser(session.user as User));
+    // Only runs if session exists and user in redux is null
+    if (session && store.getState().user.user == null) {
+      const { id } = session.user as SessionUser;
+
+      const user = (await db
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) })) as User;
+
+      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+    }
 
     return {
       props: {},
