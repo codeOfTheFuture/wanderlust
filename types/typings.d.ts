@@ -79,9 +79,9 @@ type HandleScroll = () => void;
 
 type States = [StateName: string, StateAbbr: string][];
 
-type Address = {
+type AddressSuggestion = {
   id: string;
-  placeName: string;
+  place_name: string;
   coordinates: Number[];
 };
 
@@ -92,5 +92,5 @@ export {
   type HandleScroll,
   type CloudinaryImage,
   type States,
-  type Address,
+  type AddressSuggestion,
 };

@@ -23,7 +23,7 @@ import Modal from "../modal/Modal";
 import useOnDrop from "../../hooks/useOnDrop";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
-import { Tour, User } from "../../types/typings";
+import { AddressSuggestion, Tour, User } from "../../types/typings";
 import { useRouter } from "next/router";
 import { useAppSelector } from "../../store";
 
@@ -73,6 +73,10 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
   useClickOutside(datePickerRef, () => {
     setDatePickerOpen(false);
   });
+
+  const selectSuggestion = (suggestion: AddressSuggestion) => {
+    setSelectedAddress(suggestion);
+  };
 
   // Add a new date to selected dates
   const addDate = (date: Date) => {
@@ -249,9 +253,10 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           <div className="flex items-center gap-2">
             <LocationMarkerIcon className="w-10 h-10" />
             <AddressAutocomplete
-              displayFullAddress={true}
-              selectedAddress={selectedAddress}
-              setSelectedAddress={setSelectedAddress}
+              tourPlaceName={tour?.address.placeName}
+              selectedSuggestion={selectedAddress}
+              setSelectedSuggestion={setSelectedAddress}
+              selectSuggestion={selectSuggestion}
             />
           </div>
         </div>

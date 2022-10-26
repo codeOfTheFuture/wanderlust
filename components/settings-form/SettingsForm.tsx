@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
-import useParseAddress from "../../hooks/useParseAddress";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
 import Checkbox from "../ui/Checkbox";
@@ -7,8 +6,9 @@ import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
 import CurrencyFormat from "react-currency-format";
 import { selectUser } from "../../store/slices/userSlice";
-import { Address, User } from "../../types/typings";
+import { AddressSuggestion, User } from "../../types/typings";
 import { useAppSelector } from "../../store";
+import { stateAbbrLookup } from "../../utils/stateAbbrLookup";
 
 interface Props {
   // TODO: FORM DATA TYPING
@@ -16,19 +16,58 @@ interface Props {
 }
 
 const SettingsForm: FC<Props> = ({ submitForm }) => {
-  const user = useAppSelector(selectUser);
+  const user = useAppSelector(selectUser) as User;
 
   const photoPickerRef = useRef<HTMLInputElement>(null);
 
-  const [email, setEmail] = useState<string>(user?.email!),
-    [selectedAddress, setSelectedAddress] = useState<Address | null>(null),
+  const [email, setEmail] = useState<string>(user?.email || ""),
+    [selectedSuggestion, setSelectedSuggestion] =
+      useState<AddressSuggestion | null>(null),
+    [streetAddress, setStreetAddress] = useState<string>(
+      user.streetAddress || ""
+    ),
+    [city, setCity] = useState<string>(user.city || ""),
+    [state, setState] = useState<string>(user.state || ""),
+    [zipCode, setZipCode] = useState<string>(user.zipCode || ""),
     [phoneNumber, setPhoneNumber] = useState<string>(user?.phoneNumber || ""),
     [registerAsGuide, setRegisterAsGuide] = useState<boolean>(
       user?.registerAsGuide || false
     );
 
-  const { streetAddress, city, state, zipCode, setCity, setState, setZipCode } =
-    useParseAddress(selectedAddress?.placeName || "");
+  const getStreetAddress = (placeName: string) => {
+    if (placeName) return placeName.split(", ")[0];
+  };
+
+  const getCity = (placeName: string) => {
+    if (placeName) return placeName.split(", ")[1];
+  };
+
+  const getState = (placeName: string) => {
+    if (placeName) {
+      const stateZip = placeName.split(", ")[2].split(" ");
+
+      if (stateZip.length === 2) return stateAbbrLookup(stateZip[0]);
+      return stateAbbrLookup([stateZip[0], stateZip[1]].join(" "));
+    }
+  };
+
+  const getZipCode = (placeName: string) => {
+    if (placeName) {
+      const stateZip = placeName.split(", ")[2].split(" ");
+
+      if (stateZip.length === 2) return stateZip[1];
+
+      return stateZip[2];
+    }
+  };
+
+  const selectSuggestion = (suggestion: AddressSuggestion) => {
+    setSelectedSuggestion(suggestion);
+    setStreetAddress(getStreetAddress(suggestion.place_name) as string);
+    setCity(getCity(suggestion.place_name) as string);
+    setState(getState(suggestion.place_name) as string);
+    setZipCode(getZipCode(suggestion.place_name) as string);
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -72,9 +111,9 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
           />
 
           <AddressAutocomplete
-            displayFullAddress={false}
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
+            selectedSuggestion={selectedSuggestion}
+            setSelectedSuggestion={setSelectedSuggestion}
+            selectSuggestion={selectSuggestion}
           />
 
           <div className="flex flex-row justify-center items-center gap-2">

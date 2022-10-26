@@ -4,21 +4,26 @@ import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
 import { useInView } from "react-intersection-observer";
-import { Address, User } from "../../types/typings";
+import { AddressSuggestion, User } from "../../types/typings";
+import { useRouter } from "next/router";
 
 interface Props {
-  displayFullAddress: boolean;
-  selectedAddress: Address | null;
-  setSelectedAddress: Dispatch<SetStateAction<Address | null>>;
+  tourPlaceName?: string;
+  selectedSuggestion: AddressSuggestion | null;
+  setSelectedSuggestion: Dispatch<SetStateAction<AddressSuggestion | null>>;
+  selectSuggestion: (suggestion: AddressSuggestion) => void;
 }
 
 const AddressAutocomplete: FC<Props> = ({
-  displayFullAddress,
-  selectedAddress,
-  setSelectedAddress,
+  tourPlaceName,
+  selectedSuggestion,
+  setSelectedSuggestion,
+  selectSuggestion,
 }) => {
-  console.log("selected address>>>>", selectedAddress);
+  console.log("selected address>>>>", selectedSuggestion);
   const user = useSelector(selectUser) as User;
+
+  const router = useRouter();
 
   const { value, handleAddressChange, suggestions } =
     useAddressAutocomplete("");
@@ -31,8 +36,8 @@ const AddressAutocomplete: FC<Props> = ({
   return (
     <Combobox
       as="div"
-      value={selectedAddress}
-      onChange={setSelectedAddress}
+      value={selectedSuggestion}
+      onChange={setSelectedSuggestion}
       className="relative w-full">
       <Combobox.Label className="hidden" as="label">
         Email
@@ -42,12 +47,11 @@ const AddressAutocomplete: FC<Props> = ({
         value={value}
         onChange={handleAddressChange}
         displayValue={(suggestion: any) => {
-          if (displayFullAddress)
-            return selectedAddress?.placeName
-              ? selectedAddress.placeName
-              : suggestion?.place_name || "";
-          else if (user) return user.streetAddress as string;
-          return suggestion?.place_name.split(",")[0] || "";
+          if (router.pathname === "/settings") {
+            return suggestion?.place_name.split(", ")[0] || user.streetAddress;
+          } else {
+            return suggestion?.place_name || tourPlaceName;
+          }
         }}
         className="form-input"
         placeholder="Address"
@@ -63,13 +67,7 @@ const AddressAutocomplete: FC<Props> = ({
             as="li"
             key={suggestion.id}
             value={suggestion}
-            onClick={() =>
-              setSelectedAddress({
-                id: suggestion.id,
-                placeName: suggestion?.place_name,
-                coordinates: suggestion?.geometry.coordinates,
-              })
-            }
+            onClick={() => selectSuggestion(suggestion)}
             className="cursor-pointer p-2 rounded hover:bg-gray-200">
             {suggestion?.place_name}
           </Combobox.Option>
