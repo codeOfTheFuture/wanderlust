@@ -11,7 +11,12 @@ import {
 import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import Button from "../ui/Button";
-import { addTourToFavorites, selectUser } from "../../store/slices/userSlice";
+import {
+  addTourToFavorites,
+  bookTour,
+  selectUser,
+  unBookTour,
+} from "../../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store";
 
 interface Props {
@@ -32,17 +37,28 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
     tourPhotos,
   } = tour;
 
-  const user = useAppSelector(selectUser);
+  const user = useAppSelector(selectUser) as User;
   const dispatch = useAppDispatch();
 
   const userId = user?._id.toString() as string,
     tourId = _id.toString();
 
   const favoriteTour =
-    user?.favoriteTours.find(t => t._id === tour._id) != null;
+      user?.favoriteTours.find(t => t._id === tour._id) != null,
+    bookedTour = user.bookedTours.find(t => t._id === tour._id) != null;
 
   const handleClick = () => {
     dispatch(addTourToFavorites({ userId, tourId }));
+  };
+
+  const handleBookTour = () => {
+    dispatch(bookTour({ tourId: _id.toString(), userId: user._id.toString() }));
+  };
+
+  const handleUnbookTour = () => {
+    dispatch(
+      unBookTour({ tourId: _id.toString(), userId: user._id.toString() })
+    );
   };
 
   return (
@@ -92,8 +108,12 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
             <p>US $ {price}</p>
             <p>per person</p>
           </div>
-          <Button color="btn-primary" size="btn-md" type="button">
-            Book Now
+          <Button
+            color="btn-primary"
+            size="btn-md"
+            type="button"
+            onClick={bookedTour ? handleUnbookTour : handleBookTour}>
+            {bookedTour ? "Unbook Now" : "Book Now"}
           </Button>
         </div>
         <div className="bg-black h-[1px] w-full"></div>

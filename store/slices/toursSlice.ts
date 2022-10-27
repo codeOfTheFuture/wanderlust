@@ -24,13 +24,13 @@ const initialState = {
 
 export const getPopularTours = createAsyncThunk("tours/popular", async () => {
   const response = await fetch("api/tours/popular");
-  return response.json();
+  return await response.json();
 });
 
 export const getTourDeals = createAsyncThunk("tours/deals", async () => {
   console.log("tour deals");
   const response = await fetch("api/tours/deals");
-  return response.json();
+  return await response.json();
 });
 
 export const toursSlice = createSlice({

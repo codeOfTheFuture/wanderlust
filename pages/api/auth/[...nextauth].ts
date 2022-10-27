@@ -38,6 +38,7 @@ export const authOptions: NextAuthOptions = {
         user.registerAsGuide = false;
         user.offeredTours = [];
         user.favoriteTours = [];
+        user.bookedTours = [];
         user.messages = [];
         user.signedInBefore = true;
       }

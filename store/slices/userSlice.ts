@@ -50,6 +50,26 @@ export const addTourToFavorites = createAsyncThunk(
   }
 );
 
+export const bookTour = createAsyncThunk(
+  "tours/booktour",
+  async ({ tourId, userId }: { tourId: string; userId: string }) => {
+    const response = await fetch(`api/users/${userId}/booktour/${tourId}`, {
+      method: "PUT",
+    });
+    return await response.json();
+  }
+);
+
+export const unBookTour = createAsyncThunk(
+  "tours/unBooktour",
+  async ({ tourId, userId }: { tourId: string; userId: string }) => {
+    const response = await fetch(`api/users/${userId}/unbooktour/${tourId}`, {
+      method: "PUT",
+    });
+    return await response.json();
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -91,6 +111,32 @@ export const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(addTourToFavorites.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message as string;
+      })
+      .addCase(bookTour.pending, state => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(bookTour.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.user = action.payload;
+      })
+      .addCase(bookTour.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message as string;
+      })
+      .addCase(unBookTour.pending, state => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(unBookTour.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(unBookTour.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message as string;
       });
