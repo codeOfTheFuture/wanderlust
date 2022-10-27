@@ -4,20 +4,17 @@ import Button from "../components/ui/Button";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import PageHeading from "../components/ui/PageHeading";
-import { wrapper } from "../store";
+import { useAppSelector, wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
-import { useSelector } from "react-redux";
 import { SessionUser, Tour, User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
+import { selectTours, setTours } from "../store/slices/toursSlice";
 
-interface Props {
-  offeredTours: Tour[];
-}
-
-const OfferedTours: NextPage<Props> = ({ offeredTours }) => {
-  const { registerAsGuide } = useSelector(selectUser) as User;
+const OfferedTours: NextPage = () => {
+  const { registerAsGuide } = useAppSelector(selectUser) as User;
+  const offeredTours = useAppSelector(selectTours);
 
   return (
     <>
@@ -32,7 +29,7 @@ const OfferedTours: NextPage<Props> = ({ offeredTours }) => {
           </h2>
         ) : null}
 
-        {offeredTours?.length > 0 && <TourCards tours={offeredTours} />}
+        {offeredTours?.length > 0 && <TourCards />}
 
         <Link href={!registerAsGuide ? "/settings" : "/create-tour"}>
           <Button color="btn-primary" size="btn-lg" type="button">
@@ -67,6 +64,8 @@ export const getServerSideProps: GetServerSideProps =
         JSON.stringify(queryOfferedTours)
       )) as Tour[];
 
+    store.dispatch(setTours(offeredTours));
+
     // Only runs if session exists and user in redux is null
     if (session && store.getState().user.user == null) {
       const { id } = session.user as SessionUser;
@@ -79,8 +78,6 @@ export const getServerSideProps: GetServerSideProps =
     }
 
     return {
-      props: {
-        offeredTours,
-      },
+      props: {},
     };
   });

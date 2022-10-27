@@ -5,16 +5,15 @@ import { Tour, SessionUser } from "../types/typings";
 import Button from "../components/ui/Button";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
-import { wrapper } from "../store";
+import { useAppSelector, wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
+import { getToursFilter, setTours } from "../store/slices/toursSlice";
 
-interface Props {
-  tours: Tour[];
-}
+const Home: NextPage = () => {
+  const toursFilter = useAppSelector(getToursFilter);
 
-const Home: NextPage<Props> = ({ tours }) => {
   return (
     <div className="w-full sm:w-5/6 lg:w-3/4 mx-auto">
       <div className="absolute top-0 left-0 bg-mountain-jump bg-no-repeat bg-cover bg-top h-[70vh] w-full"></div>
@@ -34,8 +33,10 @@ const Home: NextPage<Props> = ({ tours }) => {
       </div>
 
       <section className="w-full my-20">
-        <h3 className="text-2xl mb-10">Popular</h3>
-        <TourCards tours={tours} />
+        <h3 className="text-2xl mb-10">
+          {toursFilter.charAt(0).toUpperCase() + toursFilter.slice(1)}
+        </h3>
+        <TourCards />
       </section>
     </div>
   );
@@ -69,9 +70,9 @@ export const getServerSideProps: GetServerSideProps =
     const queryTours = await db.collection("tours").find({}).toArray(),
       tours = await JSON.parse(JSON.stringify(queryTours));
 
+    store.dispatch(setTours(tours));
+
     return {
-      props: {
-        tours,
-      },
+      props: {},
     };
   });

@@ -32,7 +32,7 @@ interface Tour {
   title: string;
   category: string;
   description: string;
-  price: string;
+  price: number | "";
   duration: string;
   recommendedAges: string;
   address: {

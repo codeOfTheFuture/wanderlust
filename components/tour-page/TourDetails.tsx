@@ -107,14 +107,14 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
         </div>
         <div className="mt-20">
           <div className="w-[200px] rounded-full">
-            {/* <Image
+            <Image
               src={guide.image}
               alt={guide.name}
               layout="responsive"
               width={100}
               height={100}
               className="rounded-full"
-            /> */}
+            />
           </div>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">

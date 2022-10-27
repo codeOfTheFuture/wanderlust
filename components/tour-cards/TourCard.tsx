@@ -53,7 +53,7 @@ const TourCard: FC<Props> = ({ tour }) => {
           className={`${
             user?.favoriteTours.find((t: Tour) => t._id === tour._id) != null
               ? "text-error-color"
-              : "text-gray-50"
+              : "text-black opacity-60"
           } absolute top-2 right-2 w-10  opacity-90 hover:scale-125 transition-all duration-300 ease-in-out`}
           onClick={e => {
             e.stopPropagation();

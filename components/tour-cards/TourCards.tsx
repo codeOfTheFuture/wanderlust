@@ -1,13 +1,12 @@
 import React, { FC } from "react";
 import TourCard from "./TourCard";
 import { Tour } from "../../types/typings";
+import { useAppSelector } from "../../store";
+import { selectTours } from "../../store/slices/toursSlice";
 
-interface Props {
-  tours: Tour[];
-}
-
-const TourCards: FC<Props> = ({ tours }) => {
+const TourCards: FC = () => {
   const page = 1;
+  const tours = useAppSelector(selectTours) as Tour[];
 
   return (
     <div className="flex flex-col w-11/12 sm:w-5/6 lg:w-full mx-auto">

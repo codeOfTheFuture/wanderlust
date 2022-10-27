@@ -8,6 +8,7 @@ import { SessionUser, User } from "../types/typings";
 import TourCards from "../components/tour-cards/TourCards";
 import { connectToDatabase } from "../lib/mongodb";
 import { ObjectId } from "mongodb";
+import { setTours } from "../store/slices/toursSlice";
 
 const FavoriteTours: NextPage = () => {
   const { favoriteTours } = useAppSelector(selectUser) as User;
@@ -22,7 +23,7 @@ const FavoriteTours: NextPage = () => {
             You don&apos;t have any favorite tours.
           </h2>
         ) : (
-          <TourCards tours={favoriteTours} />
+          <TourCards />
         )}
       </section>
     </>
@@ -44,11 +45,14 @@ export const getServerSideProps: GetServerSideProps =
     if (session && store.getState().user.user == null) {
       const { id } = session.user as SessionUser;
 
-      const user = (await db
-        .collection("users")
-        .findOne({ _id: new ObjectId(id) })) as User;
+      const userQuery = await db
+          .collection("users")
+          .findOne({ _id: new ObjectId(id) }),
+        user = JSON.parse(JSON.stringify(userQuery)) as User;
 
-      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+      store.dispatch(setUser(user));
+
+      store.dispatch(setTours(user.favoriteTours));
     }
 
     return {

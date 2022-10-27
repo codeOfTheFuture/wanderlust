@@ -7,11 +7,13 @@ import {
 } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import userReducer from "./slices/userSlice";
+import toursReducer from "./slices/toursSlice";
 import modalReducer from "./slices/modalSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const combinedReducers = combineReducers({
   user: userReducer,
+  tours: toursReducer,
   modal: modalReducer,
 });
 

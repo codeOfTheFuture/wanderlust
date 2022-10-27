@@ -56,7 +56,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
     [selectedAddress, setSelectedAddress] = useState<any>(
       tour?.address || null
     ),
-    [price, setPrice] = useState<string>(tour?.price || ""),
+    [price, setPrice] = useState<number | "">(tour?.price || ""),
     [datePickerOpen, setDatePickerOpen] = useState<boolean>(false),
     [selectedDates, setSelectedDates] = useState<SelectedDate[]>(
       tour?.tourDates || []
@@ -147,7 +147,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
     setRecommendedAges("");
     setWhatToBring("");
     setSelectedAddress(null);
-    setPrice("");
+    setPrice(0);
     setSelectedDates([]);
     setCurrentSelectedDate(null);
   };
@@ -273,7 +273,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
                 decimalScale={2}
                 allowNegative={false}
                 value={price}
-                onValueChange={values => setPrice(values.value)}
+                onValueChange={values => setPrice(+values.value)}
               />
               <div>per person</div>
             </div>
