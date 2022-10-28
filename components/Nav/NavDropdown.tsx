@@ -1,36 +1,19 @@
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { signOut } from "next-auth/react";
-import NavDropdownLink from "./NavDropdownLink";
+import { FC, ReactNode } from "react";
 
 interface Props {
+  children: ReactNode;
   toggleDropdown: boolean;
-  setToggleDropdown: Dispatch<SetStateAction<boolean>>;
 }
 
-const NavDropdown: FC<Props> = props => {
-  const { toggleDropdown, setToggleDropdown } = props;
-
-  const logOut = () => {
-    signOut();
-    setToggleDropdown(false);
-  };
-
+const NavDropdown: FC<Props> = ({ children, toggleDropdown }) => {
   return (
     <div
-      className={`absolute flex flex-col top-12 right-1 w-52 bg-white rounded-md p-3 mx-1 shadow-xl transition-opacity duration-150 ease-in-out ${
+      className={`absolute flex flex-col top-12 right-0 w-52 bg-white rounded-md p-3 mx-1 shadow-xl transition-opacity duration-150 ease-in-out ${
         toggleDropdown
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
       }`}>
-      <NavDropdownLink label="Create Tour" link="/create-tour" />
-      <NavDropdownLink label="Offered Tours" link="/offered-tours" />
-      <NavDropdownLink label="Booked Tours" link="/booked-tours" />
-      <NavDropdownLink label="Messages" link="/messages" />
-      <NavDropdownLink label="Favorites" link="/favorite-tours" />
-      <NavDropdownLink label="Settings" link="/settings" />
-      <div className="nav-dropdown-link" onClick={logOut}>
-        Logout
-      </div>
+      {children}
     </div>
   );
 };

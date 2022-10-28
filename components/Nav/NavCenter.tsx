@@ -1,17 +1,29 @@
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import {
+  categoriesClicked,
   getPopularTours,
   getTourDeals,
   getToursFilter,
 } from "../../store/slices/toursSlice";
 import { useAppDispatch, useAppSelector } from "../../store";
+import NavDropdown from "./NavDropdown";
+import useClickOutside from "../../hooks/useClickOutside";
+import NavCategoryOption from "./NavCategoryOption";
 
 const NavCenter: FC = () => {
   const router = useRouter();
   const toursFilter = useAppSelector(getToursFilter);
   const dispatch = useAppDispatch();
+
+  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
+
+  const dropDownRef = useRef<HTMLLIElement>(null);
+
+  useClickOutside(dropDownRef, () => {
+    setToggleDropdown(false);
+  });
 
   const fetchPopularTours = () => {
     dispatch(getPopularTours());
@@ -19,6 +31,11 @@ const NavCenter: FC = () => {
 
   const fetchTourDeals = () => {
     dispatch(getTourDeals());
+  };
+
+  const handleCategoriesClick = () => {
+    setToggleDropdown(prevState => !prevState);
+    dispatch(categoriesClicked());
   };
 
   return (
@@ -39,9 +56,25 @@ const NavCenter: FC = () => {
             onClick={fetchTourDeals}>
             Deals
           </li>
-          <li className="flex items-center hover:cursor-pointer">
+          <li
+            className="relative flex items-center hover:cursor-pointer"
+            onClick={handleCategoriesClick}
+            ref={dropDownRef}>
             Categories
-            <ChevronDownIcon className="w-6" />
+            <ChevronDownIcon
+              className={`w-6 transition-transform duration-300 ease-in-out ${
+                toggleDropdown ? "-rotate-180" : "rotate-0"
+              }`}
+            />
+            <NavDropdown toggleDropdown={toggleDropdown}>
+              <NavCategoryOption category="Hiking" />
+              <NavCategoryOption category="Cruise" />
+              <NavCategoryOption category="Bus" />
+              <NavCategoryOption category="Helicopter" />
+              <NavCategoryOption category="City" />
+              <NavCategoryOption category="National Park" />
+              <NavCategoryOption category="Historical" />
+            </NavDropdown>
           </li>
         </ul>
       )}

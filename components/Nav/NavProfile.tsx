@@ -5,6 +5,8 @@ import NavDropdown from "./NavDropdown";
 import useClickOutside from "../../hooks/useClickOutside";
 import { selectUser } from "../../store/slices/userSlice";
 import { useAppSelector } from "../../store";
+import NavDropdownLink from "./NavDropdownLink";
+import { signOut } from "next-auth/react";
 
 const NavProfile: FC = () => {
   const user = useAppSelector(selectUser),
@@ -14,6 +16,11 @@ const NavProfile: FC = () => {
 
   useClickOutside(dropsDownRef, () => setToggleDropdown(false));
 
+  const logOut = () => {
+    signOut();
+    setToggleDropdown(false);
+  };
+
   return (
     user && (
       <div className="flex justify-center items-center h-full mx-4">
@@ -22,7 +29,11 @@ const NavProfile: FC = () => {
           onClick={() => setToggleDropdown(prevState => !prevState)}
           ref={dropsDownRef}>
           <span>{firstName}</span>
-          <ChevronDownIcon className="h-6 mr-2" />
+          <ChevronDownIcon
+            className={`h-6 mr-2 transition-transform duration-300 ease-in-out ${
+              toggleDropdown ? "-rotate-180" : "rotate-0"
+            }`}
+          />
           <div className="flex h-full cursor-pointer rounded-full">
             {user.image && (
               <Image
@@ -34,10 +45,17 @@ const NavProfile: FC = () => {
               />
             )}
           </div>
-          <NavDropdown
-            toggleDropdown={toggleDropdown}
-            setToggleDropdown={setToggleDropdown}
-          />
+          <NavDropdown toggleDropdown={toggleDropdown}>
+            <NavDropdownLink label="Create Tour" link="/create-tour" />
+            <NavDropdownLink label="Offered Tours" link="/offered-tours" />
+            <NavDropdownLink label="Booked Tours" link="/booked-tours" />
+            <NavDropdownLink label="Messages" link="/messages" />
+            <NavDropdownLink label="Favorites" link="/favorite-tours" />
+            <NavDropdownLink label="Settings" link="/settings" />
+            <div className="nav-dropdown-link" onClick={logOut}>
+              Logout
+            </div>
+          </NavDropdown>
         </div>
       </div>
     )

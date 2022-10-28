@@ -6,11 +6,9 @@ interface Props {
   link: string;
 }
 
-const NavDropdownLink: FC<Props> = props => {
-  const { label, link } = props;
-
+const NavDropdownLink: FC<Props> = ({ label, link }) => {
   return (
-    <Link href={link!}>
+    <Link href={link as string}>
       <a className="nav-dropdown-link">{label}</a>
     </Link>
   );

@@ -10,7 +10,7 @@ import { RootState } from "../index";
 
 interface ToursState {
   tours: Tour[];
-  filter: "popular" | "deals";
+  filter: "popular" | "deals" | "categories";
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -39,6 +39,9 @@ export const toursSlice = createSlice({
   reducers: {
     setTours(state: ToursState, action: PayloadAction<Tour[]>) {
       state.tours = action.payload;
+    },
+    categoriesClicked(state: ToursState) {
+      state.filter = "categories";
     },
   },
 
@@ -82,7 +85,7 @@ export const toursSlice = createSlice({
   },
 });
 
-export const { setTours } = toursSlice.actions;
+export const { setTours, categoriesClicked } = toursSlice.actions;
 
 export const selectTours = (state: RootState) => state.tours.tours;
 export const getToursFilter = (state: RootState) => state.tours.filter;
