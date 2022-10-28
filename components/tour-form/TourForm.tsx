@@ -165,11 +165,13 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
               name="category"
               defaultText="Select a category"
               optionsList={[
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 4",
-                "Option 5",
+                "Hiking",
+                "Cruise",
+                "Bus",
+                "Helicopter",
+                "City",
+                "National Park",
+                "Historical Places",
               ]}
               selectStyles="flex flex-col bg-slate-100 w-52 rounded-sm"
               value={category}

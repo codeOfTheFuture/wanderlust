@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import {
   categoriesClicked,
+  fetchTourCategory,
   getPopularTours,
   getTourDeals,
   getToursFilter,
@@ -38,6 +39,10 @@ const NavCenter: FC = () => {
     dispatch(categoriesClicked());
   };
 
+  const getTourCategory = (category: string) => {
+    dispatch(fetchTourCategory(category));
+  };
+
   return (
     <>
       {router.pathname === "/" && (
@@ -67,13 +72,34 @@ const NavCenter: FC = () => {
               }`}
             />
             <NavDropdown toggleDropdown={toggleDropdown}>
-              <NavCategoryOption category="Hiking" />
-              <NavCategoryOption category="Cruise" />
-              <NavCategoryOption category="Bus" />
-              <NavCategoryOption category="Helicopter" />
-              <NavCategoryOption category="City" />
-              <NavCategoryOption category="National Park" />
-              <NavCategoryOption category="Historical" />
+              <NavCategoryOption
+                category="Hiking"
+                handleClick={() => getTourCategory("hiking")}
+              />
+              <NavCategoryOption
+                category="Cruise"
+                handleClick={() => getTourCategory("cruise")}
+              />
+              <NavCategoryOption
+                category="Bus"
+                handleClick={() => getTourCategory("bus")}
+              />
+              <NavCategoryOption
+                category="Helicopter"
+                handleClick={() => getTourCategory("helicopter")}
+              />
+              <NavCategoryOption
+                category="City"
+                handleClick={() => getTourCategory("city")}
+              />
+              <NavCategoryOption
+                category="National Park"
+                handleClick={() => getTourCategory("national-park")}
+              />
+              <NavCategoryOption
+                category="Historical Places"
+                handleClick={() => getTourCategory("historical-places")}
+              />
             </NavDropdown>
           </li>
         </ul>

@@ -9,13 +9,17 @@ interface Props {
   handleChange: Dispatch<SetStateAction<string>>;
 }
 
-const FormSelect: FC<Props> = props => {
-  const { name, defaultText, optionsList, selectStyles, value, handleChange } =
-    props;
-
+const FormSelect: FC<Props> = ({
+  name,
+  defaultText,
+  optionsList,
+  selectStyles,
+  value,
+  handleChange,
+}) => {
   return (
     <div className={selectStyles}>
-      <label htmlFor={name}>Select</label>
+      <label htmlFor={name}>{defaultText}</label>
       <select
         name={name}
         id={name}
@@ -26,7 +30,9 @@ const FormSelect: FC<Props> = props => {
           {defaultText}
         </option>
         {optionsList.map(option => (
-          <option key={option} value={option}>
+          <option
+            key={option}
+            value={option.toLocaleLowerCase().replace(/\s/, "-")}>
             {option}
           </option>
         ))}
