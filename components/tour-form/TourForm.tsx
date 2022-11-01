@@ -62,10 +62,11 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
       tour?.tourDates || []
     ),
     [currentSelectedDate, setCurrentSelectedDate] =
-      useState<SelectedDate | null>(null);
+      useState<SelectedDate | null>(null),
+    [uploadedFiles, setUploadedFiles] = useState(tour?.tourPhotos || []);
 
-  const { uploadedFiles, setUploadedFiles, onDrop } = useOnDrop(
-    tour?.tourPhotos
+  const [onDrop] = useOnDrop(cloudinaryImage =>
+    setUploadedFiles(prevState => [...prevState, cloudinaryImage])
   );
 
   const datePickerRef = useRef<HTMLDivElement>(null);
@@ -314,7 +315,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           {user && (
             <div className="relative mx-auto rounded-full">
               <Image
-                src={user.image}
+                src={user.profileImage.secure_url}
                 alt="guide"
                 width={240}
                 height={240}

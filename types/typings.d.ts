@@ -2,23 +2,20 @@ import { ObjectId } from "mongodb";
 
 interface SessionUser {
   id: ObjectId;
-  name: string;
-  email: string;
-  image: string;
 }
 
 interface User {
   _id: ObjectId;
   name: string;
   email: string;
-  image: string;
+  password?: string;
+  profileImage: CloudinaryImage;
   streetAddress: string | null;
   city: string | null;
   state: string | null;
   zipCode: string | null;
   phoneNumber: string | null;
   registerAsGuide: boolean;
-  offeredTours: Tour[];
   bookedTours: Tour[];
   favoriteTours: Tour[];
   messages: any[];

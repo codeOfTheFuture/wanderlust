@@ -46,11 +46,9 @@ export const getServerSideProps: GetServerSideProps =
 
     // Only runs if session exists and user in redux is null
     if (session && store.getState().user.user == null) {
-      const { id } = session.user as SessionUser;
-
-      const user = (await db
+      const user = await db
         .collection("users")
-        .findOne({ _id: new ObjectId(id) })) as User;
+        .findOne({ email: session.user?.email });
 
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
     }

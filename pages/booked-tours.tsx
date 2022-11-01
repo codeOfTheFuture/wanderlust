@@ -43,11 +43,9 @@ export const getServerSideProps: GetServerSideProps =
     const { db } = await connectToDatabase();
 
     if (session && store.getState().user.user == null) {
-      const { id } = session.user as SessionUser;
-
       const userQuery = await db
           .collection("users")
-          .findOne({ _id: new ObjectId(id) }),
+          .findOne({ email: session.user?.email }),
         user = JSON.parse(JSON.stringify(userQuery)) as User;
 
       store.dispatch(setUser(user));

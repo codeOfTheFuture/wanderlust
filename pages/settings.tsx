@@ -8,16 +8,15 @@ import {
   setUser,
   updateUserSettings,
 } from "../store/slices/userSlice";
-import { SessionUser, User } from "../types/typings";
+import { User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
-import { ObjectId } from "mongodb";
 
 const Settings: NextPage = () => {
-  const { _id } = useAppSelector(selectUser) as User,
+  const user = useAppSelector(selectUser) as User,
     dispatch = useAppDispatch();
 
   const submitForm = (formData: any) => {
-    dispatch(updateUserSettings({ userId: _id.toString(), formData }));
+    dispatch(updateUserSettings({ userId: user?._id.toString(), formData }));
   };
 
   return (
@@ -42,16 +41,13 @@ export const getServerSideProps: GetServerSideProps =
 
     if (session && store.getState().user.user == null) {
       const { db } = await connectToDatabase();
-      const { id } = session.user as SessionUser;
 
       const user = await db
         .collection("users")
-        .findOne({ _id: new ObjectId(id) });
+        .findOne({ email: session.user?.email });
 
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
     }
-
-    // session && store.dispatch(setUser(session.user as User));
 
     return {
       props: {},

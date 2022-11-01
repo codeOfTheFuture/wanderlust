@@ -5,7 +5,7 @@ import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
 import { connectToDatabase } from "../lib/mongodb";
 import { ObjectId } from "mongodb";
-import { SessionUser, Tour, User } from "../types/typings";
+import { SessionUser, Tour } from "../types/typings";
 import { setUser } from "../store/slices/userSlice";
 
 interface Props {
@@ -14,27 +14,19 @@ interface Props {
 
 const UpdateTour: NextPage<Props> = ({ tour }) => {
   const submitForm = async (tourToUpdate: Tour) => {
-    const response = await fetch(`/api/tours/${tour._id}`, {
+    await fetch(`/api/tours/${tour._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(tourToUpdate),
     });
-
-    const updatedTour = await response.json();
-
-    console.log("added tour>>>>>", updatedTour);
   };
 
   const deleteTour = async () => {
-    const response = await fetch(`/api/tours/${tour._id}`, {
+    await fetch(`/api/tours/${tour._id}`, {
       method: "DELETE",
     });
-
-    const deletedTour = await response.json();
-
-    console.log("Deleted Tour>>>>>", deletedTour);
   };
 
   return (
@@ -58,11 +50,9 @@ export const getServerSideProps: GetServerSideProps =
 
     // Only runs if session exists and user in redux is null
     if (session && store.getState().user.user == null) {
-      const { id } = session.user as SessionUser;
-
       const user = await db
         .collection("users")
-        .findOne({ _id: new ObjectId(id) });
+        .findOne({ email: session.user?.email });
 
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
     }
@@ -70,8 +60,6 @@ export const getServerSideProps: GetServerSideProps =
     const tour = await db.collection("tours").findOne({
       _id: new ObjectId(context.query.tour as string),
     });
-
-    console.log("tour in update>>>>", tour);
 
     return {
       props: {

@@ -1,29 +1,36 @@
-import React, { FC, RefObject } from "react";
+import React, { FC } from "react";
 import { UserIcon } from "@heroicons/react/solid";
-import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
 import Image from "next/image";
+import { useAppSelector } from "../../store";
+import { useDropzone } from "react-dropzone";
 
 interface Props {
-  photoPickerRef: RefObject<HTMLInputElement>;
+  profileImage: string;
+  onDrop: (acceptedFiles: File[]) => void;
 }
 
-const ProfilePhotoPicker: FC<Props> = ({ photoPickerRef }) => {
-  const user = useSelector(selectUser);
+const ProfilePhotoPicker: FC<Props> = ({ profileImage, onDrop }) => {
+  const user = useAppSelector(selectUser);
+
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [],
+    },
+    multiple: false,
+  });
 
   return (
     <div
+      {...getRootProps()}
       className="w-20 h-20 sm:w-36 sm:h-36 lg:w-48 lg:h-48 rounded-full border border-dotted border-divider-color cursor-pointer shadow-md hover:bg-gray-100"
-      onClick={() => photoPickerRef.current?.click()}>
+      onClick={open}>
       <div className="flex flex-col justify-center items-center w-full h-full rounded-full">
-        {user ? (
-          <div className="w-full h-full relative flex justify-center items-center rounded-full">
+        {user?.profileImage || (user && profileImage) ? (
+          <div className="w-full h-full relative flex justify-center items-center rounded-full bg-white">
             <Image
-              src={
-                photoPickerRef.current?.value
-                  ? photoPickerRef.current.value
-                  : user.image
-              }
+              src={profileImage || user.profileImage.secure_url}
               alt={(user.name, "profile image")}
               layout="fill"
               className="object-cover object-center rounded-full"
@@ -37,10 +44,10 @@ const ProfilePhotoPicker: FC<Props> = ({ photoPickerRef }) => {
         )}
       </div>
       <input
+        {...getInputProps()}
         type="file"
         name="profilePhotoPicker"
         id="profilePhotoPicker"
-        ref={photoPickerRef}
         hidden
       />
     </div>

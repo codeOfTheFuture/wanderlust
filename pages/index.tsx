@@ -10,6 +10,7 @@ import { setUser } from "../store/slices/userSlice";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
 import { getToursFilter, setTours } from "../store/slices/toursSlice";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const toursFilter = useAppSelector(getToursFilter);
@@ -25,9 +26,11 @@ const Home: NextPage = () => {
           <h1 className="text-4xl md:text-6xl  xl:text-8xl font-semibold text-light-text mt-52 sm:mt-44">
             Zion National Park
           </h1>
-          <Button color="btn-primary" size="btn-lg" type="button">
-            Search Map
-          </Button>
+          <Link href="/search">
+            <Button color="btn-primary" size="btn-lg" type="button">
+              Search Map
+            </Button>
+          </Link>
         </div>
         <SearchInput />
       </div>
@@ -58,11 +61,16 @@ export const getServerSideProps: GetServerSideProps =
 
     // Only runs if session exists and user in redux is null
     if (session && store.getState().user.user == null) {
+      console.log("Session>>", session);
       const { id } = session.user as SessionUser;
+
+      // const user = await db
+      //   .collection("users")
+      //   .findOne({ _id: new ObjectId(id) });
 
       const user = await db
         .collection("users")
-        .findOne({ _id: new ObjectId(id) });
+        .findOne({ email: session.user?.email });
 
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
     }

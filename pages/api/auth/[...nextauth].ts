@@ -3,8 +3,14 @@ import { connectToDatabase } from "../../../lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { compare } from "bcryptjs";
+import { User } from "../../../types/typings";
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   adapter: MongoDBAdapter(
     (async () => {
       const { client } = await connectToDatabase();
@@ -13,6 +19,37 @@ export const authOptions: NextAuthOptions = {
     {}
   ),
   providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      type: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const { db } = await connectToDatabase();
+
+        const user = (await db
+          .collection("users")
+          .findOne({ email: credentials?.email })) as User;
+
+        if (!user) {
+          throw new Error("Email incorrect");
+        }
+
+        const checkPassword = await compare(
+          credentials?.password as string,
+          user.password as string
+        );
+
+        if (!checkPassword) {
+          throw new Error("Password incorrect");
+        }
+
+        return JSON.parse(JSON.stringify(user));
+      },
+    }),
+
     FacebookProvider({
       clientId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string,
       clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_APP_SECRET as string,
@@ -30,13 +67,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user }) {
       if (user.signedInBefore == null) {
+        user.profileImage = {
+          secure_url: user.image,
+        };
         user.streetAddress = null;
         user.city = null;
         user.state = null;
         user.zipCode = null;
         user.phoneNumber = null;
         user.registerAsGuide = false;
-        user.offeredTours = [];
         user.favoriteTours = [];
         user.bookedTours = [];
         user.messages = [];
@@ -44,8 +83,15 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async session({ session, user }) {
-      session.user = user;
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.id = profile?.id;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      console.log("User in session>", user);
       return session;
     },
   },

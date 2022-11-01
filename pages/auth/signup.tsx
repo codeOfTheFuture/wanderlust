@@ -32,11 +32,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
       authOptions
     );
 
+  console.log("Session>>>>", session);
+
   if (session) {
     return {
-      props: {
-        providers: providers,
-      },
+      props: {},
       redirect: {
         destination: "/",
         permanent: false,

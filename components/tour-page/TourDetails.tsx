@@ -128,7 +128,7 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
         <div className="mt-20">
           <div className="w-[200px] rounded-full">
             <Image
-              src={guide.image}
+              src={guide.profileImage.secure_url}
               alt={guide.name}
               layout="responsive"
               width={100}

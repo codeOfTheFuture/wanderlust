@@ -50,31 +50,28 @@ export const getServerSideProps: GetServerSideProps =
       context.res,
       authOptions
     );
-    const { id } = session?.user as SessionUser;
 
     const { db } = await connectToDatabase();
 
-    const queryOfferedTours = await db
-        .collection("tours")
-        .find({
-          guideId: new ObjectId(id),
-        })
-        .toArray(),
-      offeredTours = (await JSON.parse(
-        JSON.stringify(queryOfferedTours)
-      )) as Tour[];
-
-    store.dispatch(setTours(offeredTours));
-
     // Only runs if session exists and user in redux is null
     if (session && store.getState().user.user == null) {
-      const { id } = session.user as SessionUser;
-
       const user = await db
         .collection("users")
-        .findOne({ _id: new ObjectId(id) });
+        .findOne({ email: session.user?.email });
 
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+
+      const queryOfferedTours = await db
+          .collection("tours")
+          .find({
+            guideId: new ObjectId(user?._id),
+          })
+          .toArray(),
+        offeredTours = (await JSON.parse(
+          JSON.stringify(queryOfferedTours)
+        )) as Tour[];
+
+      store.dispatch(setTours(offeredTours));
     }
 
     return {

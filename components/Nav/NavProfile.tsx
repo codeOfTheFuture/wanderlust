@@ -28,22 +28,20 @@ const NavProfile: FC = () => {
           className="relative flex justify-center items-center cursor-pointer"
           onClick={() => setToggleDropdown(prevState => !prevState)}
           ref={dropsDownRef}>
-          <span>{firstName}</span>
+          <span>{firstName || user.email}</span>
           <ChevronDownIcon
             className={`h-6 mr-2 transition-transform duration-300 ease-in-out ${
               toggleDropdown ? "-rotate-180" : "rotate-0"
             }`}
           />
           <div className="flex h-full cursor-pointer rounded-full">
-            {user.image && (
-              <Image
-                src={user.image}
-                width={40}
-                height={40}
-                alt={firstName}
-                className="rounded-full"
-              />
-            )}
+            <Image
+              src={user.profileImage.secure_url}
+              width={40}
+              height={40}
+              alt={firstName}
+              className="rounded-full"
+            />
           </div>
           <NavDropdown toggleDropdown={toggleDropdown}>
             <NavDropdownLink label="Create Tour" link="/create-tour" />

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
+import React, { FC, FormEvent, useState } from "react";
 import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
 import Checkbox from "../ui/Checkbox";
@@ -6,9 +6,11 @@ import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
 import CurrencyFormat from "react-currency-format";
 import { selectUser } from "../../store/slices/userSlice";
-import { AddressSuggestion, User } from "../../types/typings";
+import { AddressSuggestion, CloudinaryImage, User } from "../../types/typings";
 import { useAppSelector } from "../../store";
 import { stateAbbrLookup } from "../../utils/stateAbbrLookup";
+import useOnDrop from "../../hooks/useOnDrop";
+import deleteImage from "../../utils/deleteImage";
 
 interface Props {
   // TODO: FORM DATA TYPING
@@ -18,21 +20,21 @@ interface Props {
 const SettingsForm: FC<Props> = ({ submitForm }) => {
   const user = useAppSelector(selectUser) as User;
 
-  const photoPickerRef = useRef<HTMLInputElement>(null);
-
   const [email, setEmail] = useState<string>(user?.email || ""),
+    [name, setName] = useState(user?.name || ""),
     [selectedSuggestion, setSelectedSuggestion] =
       useState<AddressSuggestion | null>(null),
     [streetAddress, setStreetAddress] = useState<string>(
-      user.streetAddress || ""
+      user?.streetAddress || ""
     ),
-    [city, setCity] = useState<string>(user.city || ""),
-    [state, setState] = useState<string>(user.state || ""),
-    [zipCode, setZipCode] = useState<string>(user.zipCode || ""),
+    [city, setCity] = useState<string>(user?.city || ""),
+    [state, setState] = useState<string>(user?.state || ""),
+    [zipCode, setZipCode] = useState<string>(user?.zipCode || ""),
     [phoneNumber, setPhoneNumber] = useState<string>(user?.phoneNumber || ""),
     [registerAsGuide, setRegisterAsGuide] = useState<boolean>(
       user?.registerAsGuide || false
-    );
+    ),
+    [profileImage, setProfileImage] = useState<CloudinaryImage | null>(null);
 
   const getStreetAddress = (placeName: string) => {
     if (placeName) return placeName.split(", ")[0];
@@ -73,7 +75,9 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
     e.preventDefault();
 
     submitForm({
+      name,
       email,
+      image: profileImage,
       streetAddress,
       city,
       state,
@@ -82,6 +86,14 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
       registerAsGuide,
     });
   };
+
+  const [onDrop] = useOnDrop(async cloudinaryImage => {
+    if (profileImage != null) {
+      await deleteImage(profileImage.public_id, profileImage.signature);
+      setProfileImage(cloudinaryImage);
+    }
+    setProfileImage(cloudinaryImage);
+  });
 
   return (
     <form
@@ -92,7 +104,10 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
         <h2 className="text-lg font-semibold text-primary-color">
           Profile photo
         </h2>
-        <ProfilePhotoPicker photoPickerRef={photoPickerRef} />
+        <ProfilePhotoPicker
+          onDrop={onDrop}
+          profileImage={profileImage?.secure_url as string}
+        />
       </div>
 
       {/* Edit Profile Info */}
@@ -102,6 +117,14 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
         </h1>
 
         <div className="flex flex-col w-full gap-4">
+          <FormInput
+            name="name"
+            label="Name"
+            type="text"
+            value={name}
+            handleChange={setName}
+          />
+
           <FormInput
             name="email"
             label="Email"
@@ -153,9 +176,7 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
             label="Phone Number"
             type="text"
             value={phoneNumber}
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setPhoneNumber(event.target.value)
-            }
+            onChange={e => setPhoneNumber(e.target.value)}
             format="+1 (###) ###-####"
             mask="_"
           />

@@ -1,11 +1,11 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { Combobox } from "@headlessui/react";
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
-import { useSelector } from "react-redux";
 import { selectUser } from "../../store/slices/userSlice";
 import { useInView } from "react-intersection-observer";
 import { AddressSuggestion, User } from "../../types/typings";
 import { useRouter } from "next/router";
+import { useAppSelector } from "../../store";
 
 interface Props {
   tourPlaceName?: string;
@@ -21,7 +21,7 @@ const AddressAutocomplete: FC<Props> = ({
   selectSuggestion,
 }) => {
   console.log("selected address>>>>", selectedSuggestion);
-  const user = useSelector(selectUser) as User;
+  const user = useAppSelector(selectUser) as User;
 
   const router = useRouter();
 
@@ -48,7 +48,7 @@ const AddressAutocomplete: FC<Props> = ({
         onChange={handleAddressChange}
         displayValue={(suggestion: any) => {
           if (router.pathname === "/settings") {
-            return suggestion?.place_name.split(", ")[0] || user.streetAddress;
+            return suggestion?.place_name.split(", ")[0] || user?.streetAddress;
           } else {
             return suggestion?.place_name || tourPlaceName;
           }

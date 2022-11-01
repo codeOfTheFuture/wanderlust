@@ -1,16 +1,14 @@
 import React, { Dispatch, FC, Fragment, SetStateAction } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useSelector, useDispatch } from "react-redux";
 import { closeModal, selectModalOpen } from "../../store/slices/modalSlice";
 import Button from "../ui/Button";
 import DropZone from "./DropZone";
-import useOnDrop from "../../hooks/useOnDrop";
 import PreviewThumbnails from "./PreviewThumbnails";
 import ModalDivider from "./ModalDivider";
 import deleteImage from "../../utils/deleteImage";
 import { useDropzone } from "react-dropzone";
 import { CloudinaryImage } from "../../types/typings";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 interface Props {
   uploadedFiles: CloudinaryImage[];
@@ -20,7 +18,7 @@ interface Props {
 
 const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
   const modalOpen = useAppSelector(selectModalOpen),
-    dispatch = useDispatch();
+    dispatch = useAppDispatch();
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     onDrop,
