@@ -27,11 +27,11 @@ const NavCenter: FC = () => {
   });
 
   const fetchPopularTours = () => {
-    dispatch(getPopularTours());
+    dispatch(getPopularTours({ page: 1, limit: 8 }));
   };
 
   const fetchTourDeals = () => {
-    dispatch(getTourDeals());
+    dispatch(getTourDeals({ page: 1, limit: 8 }));
   };
 
   const handleCategoriesClick = () => {

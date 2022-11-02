@@ -2,7 +2,13 @@ import React, { FC, useState } from "react";
 import TourCard from "./TourCard";
 import { TourResults } from "../../types/typings";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { getPopularTours, selectTours } from "../../store/slices/toursSlice";
+import {
+  getPopularTours,
+  getTourDeals,
+  getToursCategory,
+  getToursFilter,
+  selectTours,
+} from "../../store/slices/toursSlice";
 
 const TourCards: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,7 +16,23 @@ const TourCards: FC = () => {
 
   const toursResults = useAppSelector(selectTours) as TourResults;
 
+  const filter = useAppSelector(getToursFilter);
+
   const dispatch = useAppDispatch();
+
+  const handlePagination = (page: number) => {
+    setCurrentPage(page);
+
+    if (filter === "popular") {
+      dispatch(getPopularTours({ page, limit }));
+    }
+    if (filter === "deals") {
+      dispatch(getTourDeals({ page, limit }));
+    }
+    if (filter === "categories") {
+      // dispatch()
+    }
+  };
 
   return (
     <div className="flex flex-col w-11/12 sm:w-5/6 lg:w-full mx-auto">
@@ -23,9 +45,7 @@ const TourCards: FC = () => {
         <div
           onClick={() => {
             if (toursResults.previous != null) {
-              const page = toursResults.previous?.page as number;
-              setCurrentPage(page);
-              dispatch(getPopularTours({ page, limit }));
+              handlePagination(toursResults.previous.page);
             }
           }}
           className="font-semibold cursor-pointer">
@@ -39,9 +59,7 @@ const TourCards: FC = () => {
         <div
           onClick={() => {
             if (toursResults.next != null) {
-              const page = toursResults.next?.page as number;
-              setCurrentPage(page);
-              dispatch(getPopularTours({ page, limit }));
+              handlePagination(toursResults.next.page);
             }
           }}
           className="font-semibold cursor-pointer">

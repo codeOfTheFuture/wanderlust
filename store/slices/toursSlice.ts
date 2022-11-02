@@ -28,16 +28,21 @@ export const getPopularTours = createAsyncThunk(
   "tours/popular",
   async ({ page, limit }: { page: number; limit: number }) => {
     const response = await fetch(
-      `api/tours/popular?page=${page}&limit=${limit}`
+      `api/tours/popular?page=${page || 1}&limit=${limit}`
     );
     return await response.json();
   }
 );
 
-export const getTourDeals = createAsyncThunk("tours/deals", async () => {
-  const response = await fetch("api/tours/deals");
-  return await response.json();
-});
+export const getTourDeals = createAsyncThunk(
+  "tours/deals",
+  async ({ page, limit }: { page: number; limit: number }) => {
+    const response = await fetch(
+      `api/tours/deals?page=${page || 1}&limit=${limit}`
+    );
+    return await response.json();
+  }
+);
 
 export const fetchTourCategory = createAsyncThunk(
   "tours/category",

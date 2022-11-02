@@ -18,6 +18,7 @@ interface Results {
   totalPages: number;
 }
 
+// GET - /api/tours/popular?page={page}&limit={limit}
 export default nextConnect<NextApiRequest, NextApiResponse>().get(
   async (req, res) => {
     const page = +req.query.page;
