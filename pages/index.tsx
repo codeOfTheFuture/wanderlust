@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import SearchInput from "../components/ui/SearchInput";
 import { connectToDatabase } from "../lib/mongodb";
-import { Tour, SessionUser } from "../types/typings";
+import { Tour, SessionUser, TourResults } from "../types/typings";
 import Button from "../components/ui/Button";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
@@ -75,10 +75,22 @@ export const getServerSideProps: GetServerSideProps =
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
     }
 
-    const queryTours = await db.collection("tours").find({}).toArray(),
+    const queryTours = await db.collection("tours").find({}).limit(8).toArray(),
       tours = await JSON.parse(JSON.stringify(queryTours));
 
-    store.dispatch(setTours(tours));
+    const totalPages = await db.collection("tours").countDocuments();
+
+    const results = {} as TourResults;
+
+    results.next = {
+      page: 2,
+      limit: 8,
+    };
+
+    results.totalPages = totalPages;
+    results.results = tours;
+
+    store.dispatch(setTours(results));
 
     return {
       props: {},

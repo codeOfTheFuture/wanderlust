@@ -49,6 +49,19 @@ interface Tour {
   }[];
 }
 
+interface TourResults {
+  results: Tour[];
+  next?: {
+    page: number;
+    limit: number;
+  };
+  previous?: {
+    page: number;
+    limit: number;
+  };
+  totalPages: number;
+}
+
 interface CloudinaryImage {
   api_key: string;
   asset_id: string;
@@ -86,6 +99,7 @@ export {
   type SessionUser,
   type User,
   type Tour,
+  type TourResults,
   type HandleScroll,
   type CloudinaryImage,
   type States,

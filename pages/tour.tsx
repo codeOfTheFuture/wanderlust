@@ -4,7 +4,7 @@ import RecommendedTours from "../components/tour-cards/RecommendedTours";
 import TourDetails from "../components/tour-page/TourDetails";
 import TourPageHeader from "../components/tour-page/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
-import { SessionUser, Tour, User } from "../types/typings";
+import { Tour, User } from "../types/typings";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { wrapper } from "../store";
@@ -21,7 +21,7 @@ const Tour: NextPage<Props> = ({ tour, guide, tours }) => {
     <>
       <div className="flex flex-col justify-center items-center gap-5">
         <TourPageHeader
-          backgroundImage={tour.tourPhotos[0].secure_url}
+          backgroundImage={tour.tourPhotos[0]?.secure_url}
           title={tour.title}
         />
         <TourDetails tour={tour} guide={guide} />

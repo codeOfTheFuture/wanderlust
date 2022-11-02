@@ -5,11 +5,11 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
-import { Tour } from "../../types/typings";
+import { Tour, TourResults } from "../../types/typings";
 import { RootState } from "../index";
 
 interface ToursState {
-  tours: Tour[];
+  tourResults: TourResults | null;
   filter: "popular" | "deals" | "categories";
   category: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -17,17 +17,22 @@ interface ToursState {
 }
 
 const initialState = {
-  tours: [],
+  tourResults: null,
   filter: "popular",
   category: null,
   status: "idle",
   error: null,
 } as ToursState;
 
-export const getPopularTours = createAsyncThunk("tours/popular", async () => {
-  const response = await fetch("api/tours/popular");
-  return await response.json();
-});
+export const getPopularTours = createAsyncThunk(
+  "tours/popular",
+  async ({ page, limit }: { page: number; limit: number }) => {
+    const response = await fetch(
+      `api/tours/popular?page=${page}&limit=${limit}`
+    );
+    return await response.json();
+  }
+);
 
 export const getTourDeals = createAsyncThunk("tours/deals", async () => {
   const response = await fetch("api/tours/deals");
@@ -47,8 +52,8 @@ export const toursSlice = createSlice({
   name: "tours",
   initialState,
   reducers: {
-    setTours(state: ToursState, action: PayloadAction<Tour[]>) {
-      state.tours = action.payload;
+    setTours(state: ToursState, action: PayloadAction<TourResults>) {
+      state.tourResults = action.payload;
     },
     categoriesClicked(state: ToursState) {
       state.filter = "categories";
@@ -58,18 +63,18 @@ export const toursSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(HYDRATE, (state: ToursState, action: AnyAction) => {
-        if (action.payload.tours.tours == null) {
+        if (action.payload.tours.tourResults == null) {
           return state;
         }
 
-        state.tours = action.payload.tours.tours;
+        state.tourResults = action.payload.tours.tourResults;
       })
       .addCase(getPopularTours.pending, state => {
         state.status = "loading";
         state.error = null;
       })
       .addCase(getPopularTours.fulfilled, (state, action) => {
-        state.tours = action.payload;
+        state.tourResults = action.payload;
         state.filter = "popular";
         state.category = null;
         state.status = "succeeded";
@@ -83,7 +88,7 @@ export const toursSlice = createSlice({
         state.error = null;
       })
       .addCase(getTourDeals.fulfilled, (state, action) => {
-        state.tours = action.payload;
+        state.tourResults = action.payload;
         state.filter = "deals";
         state.category = null;
         state.status = "succeeded";
@@ -97,7 +102,7 @@ export const toursSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchTourCategory.fulfilled, (state, action) => {
-        state.tours = action.payload.data;
+        state.tourResults = action.payload.data;
         state.category = action.payload.category;
         state.status = "succeeded";
       })
@@ -110,7 +115,7 @@ export const toursSlice = createSlice({
 
 export const { setTours, categoriesClicked } = toursSlice.actions;
 
-export const selectTours = (state: RootState) => state.tours.tours;
+export const selectTours = (state: RootState) => state.tours.tourResults;
 export const getToursFilter = (state: RootState) => state.tours.filter;
 export const getToursCategory = (state: RootState) => state.tours.category;
 export const getToursStatus = (state: RootState) => state.tours.status;
