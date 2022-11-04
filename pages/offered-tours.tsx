@@ -6,7 +6,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import PageHeading from "../components/ui/PageHeading";
 import { useAppSelector, wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
-import { SessionUser, Tour, User } from "../types/typings";
+import { SessionUser, Tour, TourResults, User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
@@ -14,14 +14,14 @@ import { selectTours, setTours } from "../store/slices/toursSlice";
 
 const OfferedTours: NextPage = () => {
   const { registerAsGuide } = useAppSelector(selectUser) as User;
-  const offeredTours = useAppSelector(selectTours);
+  const tourResults = useAppSelector(selectTours);
 
   return (
     <>
       <PageHeading headingText="Here you can add, edit, and delete your offered tours." />
 
       <section className="flex flex-col justify-center items-center gap-10 w-full sm:w-5/6 lg:w-3/4 min-h-[33vh] mx-auto my-20">
-        {!registerAsGuide || offeredTours.length === 0 ? (
+        {!registerAsGuide || tourResults?.results.length === 0 ? (
           <h2 className="text-base md:text-xl font-medium">
             {!registerAsGuide
               ? "Please register as a guide in your settings if you would like to create a tour"
@@ -29,7 +29,7 @@ const OfferedTours: NextPage = () => {
           </h2>
         ) : null}
 
-        {offeredTours?.length > 0 && <TourCards />}
+        {tourResults?.results && <TourCards />}
 
         <Link href={!registerAsGuide ? "/settings" : "/create-tour"}>
           <Button color="btn-primary" size="btn-lg" type="button">
@@ -62,16 +62,30 @@ export const getServerSideProps: GetServerSideProps =
       store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
 
       const queryOfferedTours = await db
-          .collection("tours")
-          .find({
-            guideId: new ObjectId(user?._id),
-          })
-          .toArray(),
-        offeredTours = (await JSON.parse(
-          JSON.stringify(queryOfferedTours)
-        )) as Tour[];
+        .collection("tours")
+        .find({
+          guideId: new ObjectId(user?._id),
+        })
+        .limit(8)
+        .toArray();
+      const offeredTours = (await JSON.parse(
+        JSON.stringify(queryOfferedTours)
+      )) as Tour[];
 
-      store.dispatch(setTours(offeredTours));
+      const results = {} as TourResults;
+      const documentCount = offeredTours.length;
+
+      if (results.totalPages > 1)
+        results.next = {
+          page: 2,
+          limit: 8,
+        };
+
+      results.totalPages = Math.ceil(documentCount / 8);
+
+      results.results = offeredTours;
+
+      store.dispatch(setTours(results));
     }
 
     return {

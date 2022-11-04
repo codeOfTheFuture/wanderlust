@@ -7,17 +7,21 @@ interface Props {
 
 const TourTitleInput: FC<Props> = ({ value, handleChange }) => {
   return (
-    <div className="flex flex-col w-full bg-slate-100 rounded-sm">
-      <label htmlFor="tourTitle">Title your tour</label>
+    <div className="form-control rounded-lg relative">
       <input
         type="text"
         name="tourTitle"
         id="tourTitle"
-        placeholder="Title your tour"
-        className="p-5 bg-transparent text-lg text-black"
+        required
+        className="form-input bg-white peer"
         value={value}
         onChange={e => handleChange(e.target.value)}
       />
+      <label
+        htmlFor="tourTitle"
+        className="form-label rounded-lg peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
+        Title your tour
+      </label>
     </div>
   );
 };

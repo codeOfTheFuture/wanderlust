@@ -28,28 +28,28 @@ const FormInput: FC<Props> = ({
   ...rest
 }) => {
   return (
-    <div className="flex flex-col w-full">
-      <label htmlFor={name} hidden>
+    <div className="form-control">
+      <input
+        className="form-input peer"
+        id={name}
+        type={type}
+        value={value}
+        onChange={e => handleChange(e.target.value)}
+        onFocus={handleFocus}
+        required
+        {...rest}
+      />
+      <label
+        htmlFor={name}
+        className="form-label peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
         {label}
       </label>
-      <div className="flex relative items-center">
-        <input
-          className="p-2 w-full border border-black rounded-md"
-          id={name}
-          placeholder={label}
-          type={type}
-          value={value}
-          onChange={e => handleChange(e.target.value)}
-          onFocus={handleFocus}
-          {...rest}
+      {Icon && (
+        <Icon
+          className="absolute right-0 w-6 mx-2 cursor-pointer hover:text-primary-color"
+          onClick={handleFocus}
         />
-        {Icon && (
-          <Icon
-            className="absolute right-0 w-6 mx-2 cursor-pointer hover:text-primary-color"
-            onClick={handleFocus}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 };

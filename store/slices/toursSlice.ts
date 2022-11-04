@@ -53,6 +53,27 @@ export const fetchTourCategory = createAsyncThunk(
   }
 );
 
+export const fetchOfferedTours = createAsyncThunk(
+  "tours/offered-tours",
+  async ({
+    page,
+    limit,
+    userId,
+  }: {
+    page: number;
+    limit: number;
+    userId: string;
+  }) => {
+    const response = await fetch(
+      `/api/tours/${userId}?page=${page}&limit=${limit}`
+    );
+
+    const data = await response.json();
+
+    return data;
+  }
+);
+
 export const toursSlice = createSlice({
   name: "tours",
   initialState,
@@ -73,6 +94,18 @@ export const toursSlice = createSlice({
         }
 
         state.tourResults = action.payload.tours.tourResults;
+      })
+      .addCase(fetchOfferedTours.pending, state => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchOfferedTours.fulfilled, (state, action) => {
+        state.tourResults = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(fetchOfferedTours.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message as string;
       })
       .addCase(getPopularTours.pending, state => {
         state.status = "loading";

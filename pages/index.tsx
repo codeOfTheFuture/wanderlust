@@ -1,14 +1,13 @@
 import type { GetServerSideProps, NextPage } from "next";
 import SearchInput from "../components/ui/SearchInput";
 import { connectToDatabase } from "../lib/mongodb";
-import { Tour, SessionUser, TourResults } from "../types/typings";
+import { TourResults } from "../types/typings";
 import Button from "../components/ui/Button";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
 import { useAppSelector, wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
 import TourCards from "../components/tour-cards/TourCards";
-import { ObjectId } from "mongodb";
 import { getToursFilter, setTours } from "../store/slices/toursSlice";
 import Link from "next/link";
 
@@ -71,17 +70,18 @@ export const getServerSideProps: GetServerSideProps =
     const queryTours = await db.collection("tours").find({}).limit(8).toArray(),
       tours = await JSON.parse(JSON.stringify(queryTours));
 
-    const totalPages = await db.collection("tours").countDocuments();
+    const documentCount = await db.collection("tours").countDocuments();
 
     const results = {} as TourResults;
-
-    results.next = {
-      page: 2,
-      limit: 8,
-    };
-
-    results.totalPages = totalPages;
+    results.totalPages = Math.ceil(documentCount / 8);
     results.results = tours;
+
+    if (results.totalPages > 1) {
+      results.next = {
+        page: 2,
+        limit: 8,
+      };
+    }
 
     store.dispatch(setTours(results));
 

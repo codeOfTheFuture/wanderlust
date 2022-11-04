@@ -70,38 +70,36 @@ const LoginForm: FC<Props> = ({ providers }) => {
   };
 
   return (
-    <div className="bottom-28 md:bottom-36 lg:bottom-auto flex flex-col items-center w-[300px] md:w-[400px] lg:w-[550px] p-4 lg:p-10 bg-white z-10 rounded-sm shadow-xl shadow-black">
+    <div className="bottom-28 md:bottom-36 lg:bottom-auto flex flex-col justify-evenly items-center w-[300px] md:w-[400px] lg:w-[560px] p-4 lg:p-12 bg-white z-10 rounded-sm shadow-xl shadow-black">
       <LoginHeading text={Btn_Label + " to Wanderlust"} />
 
       <form
-        className="flex flex-col mt-6 gap-1 w-full"
+        className="flex flex-col w-full justify-evenly items-center gap-4 py-3"
         onSubmit={handleFormSubmit}>
-        <div className="flex flex-col justify-evenly items-center gap-4 w-full lg:w-5/6 mx-auto">
-          <FormInput
-            name="email"
-            label="Email"
-            type="email"
-            value={email}
-            handleChange={setEmail}
-          />
-          <FormInput
-            name="password"
-            label="Password"
-            type="password"
-            value={password}
-            handleChange={setPassword}
-          />
-          <Button color="btn-primary" size="btn-md" type="submit">
-            {Btn_Label}
-          </Button>
-        </div>
-        <div className="flex items-center gap-3 w-full mx-5">
-          <span className="h-[1px] w-2/5 bg-gray-400"></span>
-          <span>or</span>
-          <span className="h-[1px] w-2/5 bg-gray-400"></span>
-        </div>
+        <FormInput
+          name="email"
+          label="Email"
+          type="text"
+          value={email}
+          handleChange={setEmail}
+        />
+        <FormInput
+          name="password"
+          label="Password"
+          type="password"
+          value={password}
+          handleChange={setPassword}
+        />
+        <Button color="btn-primary" size="btn-md" type="submit">
+          {Btn_Label}
+        </Button>
       </form>
-      <div className="flex flex-col lg:flex-row justify-center items-center w-full mt-6 gap-4">
+      <div className="flex justify-center items-center gap-3 my-3 w-full">
+        <span className="h-[1px] w-2/5 bg-gray-400"></span>
+        <span>or</span>
+        <span className="h-[1px] w-2/5 bg-gray-400"></span>
+      </div>
+      <div className="flex flex-col lg:flex-row justify-center items-center w-full gap-4 py-3">
         <Button
           color="btn-primary"
           size="btn-xl"

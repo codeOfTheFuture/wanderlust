@@ -1,22 +1,8 @@
-import { WithId } from "mongodb";
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 import nextConnect from "next-connect";
 import { connectToDatabase } from "../../../../lib/mongodb";
-import { Tour } from "../../../../types/typings";
-
-interface Results {
-  results: Tour[];
-  next: {
-    page: number;
-    limit: number;
-  };
-  previous: {
-    page: number;
-    limit: number;
-  };
-  totalPages: number;
-}
+import { Tour, TourResults } from "../../../../types/typings";
 
 // GET - /api/tours/popular?page={page}&limit={limit}
 export default nextConnect<NextApiRequest, NextApiResponse>().get(
@@ -37,7 +23,7 @@ export default nextConnect<NextApiRequest, NextApiResponse>().get(
         .skip(startIndex)
         .toArray()) as Tour[];
 
-      const results = {} as Results;
+      const results = {} as TourResults;
 
       const documentCount = await db.collection("tours").countDocuments();
 

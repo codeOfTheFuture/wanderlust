@@ -1,69 +1,31 @@
-import { ObjectId } from "mongodb";
 import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { FC, useState } from "react";
-import Map, { Marker, Popup } from "react-map-gl";
-import TourCard from "../components/tour-cards/TourCard";
+import { FC } from "react";
+import Map from "../components/search-page/Map";
 import TourCards from "../components/tour-cards/TourCards";
 import { connectToDatabase } from "../lib/mongodb";
-import { useAppSelector, wrapper } from "../store";
-import { selectTours, setTours } from "../store/slices/toursSlice";
+import { wrapper } from "../store";
+import { setTours } from "../store/slices/toursSlice";
 import { setUser } from "../store/slices/userSlice";
-import { SessionUser, Tour } from "../types/typings";
+import { TourResults, User } from "../types/typings";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 const Search: FC = () => {
-  const [viewState, setViewState] = useState({
-    longitude: -122.4,
-    latitude: 37.8,
-    zoom: 10,
-  });
-
-  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
-
-  const tours = useAppSelector(selectTours) as Tour[];
-
   return (
-    <div className="flex">
-      {/* Map */}
-      <div className="w-full h-auto">
-        <Map
-          {...viewState}
-          onMove={e => setViewState(e.viewState)}
-          style={{ width: "100%", height: "100vh" }}
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string}>
-          {tours.map(tour => (
-            <div key={tour?._id.toString()}>
-              <Marker
-                longitude={tour?.address?.coordinates[0]}
-                latitude={tour?.address?.coordinates[1]}
-                onClick={() => {
-                  setSelectedTour(tour);
-                }}>
-                <p className="bg-white text-primary-text w-20 h-20 rounded border border-primary-text text-lg font-semibold flex justify-center items-center cursor-pointer">
-                  {tour?.price}
-                </p>
-              </Marker>
+    <div className="flex flex-col">
+      {/* Search Input */}
+      <div className="flex ">
+        {/* Map */}
+        <div className="w-3/5">
+          <Map />
+        </div>
 
-              {selectedTour?._id === tour._id && (
-                <Popup
-                  longitude={tour.address.coordinates[0] as number}
-                  latitude={tour.address.coordinates[1] as number}
-                  onClose={() => setSelectedTour(null)}>
-                  {/* <TourCard tour={tour} /> */}
-                  <p className="w-20 h-20 bg-red-400">Tour</p>
-                </Popup>
-              )}
-            </div>
-          ))}
-        </Map>
+        {/* Tour Card List */}
+        <div className=" w-2/5 overflow-auto">
+          <div></div>
+          <TourCards />
+        </div>
       </div>
-
-      {/* Tour Card List */}
-      {/* <div className="w-2/5 h-auto">
-        <TourCards />
-      </div> */}
     </div>
   );
 };
@@ -84,19 +46,33 @@ export const getServerSideProps: GetServerSideProps =
 
     // Only runs if session exists and user in redux is null
     if (session && store.getState().user.user == null) {
-      const { id } = session.user as SessionUser;
-
-      const user = await db
+      const query = (await db
         .collection("users")
-        .findOne({ _id: new ObjectId(id) });
+        .findOne({ email: session.user?.email })) as User;
 
-      store.dispatch(setUser(JSON.parse(JSON.stringify(user))));
+      const user = JSON.parse(JSON.stringify(query));
+
+      store.dispatch(setUser(user));
     }
 
-    const queryTours = await db.collection("tours").find({}).toArray(),
-      tours = await JSON.parse(JSON.stringify(queryTours));
+    const query = await db.collection("tours").find({}).limit(8).toArray();
 
-    store.dispatch(setTours(tours));
+    const tours = JSON.parse(JSON.stringify(query));
+
+    const results = {} as TourResults;
+    results.results = tours;
+
+    const documentCount = await db.collection("tours").countDocuments();
+    results.totalPages = Math.ceil(documentCount / 8);
+
+    if (results.totalPages > 1) {
+      results.next = {
+        page: 2,
+        limit: 8,
+      };
+    }
+
+    store.dispatch(setTours(results));
 
     return {
       props: {},

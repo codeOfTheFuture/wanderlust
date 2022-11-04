@@ -27,7 +27,19 @@
     @apply flex justify-center py-2 border-y text-slate-800 w-full cursor-pointer hover:bg-primary-color hover:text-light-text;
   }
 
+  .form-control {
+    @apply flex relative items-center w-full h-[54px];
+  }
+
   .form-input {
-    @apply p-2 w-full border border-black rounded-md;
+    @apply bg-transparent focus:rounded-md focus:border-none rounded-lg block w-full p-3 text-xl text-black border border-gray-500 focus:outline-primary-color;
+  }
+
+  .form-label {
+    @apply absolute top-[1.1rem] left-1 px-1 cursor-text text-lg pointer-events-none leading-none min-w-[5px] text-gray-500 transition-all duration-200;
+  }
+
+  .form-select {
+    @apply;
   }
 }

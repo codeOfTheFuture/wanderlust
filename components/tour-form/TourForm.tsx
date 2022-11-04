@@ -157,7 +157,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
     <form className="mb-10" id="tourForm" onSubmit={handleSubmit}>
       <div className="flex justify-center items-center w-full h-[70vh] md:h-[50vh] bg-gray-400">
         <div className="flex flex-col md:flex-row justify-center items-center gap-10 w-5/6 lg:w-2/3">
-          <div className="flex flex-col gap-2 mt-10 md:mt-0 w-full">
+          <div className="flex flex-col gap-5 mt-10 md:mt-0 w-full">
             {/* Title Input */}
             <TourTitleInput value={tourTitle} handleChange={setTourTitle} />
 
@@ -174,7 +174,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
                 "National Park",
                 "Historical Places",
               ]}
-              selectStyles="flex flex-col bg-slate-100 w-52 rounded-sm"
+              selectStyles="flex flex-col bg-white rounded-lg w-52 h-[54px] relative"
               value={category}
               handleChange={setCategory}
             />
@@ -221,7 +221,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
                 "3 hour 30 minutes",
                 "4 hours",
               ]}
-              selectStyles="flex flex-col bg-slate-100 w-full rounded-sm"
+              selectStyles="flex flex-col w-full h-[54px] relative"
               value={duration}
               handleChange={setDuration}
             />
@@ -234,7 +234,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
               name="recommendedAges"
               defaultText="Recommended Ages"
               optionsList={["All ages", "18 and over"]}
-              selectStyles="flex flex-col bg-slate-100 w-full rounded-sm"
+              selectStyles="flex flex-col bg-transparent w-full h-[54px] relative"
               value={recommendedAges}
               handleChange={setRecommendedAges}
             />

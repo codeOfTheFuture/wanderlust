@@ -1,18 +1,24 @@
 import React, { FC, useState } from "react";
 import TourCard from "./TourCard";
-import { TourResults } from "../../types/typings";
+import { TourResults, User } from "../../types/typings";
 import { useAppDispatch, useAppSelector } from "../../store";
 import {
+  fetchOfferedTours,
   getPopularTours,
   getTourDeals,
   getToursCategory,
   getToursFilter,
   selectTours,
 } from "../../store/slices/toursSlice";
+import { useRouter } from "next/router";
+import { selectUser } from "../../store/slices/userSlice";
 
 const TourCards: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(8);
+  const user = useAppSelector(selectUser) as User;
+  const userId = user?._id.toString();
+  const router = useRouter();
 
   const toursResults = useAppSelector(selectTours) as TourResults;
 
@@ -32,11 +38,29 @@ const TourCards: FC = () => {
     if (filter === "categories") {
       // dispatch()
     }
+
+    if (router.pathname === "/offered-tours") {
+      dispatch(
+        fetchOfferedTours({
+          page,
+          limit,
+          userId,
+        })
+      );
+    }
   };
 
   return (
-    <div className="flex flex-col w-11/12 sm:w-5/6 lg:w-full mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-start items-start gap-6 w-full xl:h-[632px]">
+    <div
+      className={`${
+        router.pathname === "/search" && "justify-between h-[100vh] p-4"
+      } flex flex-col w-11/12 sm:w-5/6 lg:w-full mx-auto`}>
+      <div
+        className={`grid ${
+          router.pathname === "/search"
+            ? "lg:grid-cols-2 mt-16"
+            : "lg:grid-cols-3 xl:grid-cols-4 xl:h-[632px]"
+        } grid-cols-1 md:grid-cols-2 justify-start items-start gap-6 w-full`}>
         {toursResults.results?.map(tour => (
           <TourCard key={tour._id.toString()} tour={tour} />
         ))}
