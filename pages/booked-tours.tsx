@@ -4,7 +4,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useAppSelector, wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
-import { SessionUser, User } from "../types/typings";
+import { SessionUser, TourResults, User } from "../types/typings";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
 import { connectToDatabase } from "../lib/mongodb";
@@ -17,13 +17,13 @@ const BookedTours: NextPage = () => {
     <>
       <PageHeading headingText="here are the the tours you've booked." />
 
-      <section className="w-full h-[40vh] flex justify-center items-center">
+      <section className="flex flex-col justify-center items-center gap-10 w-full sm:w-5/6 lg:w-3/4 min-h-[33vh] mx-auto my-20">
         {!bookedTours?.length ? (
           <h2 className="text-lg font-medium">
             You currently don&apos;t have any tours booked
           </h2>
         ) : (
-          <TourCards />
+          <TourCards loading={false} />
         )}
       </section>
     </>
@@ -50,7 +50,10 @@ export const getServerSideProps: GetServerSideProps =
 
       store.dispatch(setUser(user));
 
-      store.dispatch(setTours(user.bookedTours));
+      const results = {} as TourResults;
+      results.results = user.bookedTours;
+
+      store.dispatch(setTours(results));
     }
 
     return {

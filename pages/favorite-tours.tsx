@@ -4,10 +4,9 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useAppSelector, wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
-import { SessionUser, User } from "../types/typings";
+import { TourResults, User } from "../types/typings";
 import TourCards from "../components/tour-cards/TourCards";
 import { connectToDatabase } from "../lib/mongodb";
-import { ObjectId } from "mongodb";
 import { setTours } from "../store/slices/toursSlice";
 
 const FavoriteTours: NextPage = () => {
@@ -23,7 +22,7 @@ const FavoriteTours: NextPage = () => {
             You don&apos;t have any favorite tours.
           </h2>
         ) : (
-          <TourCards />
+          <TourCards loading={false} />
         )}
       </section>
     </>
@@ -43,14 +42,31 @@ export const getServerSideProps: GetServerSideProps =
     const { db } = await connectToDatabase();
 
     if (session && store.getState().user.user == null) {
-      const userQuery = await db
-          .collection("users")
-          .findOne({ email: session.user?.email }),
-        user = JSON.parse(JSON.stringify(userQuery)) as User;
+      const response = await db
+        .collection("users")
+        .findOne({ email: session.user?.email });
+      const user = JSON.parse(JSON.stringify(response)) as User;
 
       store.dispatch(setUser(user));
 
-      store.dispatch(setTours(user.favoriteTours));
+      const page = 1;
+      const limit = store.getState().tours.tourResults.limit;
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+
+      const tourResults = {} as TourResults;
+      tourResults.currentPage = page;
+      tourResults.results = user.favoriteTours.slice(startIndex, endIndex);
+      tourResults.totalPages = Math.ceil(user.favoriteTours.length / limit);
+      tourResults.limit = limit;
+
+      if (user.favoriteTours.length > limit) {
+        tourResults.next = {
+          page: page + 1,
+        };
+      }
+
+      store.dispatch(setTours(tourResults));
     }
 
     return {

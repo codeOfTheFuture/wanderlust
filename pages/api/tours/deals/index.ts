@@ -30,24 +30,22 @@ export default nextConnect<NextApiRequest, NextApiResponse>().get(
       const documentCount = tourDeals.length;
 
       const results = {} as TourResults;
+      results.results = tourDeals;
+      results.totalPages = Math.ceil(documentCount / limit);
+      results.currentPage = page;
+      results.limit = limit;
 
       if (endIndex < documentCount) {
         results.next = {
           page: page + 1,
-          limit: limit,
         };
       }
 
       if (startIndex > 0) {
         results.previous = {
           page: page - 1,
-          limit: limit,
         };
       }
-
-      results.totalPages = Math.ceil(documentCount / limit);
-
-      results.results = tourDeals;
 
       res.status(200).json(results);
     } catch (error) {

@@ -33,14 +33,12 @@ export default nc<NextApiRequest, NextApiResponse>()
       if (endIndex < documentCount) {
         results.next = {
           page: page + 1,
-          limit: limit,
         };
       }
 
       if (startIndex > 0) {
         results.previous = {
           page: page - 1,
-          limit: limit,
         };
       }
 

@@ -26,6 +26,12 @@ import Button from "../ui/Button";
 import { AddressSuggestion, Tour, User } from "../../types/typings";
 import { useRouter } from "next/router";
 import { useAppSelector } from "../../store";
+import ComboboxContainer from "../ui/combobox/ComboboxContainer";
+import ComboboxInput from "../ui/combobox/ComboboxInput";
+import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
+import ComboboxLabel from "../ui/combobox/ComboboxLabel";
+import ComboboxOptions from "../ui/combobox/ComboboxOptions";
+import ComboboxOption from "../ui/combobox/ComboboxOption";
 
 export type SelectedDate = {
   date: Date;
@@ -153,6 +159,9 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
     setCurrentSelectedDate(null);
   };
 
+  const { value, handleAddressChange, suggestions } =
+    useAddressAutocomplete("");
+
   return (
     <form className="mb-10" id="tourForm" onSubmit={handleSubmit}>
       <div className="flex justify-center items-center w-full h-[70vh] md:h-[50vh] bg-gray-400">
@@ -255,12 +264,42 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           {/* Address */}
           <div className="flex items-center gap-2">
             <LocationMarkerIcon className="w-10 h-10" />
-            <AddressAutocomplete
+            {/* <AddressAutocomplete
               tourPlaceName={tour?.address.placeName}
               selectedSuggestion={selectedAddress}
               setSelectedSuggestion={setSelectedAddress}
               selectSuggestion={selectSuggestion}
-            />
+            /> */}
+            <ComboboxContainer
+              selectedSuggestion={selectedAddress}
+              setSelectedSuggestion={setSelectedAddress}
+              comboboxStyles="form-control relative">
+              <ComboboxInput
+                value={value}
+                displayValue={suggestion =>
+                  suggestion?.place_name || tour?.address.placeName
+                }
+                handleAddressChange={handleAddressChange}
+                comboboxInputStyles="form-input peer"
+              />
+              <ComboboxLabel comboboxLabelStyles="form-label peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
+                Address
+              </ComboboxLabel>
+
+              <ComboboxOptions
+                comboboxOptionsStyles={`${
+                  suggestions.length ? "flex" : "hidden"
+                } flex-col justify-center items-start absolute w-full bg-white border border-black rounded-md bottom-16`}>
+                {suggestions.map(suggestion => (
+                  <ComboboxOption
+                    key={suggestion.id}
+                    suggestion={suggestion}
+                    handleClick={() => selectSuggestion(suggestion)}
+                    comboboxOptionStyles="cursor-pointer p-2 rounded hover:bg-primary-color hover:text-white hover:shadow-xl w-full"
+                  />
+                ))}
+              </ComboboxOptions>
+            </ComboboxContainer>
           </div>
         </div>
 

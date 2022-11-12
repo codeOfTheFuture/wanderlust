@@ -1,10 +1,19 @@
 import React, { FC } from "react";
 import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
-import { Tour, User } from "../../types/typings";
+import { Tour } from "../../types/typings";
 import { HeartIcon, PencilAltIcon } from "@heroicons/react/solid";
-import { addTourToFavorites, selectUser } from "../../store/slices/userSlice";
+import {
+  addTourToFavorites,
+  removeTourFromFavorites,
+  selectUser,
+} from "../../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { Rating } from "react-simple-star-rating";
+import {
+  getUserFavoriteTours,
+  selectTours,
+} from "../../store/slices/toursSlice";
 
 interface Props {
   tour: Tour;
@@ -12,6 +21,7 @@ interface Props {
 
 const TourCard: FC<Props> = ({ tour }) => {
   const user = useAppSelector(selectUser);
+  const tourResults = useAppSelector(selectTours);
   const { _id, guideId, title, tourPhotos, price } = tour;
   const router: NextRouter = useRouter();
 
@@ -31,6 +41,9 @@ const TourCard: FC<Props> = ({ tour }) => {
     }
   };
 
+  const tourFavorite =
+    user?.favoriteTours.find((t: Tour) => t._id === tour._id) != null;
+
   return (
     <div
       className="relative flex flex-col justify-end items-center w-full h-[300px] bg-slate-200 cursor-pointer border-2 border-slate-700 shadow-lg hover:shadow-xl rounded-sm px-2"
@@ -45,27 +58,46 @@ const TourCard: FC<Props> = ({ tour }) => {
         />
       )}
 
-      {user?._id.toString() === guideId &&
-      router.pathname === "/offered-tours" ? (
-        <PencilAltIcon className="absolute top-2 right-2 w-10 text-black opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
-      ) : (
-        <HeartIcon
-          className={`${
-            user?.favoriteTours.find((t: Tour) => t._id === tour._id) != null
-              ? "text-error-color"
-              : "text-black opacity-60"
-          } absolute top-2 right-2 w-10  opacity-90 hover:scale-125 transition-all duration-300 ease-in-out`}
-          onClick={e => {
-            e.stopPropagation();
-            dispatch(
-              addTourToFavorites({
-                userId: user?._id.toString() as string,
-                tourId: _id.toString(),
-              })
-            );
-          }}
-        />
-      )}
+      <div className="absolute top-2 w-full flex justify-between items-center px-4">
+        <div className="flex justify-center items-center w-28 h-8 bg-black rounded-full bg-opacity-60">
+          <Rating
+            size={20}
+            readonly
+            initialValue={3}
+            SVGclassName="inline-block"
+            className="mb-1"
+          />
+        </div>
+
+        {user?._id.toString() === guideId &&
+        router.pathname === "/offered-tours" ? (
+          <PencilAltIcon className="w-10 text-black opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
+        ) : (
+          <HeartIcon
+            className={`${
+              tourFavorite ? "text-error-color" : "text-black opacity-60"
+            } w-10  opacity-90 hover:scale-125 transition-all duration-300 ease-in-out`}
+            onClick={e => {
+              e.stopPropagation();
+              if (tourFavorite) {
+                dispatch(
+                  removeTourFromFavorites({
+                    userId: user._id.toString(),
+                    tourId: tour._id.toString(),
+                  })
+                );
+              } else {
+                dispatch(
+                  addTourToFavorites({
+                    userId: user?._id.toString() as string,
+                    tourId: tour._id.toString(),
+                  })
+                );
+              }
+            }}
+          />
+        )}
+      </div>
 
       <div className="flex flex-col items-start w-full mt-4 p-2 z-10 bg-slate-200">
         <h2 className="font-semibold">{title}</h2>

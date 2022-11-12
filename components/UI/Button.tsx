@@ -17,8 +17,7 @@ const Button: FC<Props> = props => {
       className={`${color} ${size}`}
       type={type}
       disabled={disabled}
-      onClick={onClick}
-    >
+      onClick={onClick}>
       {children}
     </button>
   );

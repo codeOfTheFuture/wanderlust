@@ -5,11 +5,11 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
-import { Tour, TourResults } from "../../types/typings";
+import { TourResults } from "../../types/typings";
 import { RootState } from "../index";
 
 interface ToursState {
-  tourResults: TourResults | null;
+  tourResults: TourResults;
   filter: "popular" | "deals" | "categories";
   category: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -17,7 +17,12 @@ interface ToursState {
 }
 
 const initialState = {
-  tourResults: null,
+  tourResults: {
+    results: [],
+    currentPage: 1,
+    totalPages: 1,
+    limit: 8,
+  },
   filter: "popular",
   category: null,
   status: "idle",
@@ -53,6 +58,52 @@ export const fetchTourCategory = createAsyncThunk(
   }
 );
 
+export const getUserFavoriteTours = createAsyncThunk(
+  "tours/getFavorites",
+  async ({
+    page,
+    limit,
+    userId,
+  }: {
+    page: number;
+    limit: number;
+    userId: string;
+  }) => {
+    const response = await fetch(
+      `api/users/${userId}/favorite?page=${page}&limit=${limit}`
+    );
+    const data = await response.json();
+    return data;
+  }
+);
+
+export const fetchToursSearch = createAsyncThunk(
+  "tours/search",
+  async ({
+    page,
+    limit,
+    bounds,
+  }: {
+    page: number;
+    limit: number;
+    bounds: {
+      southWestLat: number;
+      northWestLat: number;
+      southWestLng: number;
+      northEastLng: number;
+    };
+  }) => {
+    const { southWestLat, northWestLat, southWestLng, northEastLng } = bounds;
+
+    const URL = `api/tours/search?page=${page}&limit=${limit}&sWLat=${southWestLat}&nWLat=${northWestLat}&sWLng=${southWestLng}&nWLng=${northEastLng}`;
+
+    const response = await fetch(URL);
+    const data = await response.json();
+
+    return data;
+  }
+);
+
 export const fetchOfferedTours = createAsyncThunk(
   "tours/offered-tours",
   async ({
@@ -80,6 +131,8 @@ export const toursSlice = createSlice({
   reducers: {
     setTours(state: ToursState, action: PayloadAction<TourResults>) {
       state.tourResults = action.payload;
+      state.filter = "popular";
+      state.category = null;
     },
     categoriesClicked(state: ToursState) {
       state.filter = "categories";
@@ -145,6 +198,30 @@ export const toursSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(fetchTourCategory.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message as string;
+      })
+      .addCase(getUserFavoriteTours.pending, state => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getUserFavoriteTours.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.tourResults = action.payload;
+      })
+      .addCase(getUserFavoriteTours.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message as string;
+      })
+      .addCase(fetchToursSearch.pending, state => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchToursSearch.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.tourResults = action.payload;
+      })
+      .addCase(fetchToursSearch.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message as string;
       });

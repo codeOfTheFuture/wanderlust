@@ -1,43 +1,117 @@
-import { FC, useState } from "react";
-import ReactMapGL from "react-map-gl";
-import { useAppSelector } from "../../store";
-import { selectTours } from "../../store/slices/toursSlice";
+import { FC, useEffect, useRef, useState } from "react";
+import ReactMapGL, { MapRef, NavigationControl } from "react-map-gl";
+import { useAppDispatch, useAppSelector } from "../../store";
+import {
+  fetchMapResults,
+  selectMapResults,
+  selectViewport,
+  selectZoom,
+} from "../../store/slices/mapSlice";
+import { fetchToursSearch, selectTours } from "../../store/slices/toursSlice";
 import { TourResults } from "../../types/typings";
 import MapMarker from "./MapMarker";
 import MapPopup from "./MapPopup";
 
-const Map: FC = () => {
-  const tourResults = useAppSelector(selectTours) as TourResults;
-  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string;
+interface Props {
+  setLoading: any;
+}
 
+const Map: FC<Props> = ({ setLoading }) => {
+  const center = useAppSelector(selectViewport);
+  const zoom = useAppSelector(selectZoom);
+  const mapResults = useAppSelector(selectMapResults);
+  const tourResults = useAppSelector(selectTours) as TourResults;
+  const dispatch = useAppDispatch();
+
+  const [selectedTourId, setSelectedTourId] = useState<string>("");
   const [viewState, setViewState] = useState({
-    longitude: -122.4,
-    latitude: 37.8,
-    zoom: 10,
+    longitude: center[0] || -74.007727,
+    latitude: center[1] || 40.707385,
+    zoom: zoom,
   });
 
-  const [selectedTourId, setSelectedTourId] = useState<string>("Empty");
+  useEffect(() => {
+    setViewState({
+      longitude: center[0] || -74.007727,
+      latitude: center[1] || 40.707385,
+      zoom: zoom,
+    });
+  }, [center, zoom]);
+
+  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string;
 
   const handleSelectedTour = (tourId: string) => {
-    console.log("Selected");
     setSelectedTourId(tourId);
   };
 
   const closePopup = () => {
-    console.log("it is automatically closing");
     setSelectedTourId("Nothing");
   };
 
-  console.log("selectedTourId", selectedTourId);
+  const mapRef = useRef<MapRef>(null);
+  const mapBounds = mapRef?.current?.getMap().getBounds();
+  const southWestLat = mapBounds?.getSouthWest().lat as number;
+  const northWestLat = mapBounds?.getNorthWest().lat as number;
+  const southWestLng = mapBounds?.getSouthWest().lng as number;
+  const northEastLng = mapBounds?.getNorthEast().lng as number;
+
+  const getSearchedTours = () => {
+    dispatch(
+      fetchMapResults({
+        bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
+      })
+    );
+
+    dispatch(
+      fetchToursSearch({
+        page: 1,
+        limit: tourResults.limit,
+        bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
+      })
+    );
+  };
+
+  useEffect(() => {
+    dispatch(
+      fetchToursSearch({
+        page: 1,
+        limit: 8,
+        bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
+      })
+    );
+
+    dispatch(
+      fetchMapResults({
+        bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
+      })
+    );
+  }, [southWestLat, northWestLat, southWestLng, northEastLng, dispatch]);
 
   return (
     <ReactMapGL
       {...viewState}
+      ref={mapRef}
       onMove={e => setViewState(e.viewState)}
+      onDragStart={() => {
+        setLoading(true);
+      }}
+      onDragEnd={() => {
+        setLoading(false);
+        getSearchedTours();
+      }}
+      onZoomStart={() => {
+        setLoading(true);
+      }}
+      onZoomEnd={() => {
+        setLoading(false);
+        getSearchedTours();
+      }}
       style={{ width: "100%", height: "100vh" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={accessToken}>
-      {tourResults.results.map(tour => (
+      <NavigationControl position="bottom-right" showCompass={false} />
+
+      {mapResults?.map(tour => (
         <div key={tour._id.toString()}>
           <MapMarker
             tourId={tour._id.toString()}

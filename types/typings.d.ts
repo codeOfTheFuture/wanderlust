@@ -53,12 +53,12 @@ interface TourResults {
   results: Tour[];
   next?: {
     page: number;
-    limit: number;
   };
   previous?: {
     page: number;
-    limit: number;
   };
+  currentPage: number;
+  limit: number;
   totalPages: number;
 }
 

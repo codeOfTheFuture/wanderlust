@@ -1,5 +1,9 @@
-import React, { FC } from "react";
+import { FC } from "react";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { Tour, User } from "../../types/typings";
+import Image from "next/image";
+import Button from "../ui/Button";
+import { HeartIcon } from "@heroicons/react/outline";
 import {
   InformationCircleIcon,
   ClockIcon,
@@ -8,16 +12,12 @@ import {
   LocationMarkerIcon,
   ChatAltIcon,
 } from "@heroicons/react/solid";
-import { HeartIcon } from "@heroicons/react/outline";
-import Image from "next/image";
-import Button from "../ui/Button";
 import {
   addTourToFavorites,
   bookTour,
   selectUser,
   unBookTour,
 } from "../../store/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "../../store";
 
 interface Props {
   tour: Tour;
@@ -32,20 +32,18 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
     duration,
     recommendedAges,
     address,
-    tourDates,
     whatToBring,
-    tourPhotos,
   } = tour;
 
-  const user = useAppSelector(selectUser) as User;
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser) as User;
 
-  const userId = user?._id.toString() as string,
-    tourId = _id.toString();
+  const userId = user?._id.toString();
+  const tourId = _id.toString();
 
   const favoriteTour =
-      user?.favoriteTours.find(t => t._id === tour._id) != null,
-    bookedTour = user.bookedTours.find(t => t._id === tour._id) != null;
+    user?.favoriteTours.find(t => t._id === tour._id) != null;
+  const bookedTour = user?.bookedTours?.find(t => t._id === tour._id) != null;
 
   const handleClick = () => {
     dispatch(addTourToFavorites({ userId, tourId }));
@@ -66,7 +64,7 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
       <div className="col-span-1 md:col-span-2 flex flex-col gap-6 p-5">
         <h2 className="text-lg font-semibold ml-[3.5rem]">About this tour</h2>
         <div className="flex items-center">
-          <InformationCircleIcon className="w-20 h-20" />
+          <InformationCircleIcon className="w-12 h-12" />
           <p className="ml-2">{description}</p>
         </div>
         <div className="flex items-center">
@@ -117,18 +115,23 @@ const TourDetails: FC<Props> = ({ tour, guide }) => {
           </Button>
         </div>
         <div className="bg-black h-[1px] w-full"></div>
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={handleClick}>
-          <HeartIcon
-            className={`${favoriteTour && "text-error-color"} w-8 h-8`}
-          />
-          <span className="text-lg font-semibold">Add to favorites</span>
-        </div>
+        {user && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={handleClick}>
+            <HeartIcon
+              className={`${favoriteTour && "text-error-color"} w-8 h-8`}
+            />
+
+            <span className="text-lg font-semibold">
+              {favoriteTour ? "Added to favorites" : "Add to favorites"}
+            </span>
+          </div>
+        )}
         <div className="mt-20">
           <div className="w-[200px] rounded-full">
             <Image
-              src={guide.profileImage.secure_url}
+              src={guide.profileImage?.secure_url}
               alt={guide.name}
               layout="responsive"
               width={100}

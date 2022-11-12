@@ -12,6 +12,7 @@ import FormInput from "../ui/FormInput";
 import LoginHeading from "./LoginHeading";
 import { BuiltInProviderType } from "next-auth/providers";
 import { useAppDispatch } from "../../store";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
   providers: Record<
@@ -49,6 +50,8 @@ const LoginForm: FC<Props> = ({ providers }) => {
 
       const data = await response.json();
 
+      console.log("data>>>>", data);
+
       if (data.acknowledged) {
         await signIn("credentials", {
           redirect: false,
@@ -64,14 +67,13 @@ const LoginForm: FC<Props> = ({ providers }) => {
         email,
         password,
       });
-
-      return router.push("/");
     }
   };
 
   return (
     <div className="bottom-28 md:bottom-36 lg:bottom-auto flex flex-col justify-evenly items-center w-[300px] md:w-[400px] lg:w-[560px] p-4 lg:p-12 bg-white z-10 rounded-sm shadow-xl shadow-black">
       <LoginHeading text={Btn_Label + " to Wanderlust"} />
+      <Toaster />
 
       <form
         className="flex flex-col w-full justify-evenly items-center gap-4 py-3"

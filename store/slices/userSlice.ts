@@ -36,9 +36,24 @@ export const updateUserSettings = createAsyncThunk(
 );
 
 export const addTourToFavorites = createAsyncThunk(
-  "users/favorites",
+  "users/addToFavorites",
   async ({ userId, tourId }: { userId: string; tourId: string }) => {
-    const response = await fetch(`/api/users/${userId}/favorites`, {
+    const response = await fetch(`/api/users/${userId}/favorite`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(tourId),
+    });
+
+    return await response.json();
+  }
+);
+
+export const removeTourFromFavorites = createAsyncThunk(
+  "users/removeFromFavorites",
+  async ({ userId, tourId }: { userId: string; tourId: string }) => {
+    const response = await fetch(`/api/users/${userId}/unfavorite`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -111,6 +126,18 @@ export const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(addTourToFavorites.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message as string;
+      })
+      .addCase(removeTourFromFavorites.pending, state => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(removeTourFromFavorites.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(removeTourFromFavorites.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message as string;
       })

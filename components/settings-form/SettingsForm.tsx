@@ -1,5 +1,4 @@
 import React, { FC, FormEvent, useState } from "react";
-import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
 import Checkbox from "../ui/Checkbox";
 import FormInput from "../ui/FormInput";
@@ -11,6 +10,12 @@ import { useAppSelector } from "../../store";
 import { stateAbbrLookup } from "../../utils/stateAbbrLookup";
 import useOnDrop from "../../hooks/useOnDrop";
 import deleteImage from "../../utils/deleteImage";
+import ComboboxContainer from "../ui/combobox/ComboboxContainer";
+import ComboboxInput from "../ui/combobox/ComboboxInput";
+import ComboboxLabel from "../ui/combobox/ComboboxLabel";
+import ComboboxOptions from "../ui/combobox/ComboboxOptions";
+import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
+import ComboboxOption from "../ui/combobox/ComboboxOption";
 
 interface Props {
   // TODO: FORM DATA TYPING
@@ -63,7 +68,7 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
     }
   };
 
-  const selectSuggestion = (suggestion: AddressSuggestion) => {
+  const autofillAddress = (suggestion: AddressSuggestion) => {
     setSelectedSuggestion(suggestion);
     setStreetAddress(getStreetAddress(suggestion.place_name) as string);
     setCity(getCity(suggestion.place_name) as string);
@@ -94,6 +99,9 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
     }
     setProfileImage(cloudinaryImage);
   });
+
+  const { value, handleAddressChange, suggestions } =
+    useAddressAutocomplete("");
 
   return (
     <form
@@ -133,11 +141,35 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
             handleChange={setEmail}
           />
 
-          <AddressAutocomplete
+          <ComboboxContainer
             selectedSuggestion={selectedSuggestion}
             setSelectedSuggestion={setSelectedSuggestion}
-            selectSuggestion={selectSuggestion}
-          />
+            comboboxStyles="form-control relative">
+            <ComboboxInput
+              value={value}
+              handleAddressChange={handleAddressChange}
+              comboboxInputStyles="form-input peer"
+              displayValue={suggestion =>
+                suggestion?.place_name.split(", ")[0] || user?.streetAddress
+              }
+            />
+            <ComboboxLabel comboboxLabelStyles="form-label peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
+              Address
+            </ComboboxLabel>
+            <ComboboxOptions
+              comboboxOptionsStyles={`${
+                suggestions.length ? "flex" : "hidden"
+              }  flex-col justify-center items-start absolute w-full bg-white rounded-md top-14 p-2 z-10 border border-gray-500`}>
+              {suggestions.map(suggestion => (
+                <ComboboxOption
+                  key={suggestion.id}
+                  suggestion={suggestion}
+                  comboboxOptionStyles="cursor-pointer p-2 rounded hover:bg-primary-color hover:text-white hover:shadow-xl w-full"
+                  handleClick={() => autofillAddress(suggestion)}
+                />
+              ))}
+            </ComboboxOptions>
+          </ComboboxContainer>
 
           <div className="flex flex-row justify-center items-center gap-2">
             <div className="w-full sm:w-6/12">

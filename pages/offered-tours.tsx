@@ -21,7 +21,7 @@ const OfferedTours: NextPage = () => {
       <PageHeading headingText="Here you can add, edit, and delete your offered tours." />
 
       <section className="flex flex-col justify-center items-center gap-10 w-full sm:w-5/6 lg:w-3/4 min-h-[33vh] mx-auto my-20">
-        {!registerAsGuide || tourResults?.results.length === 0 ? (
+        {!registerAsGuide || tourResults?.results?.length === 0 ? (
           <h2 className="text-base md:text-xl font-medium">
             {!registerAsGuide
               ? "Please register as a guide in your settings if you would like to create a tour"
@@ -29,7 +29,7 @@ const OfferedTours: NextPage = () => {
           </h2>
         ) : null}
 
-        {tourResults?.results && <TourCards />}
+        {tourResults?.results && <TourCards loading={false} />}
 
         <Link href={!registerAsGuide ? "/settings" : "/create-tour"}>
           <Button color="btn-primary" size="btn-lg" type="button">
@@ -72,18 +72,19 @@ export const getServerSideProps: GetServerSideProps =
         JSON.stringify(queryOfferedTours)
       )) as Tour[];
 
-      const results = {} as TourResults;
+      const page = 1;
+      const limit = store.getState().tours.tourResults.limit;
+
       const documentCount = offeredTours.length;
+      const results = {} as TourResults;
+      results.results = offeredTours;
+      results.totalPages = Math.ceil(documentCount / limit);
+      results.limit = limit;
 
       if (results.totalPages > 1)
         results.next = {
-          page: 2,
-          limit: 8,
+          page: page + 1,
         };
-
-      results.totalPages = Math.ceil(documentCount / 8);
-
-      results.results = offeredTours;
 
       store.dispatch(setTours(results));
     }

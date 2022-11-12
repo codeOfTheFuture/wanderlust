@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user }: { user: any }) {
       if (user.signedInBefore == null) {
         user.profileImage = {
           secure_url: user.image,
@@ -91,7 +91,6 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      console.log("User in session>", user);
       return session;
     },
   },
