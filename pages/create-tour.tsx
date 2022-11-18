@@ -1,33 +1,29 @@
-import React from "react";
+import { Fragment } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
-import { SessionUser, Tour, User } from "../types/typings";
-import { ObjectId } from "mongodb";
+import { Tour } from "../types/typings";
+
 import { connectToDatabase } from "../lib/mongodb";
 
 const CreateTour: NextPage = () => {
   const submitForm = async (newTour: Tour) => {
-    const response = await fetch("/api/tours", {
+    await fetch("/api/tours", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newTour),
     });
-
-    const addedTour = response.json();
-
-    console.log("added tour>>>>>", addedTour);
   };
 
   return (
-    <>
+    <Fragment>
       <TourForm submitForm={submitForm} />
-    </>
+    </Fragment>
   );
 };
 

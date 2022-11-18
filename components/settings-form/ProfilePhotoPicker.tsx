@@ -13,7 +13,7 @@ interface Props {
 const ProfilePhotoPicker: FC<Props> = ({ profileImage, onDrop }) => {
   const user = useAppSelector(selectUser);
 
-  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
     accept: {
       "image/*": [],

@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react";
+import { FC, Fragment, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import {
@@ -14,11 +14,10 @@ import useClickOutside from "../../hooks/useClickOutside";
 import NavCategoryOption from "./NavCategoryOption";
 
 const NavCenter: FC = () => {
-  const router = useRouter();
-  const toursFilter = useAppSelector(getToursFilter);
-  const dispatch = useAppDispatch();
-
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
+  const toursFilter = useAppSelector(getToursFilter);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const dropDownRef = useRef<HTMLLIElement>(null);
 
@@ -44,7 +43,7 @@ const NavCenter: FC = () => {
   };
 
   return (
-    <>
+    <Fragment>
       {router.pathname === "/" && (
         <ul className="hidden md:flex justify-around items-center gap-8 h-full text-xl">
           <li
@@ -104,7 +103,7 @@ const NavCenter: FC = () => {
           </li>
         </ul>
       )}
-    </>
+    </Fragment>
   );
 };
 

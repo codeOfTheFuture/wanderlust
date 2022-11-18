@@ -1,5 +1,5 @@
 import { RootState } from "../index";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
 export interface ModalState {
@@ -22,13 +22,13 @@ export const modalSlice = createSlice({
     },
   },
 
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
+  extraReducers: builder => {
+    builder.addCase(HYDRATE, (state, action: AnyAction) => {
       if (action.payload.modal != null) {
         return state;
       }
       state.modalOpen = action.payload.modal;
-    },
+    });
   },
 });
 

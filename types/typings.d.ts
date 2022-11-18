@@ -47,6 +47,10 @@ interface Tour {
       minute: number;
     };
   }[];
+  rating?: {
+    ratingValue: number;
+    totalRatings: number;
+  };
 }
 
 interface TourResults {
@@ -84,8 +88,6 @@ interface CloudinaryImage {
   version: number;
   version_id: string;
 }
-
-type HandleScroll = () => void;
 
 type States = [StateName: string, StateAbbr: string][];
 

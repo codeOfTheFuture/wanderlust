@@ -22,7 +22,7 @@ export default nextConnect<NextApiRequest, NextApiResponse>().put(
           $push: {
             bookedTourists: JSON.parse(
               JSON.stringify({
-                tourist_id: new ObjectId(user_id),
+                tourist_id: user_id,
               })
             ),
           },

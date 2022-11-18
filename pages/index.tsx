@@ -19,6 +19,7 @@ import Head from "next/head";
 const Home: NextPage = () => {
   const { value, handleAddressChange, suggestions } =
     useAddressAutocomplete("");
+  // TODO: create type for selectedSuggestion
   const [selectedSuggestion, setSelectedSuggestion] = useState<any>(null);
   const [zoom, setZoom] = useState<number>(5);
   const toursFilter = useAppSelector(getToursFilter);
@@ -101,10 +102,6 @@ const Home: NextPage = () => {
             setZoomLevel={setZoomLevel}
             comboBoxStyles="flex w-full h-16 sm:h-20 shadow-md"
             comboboxInputStyles="relative w-full h-full pl-10 pr-[8rem] text-xl border border-primary-text focus:outline-none"
-            comboboxOptionsStyles={`${
-              suggestions.length ? "flex" : "hidden"
-            } flex-col justify-center items-start gap-2 absolute w-2/3 rounded bg-white top-20 p-2 z-10 border border-gray-500 shadow-xl`}
-            comboboxOptionStyles="cursor-pointer p-2 rounded hover:bg-primary-color hover:text-white hover:shadow-2xl w-full"
           />
         </form>
       </div>

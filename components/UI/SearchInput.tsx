@@ -1,11 +1,14 @@
-import React, { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import { Combobox } from "@headlessui/react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  Fragment,
+  SetStateAction,
+} from "react";
 import { useAppSelector } from "../../store";
 import { selectSearchQuery } from "../../store/slices/searchSlice";
 import { AddressSuggestion } from "../../types/typings";
-import ComboboxContainer from "./combobox/ComboboxContainer";
-import ComboboxInput from "./combobox/ComboboxInput";
-import ComboboxOption from "./combobox/ComboboxOption";
-import ComboboxOptions from "./combobox/ComboboxOptions";
 
 interface Props {
   value: string;
@@ -16,8 +19,6 @@ interface Props {
   setZoomLevel: (placeType: string, category: string) => void;
   comboBoxStyles: string;
   comboboxInputStyles: string;
-  comboboxOptionsStyles: string;
-  comboboxOptionStyles: string;
 }
 
 const SearchInput: FC<Props> = ({
@@ -29,51 +30,59 @@ const SearchInput: FC<Props> = ({
   setZoomLevel,
   comboBoxStyles,
   comboboxInputStyles,
-  comboboxOptionsStyles,
-  comboboxOptionStyles,
 }) => {
   const searchQuery = useAppSelector(selectSearchQuery) as string;
 
   return (
-    <ComboboxContainer
-      comboboxStyles={comboBoxStyles}
-      selectedSuggestion={selectedSuggestion}
-      setSelectedSuggestion={setSelectedSuggestion}>
-      <ComboboxInput
-        comboboxInputStyles={comboboxInputStyles}
+    <Combobox
+      as="div"
+      value={selectedSuggestion}
+      onChange={setSelectedSuggestion}
+      className={comboBoxStyles}>
+      <Combobox.Input
         value={value}
-        handleAddressChange={handleAddressChange}
-        displayValue={suggestion => {
+        onChange={handleAddressChange}
+        className={comboboxInputStyles}
+        displayValue={(suggestion: any) => {
           if (searchQuery && !suggestion) return searchQuery;
-          if (suggestion?.place_type[0] === "poi") {
-            return suggestion?.text;
-          }
+          if (suggestion?.place_type[0] === "poi") return suggestion?.text;
           return suggestion?.place_name;
         }}
+        required
       />
+
       <button
         className="absolute top-2 right-2 flex justify-center items-center w-20 h-12 sm:w-32 sm:h-16 bg-primary-color text-light-text text-lg border border-primary-text cursor-pointer"
         type="submit">
         Search
       </button>
 
-      <ComboboxOptions comboboxOptionsStyles={comboboxOptionsStyles}>
+      <Combobox.Options
+        className={`${
+          suggestions.length ? "flex" : "hidden"
+        } flex-col justify-center items-start gap-2 absolute w-2/3 rounded bg-white top-20 p-2 z-10 border border-gray-500 shadow-xl`}>
         {suggestions.map(suggestion => (
-          <ComboboxOption
-            key={suggestion.id}
-            suggestion={suggestion}
-            handleClick={() => {
-              setSelectedSuggestion(suggestion);
-              setZoomLevel(
-                suggestion.place_type[0],
-                suggestion.properties.category
-              );
-            }}
-            comboboxOptionStyles={comboboxOptionStyles}
-          />
+          <Combobox.Option key={suggestion.id} value={suggestion} as={Fragment}>
+            {({ active }) => (
+              <li
+                className={`
+                ${active && "bg-primary-color text-white shadow-2xl"}
+                cursor-pointer p-2 rounded w-full
+              `}
+                onClick={() => {
+                  setSelectedSuggestion(suggestion);
+                  setZoomLevel(
+                    suggestion.place_type[0],
+                    suggestion.properties.category
+                  );
+                }}>
+                {suggestion.place_name}
+              </li>
+            )}
+          </Combobox.Option>
         ))}
-      </ComboboxOptions>
-    </ComboboxContainer>
+      </Combobox.Options>
+    </Combobox>
   );
 };
 

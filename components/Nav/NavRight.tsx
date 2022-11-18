@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import NavProfile from "./NavProfile";
@@ -6,8 +6,8 @@ import { selectUser } from "../../store/slices/userSlice";
 import { useAppSelector } from "../../store";
 
 const NavRight: FC = () => {
-  const user = useAppSelector(selectUser),
-    router = useRouter();
+  const user = useAppSelector(selectUser);
+  const router = useRouter();
 
   return (
     <>

@@ -94,7 +94,7 @@ export const userSlice = createSlice({
     },
   },
 
-  extraReducers(builder) {
+  extraReducers: builder => {
     builder
       .addCase(HYDRATE, (state: UserState, action: AnyAction) => {
         if (action.payload.user.user == null) {

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import Button from "../components/ui/Button";
@@ -6,7 +7,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import PageHeading from "../components/ui/PageHeading";
 import { useAppSelector, wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
-import { SessionUser, Tour, TourResults, User } from "../types/typings";
+import { Tour, TourResults, User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
 import TourCards from "../components/tour-cards/TourCards";
 import { ObjectId } from "mongodb";
@@ -17,7 +18,7 @@ const OfferedTours: NextPage = () => {
   const tourResults = useAppSelector(selectTours);
 
   return (
-    <>
+    <Fragment>
       <PageHeading headingText="Here you can add, edit, and delete your offered tours." />
 
       <section className="flex flex-col justify-center items-center gap-10 w-full sm:w-5/6 lg:w-3/4 min-h-[33vh] mx-auto my-20">
@@ -37,7 +38,7 @@ const OfferedTours: NextPage = () => {
           </Button>
         </Link>
       </section>
-    </>
+    </Fragment>
   );
 };
 

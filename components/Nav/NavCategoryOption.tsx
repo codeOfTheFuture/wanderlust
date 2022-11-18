@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface Props {
   category: string;
@@ -7,11 +7,11 @@ interface Props {
 
 const NavCategoryOption: FC<Props> = ({ category, handleClick }) => {
   return (
-    <>
+    <Fragment>
       <div className="nav-dropdown-link" onClick={handleClick}>
         {category}
       </div>
-    </>
+    </Fragment>
   );
 };
 

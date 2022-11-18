@@ -10,21 +10,17 @@ import {
 } from "../../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { Rating } from "react-simple-star-rating";
-import {
-  getUserFavoriteTours,
-  selectTours,
-} from "../../store/slices/toursSlice";
 
 interface Props {
   tour: Tour;
 }
 
 const TourCard: FC<Props> = ({ tour }) => {
-  const user = useAppSelector(selectUser);
-  const tourResults = useAppSelector(selectTours);
   const { _id, guideId, title, tourPhotos, price } = tour;
-  const router: NextRouter = useRouter();
 
+  const user = useAppSelector(selectUser);
+
+  const router: NextRouter = useRouter();
   const dispatch = useAppDispatch();
 
   const tourPageUrl = `/tour?tour=${_id}`;
@@ -58,16 +54,22 @@ const TourCard: FC<Props> = ({ tour }) => {
         />
       )}
 
-      <div className="absolute top-2 w-full flex justify-between items-center px-4">
-        <div className="flex justify-center items-center w-28 h-8 bg-black rounded-full bg-opacity-60">
-          <Rating
-            size={20}
-            readonly
-            initialValue={3}
-            SVGclassName="inline-block"
-            className="mb-1"
-          />
-        </div>
+      <div
+        className={`${
+          tour?.rating ? "justify-between" : "justify-end"
+        } flex items-center absolute top-2 w-full px-4`}>
+        {tour?.rating ? (
+          <div className="flex justify-center items-center w-28 h-8 bg-black rounded-full bg-opacity-60">
+            <Rating
+              size={20}
+              readonly
+              initialValue={tour.rating.ratingValue}
+              SVGclassName="inline-block"
+              className="mb-1"
+              allowFraction
+            />
+          </div>
+        ) : null}
 
         {user?._id.toString() === guideId &&
         router.pathname === "/offered-tours" ? (

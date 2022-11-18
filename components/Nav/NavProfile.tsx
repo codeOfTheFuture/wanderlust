@@ -9,10 +9,13 @@ import NavDropdownLink from "./NavDropdownLink";
 import { signOut } from "next-auth/react";
 
 const NavProfile: FC = () => {
-  const user = useAppSelector(selectUser),
-    firstName = user?.name?.match(/^[^\s]+/)?.join() as string,
-    dropsDownRef = useRef<HTMLDivElement>(null),
-    [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
+  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
+
+  const user = useAppSelector(selectUser);
+
+  const firstName = user?.name?.match(/^[^\s]+/)?.join() as string;
+
+  const dropsDownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropsDownRef, () => setToggleDropdown(false));
 

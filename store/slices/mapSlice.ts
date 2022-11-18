@@ -31,6 +31,7 @@ export const fetchMapResults = createAsyncThunk(
       northEastLng: number;
     };
   }) => {
+    console.log("Bounds>>>>>", bounds);
     const { southWestLat, northWestLat, southWestLng, northEastLng } = bounds;
 
     const URL = `api/tours/search/map?sWLat=${southWestLat}&nWLat=${northWestLat}&sWLng=${southWestLng}&nWLng=${northEastLng}`;
@@ -52,11 +53,10 @@ export const mapSlice = createSlice({
     },
   },
 
-  extraReducers(builder) {
+  extraReducers: builder => {
     builder
-      .addCase(HYDRATE, (state: MapState, action: AnyAction) => {
-        if (action.payload.map.center.length === 0) return state;
-        state = action.payload.map;
+      .addCase(HYDRATE, (state: MapState) => {
+        return state;
       })
       .addCase(fetchMapResults.pending, state => {
         state.status = "loading";

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -5,7 +6,7 @@ import TourForm from "../components/tour-form/TourForm";
 import { wrapper } from "../store";
 import { connectToDatabase } from "../lib/mongodb";
 import { ObjectId } from "mongodb";
-import { SessionUser, Tour } from "../types/typings";
+import { Tour } from "../types/typings";
 import { setUser } from "../store/slices/userSlice";
 
 interface Props {
@@ -30,9 +31,9 @@ const UpdateTour: NextPage<Props> = ({ tour }) => {
   };
 
   return (
-    <>
+    <Fragment>
       <TourForm tour={tour} submitForm={submitForm} deleteTour={deleteTour} />
-    </>
+    </Fragment>
   );
 };
 

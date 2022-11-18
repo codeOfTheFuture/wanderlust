@@ -1,12 +1,13 @@
 import { FC } from "react";
 import { useEffect, useState } from "react";
-import { HandleScroll } from "../../types/typings";
 import Footer from "../ui/Footer";
 import Navbar from "../nav/Navbar";
 
 interface Props {
   children: React.ReactNode;
 }
+
+type HandleScroll = () => void;
 
 const Layout: FC<Props> = ({ children }) => {
   const [scrollPosition, setScrollPosition] = useState(0);

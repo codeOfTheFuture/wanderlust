@@ -1,6 +1,5 @@
 import { RootState } from "../index";
 import { createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
 
 export interface SearchState {
   searchQuery: string;

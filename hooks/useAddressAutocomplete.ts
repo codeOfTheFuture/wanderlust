@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   selectSearchQuery,
   setSearchQuery,
@@ -10,9 +11,21 @@ const useAddressAutocomplete = (initialValue: string) => {
     [suggestions, setSuggestions] = useState<any[]>([]);
 
   const searchQuery = useAppSelector(selectSearchQuery) as string;
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const MAPBOX_ENDPOINT = `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}&country=US&types=country,region,place,poi&autocomplete=true`;
+  let types: string;
+
+  if (
+    router.pathname === "/create-tour" ||
+    router.pathname === "/update-tour"
+  ) {
+    types = "address";
+  } else {
+    types = "country,region,place,poi";
+  }
+
+  const MAPBOX_ENDPOINT = `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}&country=US&types=${types}&autocomplete=true`;
 
   const handleAddressChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);

@@ -1,18 +1,12 @@
 import React, { FC, FormEvent, useState } from "react";
-import {
-  ClientSafeProvider,
-  LiteralUnion,
-  signIn,
-  useSession,
-} from "next-auth/react";
+import { ClientSafeProvider, LiteralUnion, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthLink from "./AuthLink";
 import Button from "../ui/Button";
 import FormInput from "../ui/FormInput";
-import LoginHeading from "./LoginHeading";
 import { BuiltInProviderType } from "next-auth/providers";
 import { useAppDispatch } from "../../store";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 interface Props {
   providers: Record<
@@ -22,16 +16,17 @@ interface Props {
 }
 
 const LoginForm: FC<Props> = ({ providers }) => {
-  const router = useRouter(),
-    dispatch = useAppDispatch(),
-    Btn_Label = router.pathname === "/auth/signup" ? "Sign Up" : "Sign In",
-    Facebook_Provider_NAME = `${Btn_Label} with ${providers?.facebook.name}`,
-    Google_Provider_NAME = `${Btn_Label} with ${providers?.google.name}`,
-    Facebook_Provider_ID = providers?.facebook.id,
-    Google_Provider_ID = providers?.google.id;
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const [email, setEmail] = useState<string>(""),
-    [password, setPassword] = useState<string>("");
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const btnLabel = router.pathname === "/auth/signup" ? "Sign Up" : "Sign In";
+  const facebookProviderName = `${btnLabel} with ${providers?.facebook.name}`;
+  const googleProviderName = `${btnLabel} with ${providers?.google.name}`;
+  const facebookProviderId = providers?.facebook.id;
+  const googleProviderId = providers?.google.id;
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,8 +45,6 @@ const LoginForm: FC<Props> = ({ providers }) => {
 
       const data = await response.json();
 
-      console.log("data>>>>", data);
-
       if (data.acknowledged) {
         await signIn("credentials", {
           redirect: false,
@@ -67,12 +60,16 @@ const LoginForm: FC<Props> = ({ providers }) => {
         email,
         password,
       });
+
+      return router.push("/");
     }
   };
 
   return (
     <div className="bottom-28 md:bottom-36 lg:bottom-auto flex flex-col justify-evenly items-center w-[300px] md:w-[400px] lg:w-[560px] p-4 lg:p-12 bg-white z-10 rounded-sm shadow-xl shadow-black">
-      <LoginHeading text={Btn_Label + " to Wanderlust"} />
+      <h1 className="text-2xl font-bold text-primary-color mb-10">
+        {btnLabel + " to Wanderlust"}
+      </h1>
       <Toaster />
 
       <form
@@ -93,7 +90,7 @@ const LoginForm: FC<Props> = ({ providers }) => {
           handleChange={setPassword}
         />
         <Button color="btn-primary" size="btn-md" type="submit">
-          {Btn_Label}
+          {btnLabel}
         </Button>
       </form>
       <div className="flex justify-center items-center gap-3 my-3 w-full">
@@ -106,15 +103,15 @@ const LoginForm: FC<Props> = ({ providers }) => {
           color="btn-primary"
           size="btn-xl"
           type="button"
-          onClick={() => signIn(Facebook_Provider_ID)}>
-          {Facebook_Provider_NAME}
+          onClick={() => signIn(facebookProviderId)}>
+          {facebookProviderName}
         </Button>
         <Button
           color="btn-error"
           size="btn-xl"
           type="button"
-          onClick={() => signIn(Google_Provider_ID)}>
-          {Google_Provider_NAME}
+          onClick={() => signIn(googleProviderId)}>
+          {googleProviderName}
         </Button>
       </div>
       <AuthLink />

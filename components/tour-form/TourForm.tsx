@@ -1,4 +1,11 @@
-import React, { FC, FormEvent, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  Fragment,
+  useRef,
+  useState,
+} from "react";
 import TourImageUpload from "./TourImageUpload";
 import TourTitleInput from "./TourTitleInput";
 import FormSelect from "../ui/FormSelect";
@@ -21,17 +28,13 @@ import DatePicker from "../ui/DatePicker/DatePicker";
 import useClickOutside from "../../hooks/useClickOutside";
 import Modal from "../modal/Modal";
 import useOnDrop from "../../hooks/useOnDrop";
-import AddressAutocomplete from "../ui/AddressAutocomplete";
 import Button from "../ui/Button";
 import { AddressSuggestion, Tour, User } from "../../types/typings";
 import { useRouter } from "next/router";
 import { useAppSelector } from "../../store";
-import ComboboxContainer from "../ui/combobox/ComboboxContainer";
-import ComboboxInput from "../ui/combobox/ComboboxInput";
+
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
-import ComboboxLabel from "../ui/combobox/ComboboxLabel";
-import ComboboxOptions from "../ui/combobox/ComboboxOptions";
-import ComboboxOption from "../ui/combobox/ComboboxOption";
+import { Combobox } from "@headlessui/react";
 
 export type SelectedDate = {
   date: Date;
@@ -48,42 +51,68 @@ interface Props {
 }
 
 const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
-  const user = useAppSelector(selectUser) as User,
-    router = useRouter();
+  const user = useAppSelector(selectUser) as User;
 
-  const [tourTitle, setTourTitle] = useState<string>(tour?.title || ""),
-    [category, setCategory] = useState<string>(tour?.category || ""),
-    [description, setDescription] = useState<string>(tour?.description || ""),
-    [duration, setDuration] = useState<string>(tour?.duration || ""),
-    [recommendedAges, setRecommendedAges] = useState<string>(
-      tour?.recommendedAges || ""
-    ),
-    [whatToBring, setWhatToBring] = useState<string>(tour?.whatToBring || ""),
-    [selectedAddress, setSelectedAddress] = useState<any>(
-      tour?.address || null
-    ),
-    [price, setPrice] = useState<number | "">(tour?.price || ""),
-    [datePickerOpen, setDatePickerOpen] = useState<boolean>(false),
-    [selectedDates, setSelectedDates] = useState<SelectedDate[]>(
-      tour?.tourDates || []
-    ),
-    [currentSelectedDate, setCurrentSelectedDate] =
-      useState<SelectedDate | null>(null),
-    [uploadedFiles, setUploadedFiles] = useState(tour?.tourPhotos || []);
+  const [tourTitle, setTourTitle] = useState<string>(tour?.title || "");
+  const [category, setCategory] = useState<string>(tour?.category || "");
+  const [description, setDescription] = useState<string>(
+    tour?.description || ""
+  );
+  const [duration, setDuration] = useState<string>(tour?.duration || "");
+  const [recommendedAges, setRecommendedAges] = useState<string>(
+    tour?.recommendedAges || ""
+  );
+  const [whatToBring, setWhatToBring] = useState<string>(
+    tour?.whatToBring || ""
+  );
+  const [selectedAddress, setSelectedAddress] = useState<any>(
+    tour?.address || null
+  );
+  const [price, setPrice] = useState<number | "">(tour?.price || "");
+  const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
+  const [selectedDates, setSelectedDates] = useState<SelectedDate[]>(
+    tour?.tourDates || []
+  );
+  const [currentSelectedDate, setCurrentSelectedDate] =
+    useState<SelectedDate | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState(tour?.tourPhotos || []);
+
+  const [ratingValue, setRatingValue] = useState<string>("");
 
   const [onDrop] = useOnDrop(cloudinaryImage =>
     setUploadedFiles(prevState => [...prevState, cloudinaryImage])
   );
 
+  const router = useRouter();
+
   const datePickerRef = useRef<HTMLDivElement>(null);
+
+  const handleRatingValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setRatingValue(e.target.value);
+  };
+  const handleTotalRatingsChange = () => {
+    if (ratingValue === "") return null;
+    if (tour == null || tour?.rating == null) {
+      const rating = {} as { ratingValue: number; totalRatings: number };
+      rating.ratingValue = parseFloat(ratingValue);
+      rating.totalRatings = 1;
+      return rating;
+    }
+    const rating = {} as { ratingValue: number; totalRatings: number };
+    const ratings = tour.rating.ratingValue * tour.rating.totalRatings;
+    const newRatings = ratings + ratingValue;
+    const newTotalRatings = tour.rating.totalRatings + 1;
+    const newRatingValue = parseFloat(newRatings) / newTotalRatings;
+
+    rating.ratingValue = newRatingValue;
+    rating.totalRatings = newTotalRatings;
+
+    return rating;
+  };
 
   useClickOutside(datePickerRef, () => {
     setDatePickerOpen(false);
   });
-
-  const selectSuggestion = (suggestion: AddressSuggestion) => {
-    setSelectedAddress(suggestion);
-  };
 
   // Add a new date to selected dates
   const addDate = (date: Date) => {
@@ -141,7 +170,13 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
       tourDates: selectedDates,
       tourPhotos: uploadedFiles,
       bookedTourists: [],
-    };
+    } as any;
+
+    const rating = handleTotalRatingsChange();
+
+    if (rating) {
+      tour.rating = rating;
+    }
 
     submitForm(tour);
   };
@@ -264,42 +299,51 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           {/* Address */}
           <div className="flex items-center gap-2">
             <LocationMarkerIcon className="w-10 h-10" />
-            {/* <AddressAutocomplete
-              tourPlaceName={tour?.address.placeName}
-              selectedSuggestion={selectedAddress}
-              setSelectedSuggestion={setSelectedAddress}
-              selectSuggestion={selectSuggestion}
-            /> */}
-            <ComboboxContainer
-              selectedSuggestion={selectedAddress}
-              setSelectedSuggestion={setSelectedAddress}
-              comboboxStyles="form-control relative">
-              <ComboboxInput
+            <Combobox
+              as="div"
+              value={selectedAddress}
+              onChange={setSelectedAddress}
+              className="form-control relative">
+              <Combobox.Input
+                as="input"
+                className="form-input peer"
                 value={value}
-                displayValue={suggestion =>
+                onChange={handleAddressChange}
+                displayValue={(suggestion: any) =>
                   suggestion?.place_name || tour?.address.placeName
                 }
-                handleAddressChange={handleAddressChange}
-                comboboxInputStyles="form-input peer"
+                required
               />
-              <ComboboxLabel comboboxLabelStyles="form-label peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
+              <Combobox.Label
+                as="label"
+                className="form-label peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
                 Address
-              </ComboboxLabel>
+              </Combobox.Label>
 
-              <ComboboxOptions
-                comboboxOptionsStyles={`${
-                  suggestions.length ? "flex" : "hidden"
+              <Combobox.Options
+                className={`${
+                  suggestions?.length ? "flex" : "hidden"
                 } flex-col justify-center items-start absolute w-full bg-white border border-black rounded-md bottom-16`}>
-                {suggestions.map(suggestion => (
-                  <ComboboxOption
-                    key={suggestion.id}
-                    suggestion={suggestion}
-                    handleClick={() => selectSuggestion(suggestion)}
-                    comboboxOptionStyles="cursor-pointer p-2 rounded hover:bg-primary-color hover:text-white hover:shadow-xl w-full"
-                  />
+                {suggestions?.map(suggestion => (
+                  <Combobox.Option
+                    as={Fragment}
+                    value={suggestion}
+                    key={suggestion.id}>
+                    {({ active }) => (
+                      <li
+                        className={`
+                ${active && "bg-primary-color text-white shadow-2xl"}
+                cursor-pointer p-2 rounded w-full`}
+                        onClick={() => {
+                          setSelectedAddress(suggestion);
+                        }}>
+                        {suggestion.place_name}
+                      </li>
+                    )}
+                  </Combobox.Option>
                 ))}
-              </ComboboxOptions>
-            </ComboboxContainer>
+              </Combobox.Options>
+            </Combobox>
           </div>
         </div>
 
@@ -346,6 +390,14 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
                 selectDate={selectDate}
                 changeTime={changeTime}
                 datePickerOpen={datePickerOpen}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                value={ratingValue}
+                placeholder="rating value"
+                onChange={handleRatingValueChange}
               />
             </div>
           </div>

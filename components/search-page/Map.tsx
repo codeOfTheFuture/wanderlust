@@ -1,4 +1,12 @@
-import { FC, useEffect, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import ReactMapGL, { MapRef, NavigationControl } from "react-map-gl";
 import { useAppDispatch, useAppSelector } from "../../store";
 import {
@@ -7,13 +15,14 @@ import {
   selectViewport,
   selectZoom,
 } from "../../store/slices/mapSlice";
+import { selectSearchQuery } from "../../store/slices/searchSlice";
 import { fetchToursSearch, selectTours } from "../../store/slices/toursSlice";
 import { TourResults } from "../../types/typings";
 import MapMarker from "./MapMarker";
 import MapPopup from "./MapPopup";
 
 interface Props {
-  setLoading: any;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const Map: FC<Props> = ({ setLoading }) => {
@@ -29,6 +38,7 @@ const Map: FC<Props> = ({ setLoading }) => {
     latitude: center[1] || 40.707385,
     zoom: zoom,
   });
+  const mapRef = useRef<MapRef>(null);
 
   useEffect(() => {
     setViewState({
@@ -36,9 +46,12 @@ const Map: FC<Props> = ({ setLoading }) => {
       latitude: center[1] || 40.707385,
       zoom: zoom,
     });
-  }, [center, zoom]);
 
-  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string;
+    mapRef.current?.flyTo({
+      center: [center[0], center[1]],
+      zoom: zoom,
+    });
+  }, [center, zoom]);
 
   const handleSelectedTour = (tourId: string) => {
     setSelectedTourId(tourId);
@@ -48,14 +61,10 @@ const Map: FC<Props> = ({ setLoading }) => {
     setSelectedTourId("Nothing");
   };
 
-  const mapRef = useRef<MapRef>(null);
-  const mapBounds = mapRef?.current?.getMap().getBounds();
-  const southWestLat = mapBounds?.getSouthWest().lat as number;
-  const northWestLat = mapBounds?.getNorthWest().lat as number;
-  const southWestLng = mapBounds?.getSouthWest().lng as number;
-  const northEastLng = mapBounds?.getNorthEast().lng as number;
-
   const getSearchedTours = () => {
+    const { southWestLat, northWestLat, southWestLng, northEastLng } =
+      getMapBounds();
+
     dispatch(
       fetchMapResults({
         bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
@@ -71,27 +80,35 @@ const Map: FC<Props> = ({ setLoading }) => {
     );
   };
 
-  useEffect(() => {
-    dispatch(
-      fetchToursSearch({
-        page: 1,
-        limit: 8,
-        bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
-      })
-    );
+  const getMapBounds = () => {
+    const mapBounds = mapRef.current?.getBounds();
+    const southWestLat = mapBounds?.getSouthWest().lat as number;
+    const northWestLat = mapBounds?.getNorthWest().lat as number;
+    const southWestLng = mapBounds?.getSouthWest().lng as number;
+    const northEastLng = mapBounds?.getNorthEast().lng as number;
 
-    dispatch(
-      fetchMapResults({
-        bounds: { southWestLat, northWestLat, southWestLng, northEastLng },
-      })
-    );
-  }, [southWestLat, northWestLat, southWestLng, northEastLng, dispatch]);
+    return {
+      southWestLat,
+      northWestLat,
+      southWestLng,
+      northEastLng,
+    };
+  };
 
   return (
     <ReactMapGL
       {...viewState}
       ref={mapRef}
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string}
       onMove={e => setViewState(e.viewState)}
+      onLoad={() => {
+        getSearchedTours();
+      }}
       onDragStart={() => {
         setLoading(true);
       }}
@@ -105,10 +122,7 @@ const Map: FC<Props> = ({ setLoading }) => {
       onZoomEnd={() => {
         setLoading(false);
         getSearchedTours();
-      }}
-      style={{ width: "100%", height: "100vh" }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
-      mapboxAccessToken={accessToken}>
+      }}>
       <NavigationControl position="bottom-right" showCompass={false} />
 
       {mapResults?.map(tour => (

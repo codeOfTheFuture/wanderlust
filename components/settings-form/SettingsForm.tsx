@@ -17,29 +17,44 @@ import ComboboxOptions from "../ui/combobox/ComboboxOptions";
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
 import ComboboxOption from "../ui/combobox/ComboboxOption";
 
+interface FormData {
+  email: string;
+  name: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  phoneNumber: string;
+  registerAsGuide: boolean;
+  image: CloudinaryImage | null;
+}
+
 interface Props {
-  // TODO: FORM DATA TYPING
-  submitForm: (formData: any) => void;
+  submitForm: (formData: FormData) => void;
 }
 
 const SettingsForm: FC<Props> = ({ submitForm }) => {
   const user = useAppSelector(selectUser) as User;
 
-  const [email, setEmail] = useState<string>(user?.email || ""),
-    [name, setName] = useState(user?.name || ""),
-    [selectedSuggestion, setSelectedSuggestion] =
-      useState<AddressSuggestion | null>(null),
-    [streetAddress, setStreetAddress] = useState<string>(
-      user?.streetAddress || ""
-    ),
-    [city, setCity] = useState<string>(user?.city || ""),
-    [state, setState] = useState<string>(user?.state || ""),
-    [zipCode, setZipCode] = useState<string>(user?.zipCode || ""),
-    [phoneNumber, setPhoneNumber] = useState<string>(user?.phoneNumber || ""),
-    [registerAsGuide, setRegisterAsGuide] = useState<boolean>(
-      user?.registerAsGuide || false
-    ),
-    [profileImage, setProfileImage] = useState<CloudinaryImage | null>(null);
+  const [email, setEmail] = useState<string>(user?.email || "");
+  const [name, setName] = useState(user?.name || "");
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<AddressSuggestion | null>(null);
+  const [streetAddress, setStreetAddress] = useState<string>(
+    user?.streetAddress || ""
+  );
+  const [city, setCity] = useState<string>(user?.city || "");
+  const [state, setState] = useState<string>(user?.state || "");
+  const [zipCode, setZipCode] = useState<string>(user?.zipCode || "");
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    user?.phoneNumber || ""
+  );
+  const [registerAsGuide, setRegisterAsGuide] = useState<boolean>(
+    user?.registerAsGuide || false
+  );
+  const [profileImage, setProfileImage] = useState<CloudinaryImage | null>(
+    null
+  );
 
   const getStreetAddress = (placeName: string) => {
     if (placeName) return placeName.split(", ")[0];

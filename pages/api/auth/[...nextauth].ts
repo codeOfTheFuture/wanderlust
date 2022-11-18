@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ user }: { user: any }) {
+    async signIn({ user }: any) {
       if (user.signedInBefore == null) {
         user.profileImage = {
           secure_url: user.image,
@@ -83,14 +83,14 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile }: any) {
       if (account) {
         token.accessToken = account.access_token;
         token.id = profile?.id;
       }
       return token;
     },
-    async session({ session, token, user }) {
+    async session({ session }) {
       return session;
     },
   },

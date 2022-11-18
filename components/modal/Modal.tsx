@@ -4,7 +4,6 @@ import { closeModal, selectModalOpen } from "../../store/slices/modalSlice";
 import Button from "../ui/Button";
 import DropZone from "./DropZone";
 import PreviewThumbnails from "./PreviewThumbnails";
-import ModalDivider from "./ModalDivider";
 import deleteImage from "../../utils/deleteImage";
 import { useDropzone } from "react-dropzone";
 import { CloudinaryImage } from "../../types/typings";
@@ -17,8 +16,8 @@ interface Props {
 }
 
 const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
-  const modalOpen = useAppSelector(selectModalOpen),
-    dispatch = useAppDispatch();
+  const modalOpen = useAppSelector(selectModalOpen);
+  const dispatch = useAppDispatch();
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     onDrop,
@@ -34,8 +33,6 @@ const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
       prevState.filter(file => file.public_id !== public_id)
     );
   };
-
-  console.log(uploadedFiles);
 
   return (
     <Transition appear show={modalOpen} as={Fragment}>
@@ -72,7 +69,11 @@ const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
                     isDragActive={isDragActive}
                   />
 
-                  <ModalDivider />
+                  <div className="hidden lg:flex justify-evenly items-center gap-2 w-full text-gray-800">
+                    <div className="w-full h-[2px] bg-gray-800 mt-2"></div>
+                    <div className="text-2xl font-medium text-center">or</div>
+                    <div className="w-full h-[2px] bg-gray-800 mt-2"></div>
+                  </div>
 
                   <Button
                     type="button"

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC, Fragment } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -6,7 +6,7 @@ const AuthLink: FC = () => {
   const router = useRouter();
 
   return (
-    <React.Fragment>
+    <Fragment>
       {router.pathname === "/auth/signup" ? (
         <div className="flex mt-4 text-lg">
           <span>Already have an account? </span>
@@ -22,7 +22,7 @@ const AuthLink: FC = () => {
           </Link>
         </div>
       )}
-    </React.Fragment>
+    </Fragment>
   );
 };
 

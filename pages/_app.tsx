@@ -5,7 +5,6 @@ import { wrapper } from "../store";
 import { useRouter } from "next/router";
 import AuthLayout from "../components/layouts/AuthLayout";
 import Layout from "../components/layouts/Layout";
-import { Toaster } from "react-hot-toast";
 
 const App = ({
   Component,

@@ -139,7 +139,7 @@ export const toursSlice = createSlice({
     },
   },
 
-  extraReducers(builder) {
+  extraReducers: builder => {
     builder
       .addCase(HYDRATE, (state: ToursState, action: AnyAction) => {
         if (action.payload.tours.tourResults == null) {
