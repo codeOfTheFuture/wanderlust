@@ -15,50 +15,17 @@ import {
 import { useRouter } from "next/router";
 import { selectUser } from "../../store/slices/userSlice";
 import ReactLoading from "react-loading";
+import Pagination from "./Pagination";
 
 interface Props {
   loading: boolean;
 }
 
 const TourCards: FC<Props> = ({ loading }) => {
-  const user = useAppSelector(selectUser) as User;
-  const userId = user?._id?.toString();
   const router = useRouter();
 
   const toursResults = useAppSelector(selectTours) as TourResults;
   const status = useAppSelector(getToursStatus);
-  const currentPage = toursResults.currentPage;
-  const limit = toursResults.limit;
-
-  const filter = useAppSelector(getToursFilter);
-
-  const dispatch = useAppDispatch();
-
-  const handlePagination = (page: number) => {
-    if (filter === "popular" && router.pathname === "/") {
-      dispatch(getPopularTours({ page, limit }));
-    }
-    if (filter === "deals" && router.pathname === "/") {
-      dispatch(getTourDeals({ page, limit }));
-    }
-    if (filter === "categories" && router.pathname === "/") {
-      // dispatch()
-    }
-
-    if (router.pathname === "/offered-tours") {
-      dispatch(
-        fetchOfferedTours({
-          page,
-          limit,
-          userId,
-        })
-      );
-    }
-
-    if (router.pathname === "/favorite-tours") {
-      dispatch(getUserFavoriteTours({ page, limit, userId }));
-    }
-  };
 
   return (
     <div
@@ -93,33 +60,7 @@ const TourCards: FC<Props> = ({ loading }) => {
         ))}
       </div>
 
-      {toursResults.results.length > 0 && (
-        <div className="flex justify-between items-center my-8 w-full">
-          <div
-            onClick={() => {
-              if (toursResults.previous != null) {
-                handlePagination(toursResults.previous.page);
-              }
-            }}
-            className="font-semibold cursor-pointer">
-            Previous
-          </div>
-
-          <span className="font-semibold cursor-pointer bg-primary-color text-white text-lg w-10 h-10 rounded flex justify-center items-center">
-            {currentPage?.toString()}
-          </span>
-
-          <div
-            onClick={() => {
-              if (toursResults.next != null) {
-                handlePagination(toursResults.next.page);
-              }
-            }}
-            className="font-semibold cursor-pointer">
-            Next
-          </div>
-        </div>
-      )}
+      {toursResults.results.length > 0 && <Pagination />}
     </div>
   );
 };
