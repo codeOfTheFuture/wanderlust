@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useEffect, useState } from "react";
 // import Footer from "../ui/Footer";
-import Navbar from "../nav/Navbar";
+// import Navbar from "../nav/Navbar";
 
 interface Props {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ const Layout: FC<Props> = ({ children }) => {
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      <Navbar scrollPosition={scrollPosition} />
+      {/* <Navbar scrollPosition={scrollPosition} /> */}
       <main className="w-full h-full">{children}</main>
       {/* <Footer /> */}
     </div>
