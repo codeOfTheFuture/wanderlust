@@ -15,8 +15,8 @@ const Messages: NextPage = () => {
       <PageHeading headingText="Here are your messages." />
 
       <section className="w-full flex flex-col items-center gap-5 my-10">
-        <Message userImg={user!.image!} />
-        <Message userImg={user!.image!} />
+        <Message userImg={user?.profileImage?.secure_url as string} />
+        <Message userImg={user?.profileImage?.secure_url as string} />
       </section>
     </>
   );
