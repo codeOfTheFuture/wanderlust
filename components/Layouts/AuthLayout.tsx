@@ -1,5 +1,5 @@
 import { FC } from "react";
-import LoginImage from "../Auth-form/LoginImage";
+import LoginImage from "../auth-form/LoginImage";
 import Navbar from "../Nav/Navbar";
 import { Toaster } from "react-hot-toast";
 
