@@ -10,12 +10,7 @@ import { useAppSelector } from "../../store";
 import { stateAbbrLookup } from "../../utils/stateAbbrLookup";
 import useOnDrop from "../../hooks/useOnDrop";
 import deleteImage from "../../utils/deleteImage";
-import ComboboxContainer from "../ui/combobox/ComboboxContainer";
-import ComboboxInput from "../ui/combobox/ComboboxInput";
-import ComboboxLabel from "../ui/combobox/ComboboxLabel";
-import ComboboxOptions from "../ui/combobox/ComboboxOptions";
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
-import ComboboxOption from "../ui/combobox/ComboboxOption";
 
 interface FormData {
   email: string;
@@ -156,7 +151,7 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
             handleChange={setEmail}
           />
 
-          <ComboboxContainer
+          {/* <ComboboxContainer
             selectedSuggestion={selectedSuggestion}
             setSelectedSuggestion={setSelectedSuggestion}
             comboboxStyles="form-control relative">
@@ -184,7 +179,7 @@ const SettingsForm: FC<Props> = ({ submitForm }) => {
                 />
               ))}
             </ComboboxOptions>
-          </ComboboxContainer>
+          </ComboboxContainer> */}
 
           <div className="flex flex-row justify-center items-center gap-2">
             <div className="w-full sm:w-6/12">
