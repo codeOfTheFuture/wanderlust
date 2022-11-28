@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useState } from "react";
-import Button from "../Ui/Button";
-import Checkbox from "../Ui/Checkbox";
-import FormInput from "../Ui/FormInput";
+import Button from "../ui/Button";
+import Checkbox from "../ui/Checkbox";
+import FormInput from "../ui/FormInput";
 import ProfilePhotoPicker from "./ProfilePhotoPicker";
 import CurrencyFormat from "react-currency-format";
 import { selectUser } from "../../store/slices/userSlice";
@@ -10,12 +10,12 @@ import { useAppSelector } from "../../store";
 import { stateAbbrLookup } from "../../utils/stateAbbrLookup";
 import useOnDrop from "../../hooks/useOnDrop";
 import deleteImage from "../../utils/deleteImage";
-import ComboboxContainer from "../Ui/combobox/ComboboxContainer";
-import ComboboxInput from "../Ui/combobox/ComboboxInput";
-import ComboboxLabel from "../Ui/combobox/ComboboxLabel";
-import ComboboxOptions from "../Ui/combobox/ComboboxOptions";
+import ComboboxContainer from "../ui/combobox/ComboboxContainer";
+import ComboboxInput from "../ui/combobox/ComboboxInput";
+import ComboboxLabel from "../ui/combobox/ComboboxLabel";
+import ComboboxOptions from "../ui/combobox/ComboboxOptions";
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
-import ComboboxOption from "../Ui/combobox/ComboboxOption";
+import ComboboxOption from "../ui/combobox/ComboboxOption";
 
 interface FormData {
   email: string;

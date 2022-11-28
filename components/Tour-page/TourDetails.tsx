@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { Tour, User } from "../../types/typings";
 import Image from "next/image";
-import Button from "../Ui/Button";
+import Button from "../ui/Button";
 import { HeartIcon } from "@heroicons/react/outline";
 import {
   InformationCircleIcon,

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Popup } from "react-map-gl";
 import { Tour } from "../../types/typings";
-import TourCard from "../Tour-cards/TourCard";
+import TourCard from "../tour-cards/TourCard";
 
 interface Props {
   tour: Tour;

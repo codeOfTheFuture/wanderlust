@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { SelectedDate } from "../../Tour-form/TourForm";
+import { SelectedDate } from "../../tour-form/TourForm";
 import TimePickerDigitSelect from "./TimePickerDigitSelect";
 
 interface Props {

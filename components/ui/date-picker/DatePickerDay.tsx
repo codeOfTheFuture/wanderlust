@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { SelectedDate } from "../../Tour-form/TourForm";
+import { SelectedDate } from "../../tour-form/TourForm";
 
 interface Props {
   day: number;

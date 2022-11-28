@@ -1,6 +1,6 @@
 import { FC } from "react";
 import LoginImage from "../auth-form/LoginImage";
-import Navbar from "../Nav/Navbar";
+import Navbar from "../nav/Navbar";
 import { Toaster } from "react-hot-toast";
 
 interface Props {

@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import TourImageUpload from "./TourImageUpload";
 import TourTitleInput from "./TourTitleInput";
-import FormSelect from "../Ui/FormSelect";
+import FormSelect from "../ui/FormSelect";
 import {
   ClockIcon,
   LocationMarkerIcon,
@@ -19,16 +19,16 @@ import {
   InformationCircleIcon,
   UsersIcon,
 } from "@heroicons/react/solid";
-import FormTextArea from "../Ui/FormTextArea";
-import FormInput from "../Ui/FormInput";
+import FormTextArea from "../ui/FormTextArea";
+import FormInput from "../ui/FormInput";
 import CurrencyFormat from "react-currency-format";
 import Image from "next/image";
 import { selectUser } from "../../store/slices/userSlice";
-import DatePicker from "../Ui/DatePicker/DatePicker";
+import DatePicker from "../ui/date-picker/DatePicker";
 import useClickOutside from "../../hooks/useClickOutside";
-import Modal from "../Modal/Modal";
+import Modal from "../modal/Modal";
 import useOnDrop from "../../hooks/useOnDrop";
-import Button from "../Ui/Button";
+import Button from "../ui/Button";
 import { AddressSuggestion, Tour, User } from "../../types/typings";
 import { useRouter } from "next/router";
 import { useAppSelector } from "../../store";

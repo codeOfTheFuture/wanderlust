@@ -1,13 +1,13 @@
 import type { GetServerSideProps, NextPage } from "next";
-import SearchInput from "../components/Ui/SearchInput";
+import SearchInput from "../components/ui/SearchInput";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour, TourResults, User } from "../types/typings";
-import Button from "../components/Ui/Button";
+import Button from "../components/ui/Button";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
 import { useAppDispatch, useAppSelector, wrapper } from "../store";
 import { setUser } from "../store/slices/userSlice";
-import TourCards from "../components/Tour-cards/TourCards";
+import TourCards from "../components/tour-cards/TourCards";
 import { getToursFilter, setTours } from "../store/slices/toursSlice";
 import { FormEvent, useEffect, useState } from "react";
 import useAddressAutocomplete from "../hooks/useAddressAutocomplete";

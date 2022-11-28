@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, Fragment, SetStateAction } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { closeModal, selectModalOpen } from "../../store/slices/modalSlice";
-import Button from "../Ui/Button";
+import Button from "../ui/Button";
 import DropZone from "./DropZone";
 import PreviewThumbnails from "./PreviewThumbnails";
 import deleteImage from "../../utils/deleteImage";
