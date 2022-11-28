@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useEffect, useState } from "react";
-import Footer from "../ui/Footer";
-import Navbar from "../nav/Navbar";
+import Footer from "../Ui/Footer";
+import Navbar from "../Nav/Navbar";
 
 interface Props {
   children: React.ReactNode;

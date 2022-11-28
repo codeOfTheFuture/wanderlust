@@ -4,7 +4,7 @@ import {
   getProviders,
   LiteralUnion,
 } from "next-auth/react";
-import AuthForm from "../../components/auth-form/LoginForm";
+import AuthForm from "../../components/Auth-form/LoginForm";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { BuiltInProviderType } from "next-auth/providers";

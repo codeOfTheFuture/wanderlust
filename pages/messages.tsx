@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import Message from "../components/messages/Message";
-import PageHeading from "../components/ui/PageHeading";
+import Message from "../components/Messages/Message";
+import PageHeading from "../components/Ui/PageHeading";
 import { selectUser } from "../store/slices/userSlice";
 import { wrapper } from "../store";
 import { useSelector } from "react-redux";

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { SelectedDate } from "../../tour-form/TourForm";
+import { SelectedDate } from "../../Tour-form/TourForm";
 
 interface Props {
   currentSelectedDate: SelectedDate | null;

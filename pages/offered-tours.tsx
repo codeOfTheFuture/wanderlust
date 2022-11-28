@@ -1,15 +1,15 @@
 import { Fragment } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
-import Button from "../components/ui/Button";
+import Button from "../components/Ui/Button";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import PageHeading from "../components/ui/PageHeading";
+import PageHeading from "../components/Ui/PageHeading";
 import { useAppSelector, wrapper } from "../store";
 import { selectUser, setUser } from "../store/slices/userSlice";
 import { Tour, TourResults, User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
-import TourCards from "../components/tour-cards/TourCards";
+import TourCards from "../components/Tour-cards/TourCards";
 import { ObjectId } from "mongodb";
 import { selectTours, setTours } from "../store/slices/toursSlice";
 

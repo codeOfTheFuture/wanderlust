@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import DatePickerDay from "./DatePickerDay";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { genMonth } from "../../../utils/getMonth";
-import { SelectedDate } from "../../tour-form/TourForm";
+import { SelectedDate } from "../../Tour-form/TourForm";
 
 interface Props {
   calendar: number[];

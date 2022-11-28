@@ -3,7 +3,7 @@ import { Calendar as CalendarData } from "calendar";
 import Calendar from "./Calendar";
 import DatePanel from "./DatePanel";
 import TimePicker from "./TimePicker";
-import { SelectedDate } from "../../tour-form/TourForm";
+import { SelectedDate } from "../../Tour-form/TourForm";
 
 interface Props {
   datePickerOpen: boolean;

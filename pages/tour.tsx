@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import { ObjectId } from "mongodb";
-import RecommendedTours from "../components/tour-cards/RecommendedTours";
-import TourDetails from "../components/tour-page/TourDetails";
-import TourPageHeader from "../components/tour-page/TourPageHeader";
+import RecommendedTours from "../components/Tour-cards/RecommendedTours";
+import TourDetails from "../components/Tour-page/TourDetails";
+import TourPageHeader from "../components/Tour-page/TourPageHeader";
 import { connectToDatabase } from "../lib/mongodb";
 import { Tour, User } from "../types/typings";
 import { unstable_getServerSession } from "next-auth";

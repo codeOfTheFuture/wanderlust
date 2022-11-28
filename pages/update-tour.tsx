@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import TourForm from "../components/tour-form/TourForm";
+import TourForm from "../components/Tour-form/TourForm";
 import { wrapper } from "../store";
 import { connectToDatabase } from "../lib/mongodb";
 import { ObjectId } from "mongodb";

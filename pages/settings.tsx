@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { GetServerSideProps, NextPage } from "next";
-import SettingsForm from "../components/settings-form/SettingsForm";
+import SettingsForm from "../components/Settings-form/SettingsForm";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useAppDispatch, useAppSelector, wrapper } from "../store";
