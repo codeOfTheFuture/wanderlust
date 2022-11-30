@@ -35,6 +35,7 @@ import { useAppSelector } from "../../store";
 
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
 import { Combobox } from "@headlessui/react";
+import AddressInput from "../ui/AddressInput";
 
 export type SelectedDate = {
   date: Date;
@@ -299,51 +300,15 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           {/* Address */}
           <div className="flex items-center gap-2">
             <LocationMarkerIcon className="w-10 h-10" />
-            <Combobox
-              as="div"
-              value={selectedAddress}
-              onChange={setSelectedAddress}
-              className="form-control relative">
-              <Combobox.Input
-                as="input"
-                className="form-input peer"
-                value={value}
-                onChange={handleAddressChange}
-                displayValue={(suggestion: any) =>
-                  suggestion?.place_name || tour?.address.placeName
-                }
-                required
-              />
-              <Combobox.Label
-                as="label"
-                className="form-label peer-focus:-translate-y-[1.6rem] peer-focus:text-sm peer-focus:translate-x-2 peer-focus:bg-white peer-focus:text-primary-color peer-valid:-translate-y-[1.6rem] peer-valid:text-sm peer-valid:translate-x-2 peer-valid:bg-white">
-                Address
-              </Combobox.Label>
-
-              <Combobox.Options
-                className={`${
-                  suggestions?.length ? "flex" : "hidden"
-                } flex-col justify-center items-start absolute w-full bg-white border border-black rounded-md bottom-16`}>
-                {suggestions?.map(suggestion => (
-                  <Combobox.Option
-                    as={Fragment}
-                    value={suggestion}
-                    key={suggestion.id}>
-                    {({ active }) => (
-                      <li
-                        className={`
-                ${active && "bg-primary-color text-white shadow-2xl"}
-                cursor-pointer p-2 rounded w-full`}
-                        onClick={() => {
-                          setSelectedAddress(suggestion);
-                        }}>
-                        {suggestion.place_name}
-                      </li>
-                    )}
-                  </Combobox.Option>
-                ))}
-              </Combobox.Options>
-            </Combobox>
+            <AddressInput
+              defaultValue={tour?.address?.placeName}
+              value={value}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+              handleAddressChange={handleAddressChange}
+              suggestions={suggestions}
+              autofillAddress={null}
+            />
           </div>
         </div>
 

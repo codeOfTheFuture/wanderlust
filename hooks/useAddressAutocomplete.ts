@@ -18,7 +18,8 @@ const useAddressAutocomplete = (initialValue: string) => {
 
   if (
     router.pathname === "/create-tour" ||
-    router.pathname === "/update-tour"
+    router.pathname === "/update-tour" ||
+    router.pathname === "/settings"
   ) {
     types = "address";
   } else {
