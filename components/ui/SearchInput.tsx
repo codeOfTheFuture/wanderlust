@@ -43,6 +43,7 @@ const SearchInput: FC<Props> = ({
         value={value}
         onChange={handleAddressChange}
         className={comboboxInputStyles}
+        placeholder="Search by city, state, or points of interest"
         displayValue={(suggestion: any) => {
           if (searchQuery && !suggestion) return searchQuery;
           if (suggestion?.place_type[0] === "poi") return suggestion?.text;
