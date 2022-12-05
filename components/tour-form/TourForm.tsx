@@ -1,11 +1,4 @@
-import React, {
-  ChangeEvent,
-  FC,
-  FormEvent,
-  Fragment,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
 import TourImageUpload from "./TourImageUpload";
 import TourTitleInput from "./TourTitleInput";
 import FormSelect from "../ui/FormSelect";
@@ -29,12 +22,11 @@ import useClickOutside from "../../hooks/useClickOutside";
 import Modal from "../modal/Modal";
 import useOnDrop from "../../hooks/useOnDrop";
 import Button from "../ui/Button";
-import { AddressSuggestion, Tour, User } from "../../types/typings";
+import { Tour, User } from "../../types/typings";
 import { useRouter } from "next/router";
 import { useAppSelector } from "../../store";
 
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
-import { Combobox } from "@headlessui/react";
 import AddressInput from "../ui/AddressInput";
 
 export type SelectedDate = {

@@ -13,8 +13,10 @@ import { selectSearchQuery, setSearchQuery } from "../store/slices/searchSlice";
 import { setUser } from "../store/slices/userSlice";
 import { User } from "../types/typings";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { MapIcon, ViewListIcon } from "@heroicons/react/solid";
 
 const Search: FC = () => {
+  const [viewMap, setViewMap] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState<any>(null);
   const [zoom, setZoom] = useState<number>(5);
@@ -67,7 +69,7 @@ const Search: FC = () => {
       {/* Search Input */}
       <form
         onSubmit={handleSearch}
-        className="absolute flex justify-center top-16 z-20 w-3/5">
+        className="absolute flex justify-center top-16 z-20 w-full xl:w-3/5">
         <SearchInput
           value={value}
           suggestions={suggestions}
@@ -80,16 +82,36 @@ const Search: FC = () => {
         />
       </form>
 
-      <div className="flex ">
+      <div className="flex justify-center xl:justify-start">
         {/* Map */}
-        <div className="w-3/5 h-[85vh] absolute bottom-0">
+        <div
+          className={`w-full xl:w-3/5 h-[85vh] absolute bottom-0 transition-opacity duration-300 ease-in-out ${
+            viewMap
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none xl:opacity-100 xl:pointer-events-auto"
+          }`}>
           <Map setLoading={setLoading} />
         </div>
 
         {/* Tour Card List */}
-        <div className=" w-2/5 absolute right-0 overflow-auto">
+        <div
+          className={`w-full xl:w-2/5 absolute right-0 overflow-auto transition-opacity duration-300 ease-in-out ${
+            viewMap
+              ? "opacity-0 pointer-events-none xl:opacity-100 xl:pointer-events-auto"
+              : "opacity-100 pointer-events-auto"
+          }`}>
           <TourCards loading={loading} />
         </div>
+        <button
+          className="absolute bottom-5 flex gap-2 items-center xl:hidden py-2 px-6 bg-white font-semibold rounded-full border border-black hover:bg-gray-100"
+          onClick={() => setViewMap(prevState => !prevState)}>
+          {viewMap ? (
+            <ViewListIcon className="w-4 h-4" />
+          ) : (
+            <MapIcon className="w-4 h-4" />
+          )}
+          {viewMap ? "View List" : "View Map"}
+        </button>
       </div>
     </div>
   );
