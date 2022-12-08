@@ -11,13 +11,27 @@ import {
 } from "../store/slices/userSlice";
 import { User } from "../types/typings";
 import { connectToDatabase } from "../lib/mongodb";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const Settings: NextPage = () => {
   const user = useAppSelector(selectUser) as User,
     dispatch = useAppDispatch();
 
+  const router = useRouter();
+
   const submitForm = (formData: any) => {
-    dispatch(updateUserSettings({ userId: user?._id.toString(), formData }));
+    const promise = dispatch(
+      updateUserSettings({ userId: user?._id.toString(), formData })
+    );
+
+    toast.promise(promise, {
+      loading: "Submitting Form...",
+      success: "User settings updated",
+      error: "Error updating settings",
+    });
+
+    router.back();
   };
 
   return (
