@@ -1,21 +1,24 @@
 import React, { Dispatch, FC, Fragment, SetStateAction } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { closeModal, selectModalOpen } from "../../store/slices/modalSlice";
+import {
+  closeModal,
+  openModal,
+  selectModalOpen,
+} from "../../store/slices/modalSlice";
 import Button from "../ui/Button";
 import DropZone from "./DropZone";
 import PreviewThumbnails from "./PreviewThumbnails";
-import deleteImage from "../../utils/deleteImage";
 import { useDropzone } from "react-dropzone";
 import { CloudinaryImage } from "../../types/typings";
 import { useAppDispatch, useAppSelector } from "../../store";
 
 interface Props {
   uploadedFiles: CloudinaryImage[];
-  setUploadedFiles: Dispatch<SetStateAction<CloudinaryImage[]>>;
   onDrop: (acceptedFiles: File[]) => void;
+  removeImage: (public_id: string, signature: string) => void;
 }
 
-const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
+const Modal: FC<Props> = ({ uploadedFiles, onDrop, removeImage }) => {
   const modalOpen = useAppSelector(selectModalOpen);
   const dispatch = useAppDispatch();
 
@@ -26,13 +29,6 @@ const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
     },
     multiple: false,
   });
-
-  const removeImage = async (public_id: string, signature: string) => {
-    await deleteImage(public_id, signature);
-    setUploadedFiles(prevState =>
-      prevState.filter(file => file.public_id !== public_id)
-    );
-  };
 
   return (
     <Transition appear show={modalOpen} as={Fragment}>
@@ -61,8 +57,8 @@ const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
               leave="ease-in duration-200"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95">
-              <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex flex-col justify-start lg:justify-center lg:items-center gap-6 w-[250px] sm:w-[300px] md:w-[450px] lg:w-[600px] h-[500px] md:h-[600px] p-6">
+              <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all w-full md:w-auto">
+                <div className="flex flex-col justify-start lg:justify-center items-center gap-6 md:w-[450px] lg:w-[600px] h-[500px] md:h-[600px] p-6">
                   <DropZone
                     getRootProps={getRootProps}
                     getInputProps={getInputProps}
@@ -84,9 +80,18 @@ const Modal: FC<Props> = ({ uploadedFiles, setUploadedFiles, onDrop }) => {
                   </Button>
 
                   <PreviewThumbnails
+                    modal={true}
                     uploadedFiles={uploadedFiles}
                     removeImage={removeImage}
                   />
+                </div>
+
+                <div className="w-full flex justify-center">
+                  <button
+                    className="text-primary-color"
+                    onClick={() => dispatch(openModal(false))}>
+                    Close
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

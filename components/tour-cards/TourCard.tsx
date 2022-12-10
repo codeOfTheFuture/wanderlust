@@ -10,6 +10,7 @@ import {
 } from "../../store/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { Rating } from "react-simple-star-rating";
+import toast from "react-hot-toast";
 
 interface Props {
   tour: Tour;
@@ -82,18 +83,58 @@ const TourCard: FC<Props> = ({ tour }) => {
             onClick={e => {
               e.stopPropagation();
               if (tourFavorite) {
-                dispatch(
+                const promise = dispatch(
                   removeTourFromFavorites({
                     userId: user._id.toString(),
                     tourId: tour._id.toString(),
                   })
                 );
+
+                toast.promise(
+                  promise,
+                  {
+                    loading: null,
+                    success: "Removed from favorites!",
+                    error: "Error removing from favorites",
+                  },
+                  {
+                    loading: {
+                      duration: 0,
+                    },
+                    success: {
+                      duration: 2000,
+                    },
+                    error: {
+                      duration: 2000,
+                    },
+                  }
+                );
               } else {
-                dispatch(
+                const promise = dispatch(
                   addTourToFavorites({
                     userId: user?._id.toString() as string,
                     tourId: tour._id.toString(),
                   })
+                );
+
+                toast.promise(
+                  promise,
+                  {
+                    loading: null,
+                    success: "Added to favorites!",
+                    error: "Error adding to favorites",
+                  },
+                  {
+                    loading: {
+                      duration: 0,
+                    },
+                    success: {
+                      duration: 2000,
+                    },
+                    error: {
+                      duration: 2000,
+                    },
+                  }
                 );
               }
             }}

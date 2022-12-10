@@ -28,6 +28,10 @@ import { useAppSelector } from "../../store";
 
 import useAddressAutocomplete from "../../hooks/useAddressAutocomplete";
 import AddressInput from "../ui/AddressInput";
+import { selectModalOpen } from "../../store/slices/modalSlice";
+import PreviewThumbnails from "../modal/PreviewThumbnails";
+import deleteImage from "../../utils/deleteImage";
+import toast from "react-hot-toast";
 
 export type SelectedDate = {
   date: Date;
@@ -45,6 +49,7 @@ interface Props {
 
 const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
   const user = useAppSelector(selectUser) as User;
+  const modalOpen = useAppSelector(selectModalOpen) as boolean;
 
   const [tourTitle, setTourTitle] = useState<string>(tour?.title || "");
   const [category, setCategory] = useState<string>(tour?.category || "");
@@ -75,6 +80,19 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
   const [onDrop] = useOnDrop(cloudinaryImage =>
     setUploadedFiles(prevState => [...prevState, cloudinaryImage])
   );
+
+  const removeImage = (public_id: string, signature: string) => {
+    const promise = deleteImage(public_id, signature);
+    setUploadedFiles(prevState =>
+      prevState.filter(file => file.public_id !== public_id)
+    );
+
+    toast.promise(promise, {
+      loading: "Removing Image...",
+      success: "Image Removed!",
+      error: "Error Removing Image.",
+    });
+  };
 
   const router = useRouter();
 
@@ -171,7 +189,7 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
       tour.rating = rating;
     }
 
-    submitForm(tour);
+    await submitForm(tour);
   };
 
   const clearForm = () => {
@@ -192,9 +210,9 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
 
   return (
     <form className="mb-10" id="tourForm" onSubmit={handleSubmit}>
-      <div className="flex justify-center items-center w-full h-[70vh] md:h-[50vh] bg-gray-400">
-        <div className="flex flex-col md:flex-row justify-center items-center gap-10 w-5/6 lg:w-2/3">
-          <div className="flex flex-col gap-5 mt-10 md:mt-0 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-none grid-rows-5 md:grid-rows-4 justify-center items-center w-full pt-14 md:pt-20 px-2 md:p-5 bg-gray-400">
+        <div className="grid grid-cols-1 md:grid-cols-5 items-center md:gap-5 lg:gap-10 h-full row-span-4 md:row-span-3">
+          <div className="flex flex-col gap-5 w-full md:col-span-4">
             {/* Title Input */}
             <TourTitleInput value={tourTitle} handleChange={setTourTitle} />
 
@@ -221,9 +239,19 @@ const TourForm: FC<Props> = ({ tour, submitForm, deleteTour }) => {
           <TourImageUpload />
           <Modal
             uploadedFiles={uploadedFiles}
-            setUploadedFiles={setUploadedFiles}
             onDrop={onDrop}
+            removeImage={removeImage}
           />
+        </div>
+
+        <div className="w-full h-32 row-span-1">
+          {!modalOpen && uploadedFiles.length > 0 && (
+            <PreviewThumbnails
+              modal={false}
+              uploadedFiles={uploadedFiles}
+              removeImage={removeImage}
+            />
+          )}
         </div>
       </div>
 

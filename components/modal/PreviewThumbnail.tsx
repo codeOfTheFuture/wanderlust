@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface Props {
   uploadedFile: CloudinaryImage;
-  removeImage: (public_id: string, signature: string) => Promise<void>;
+  removeImage: (public_id: string, signature: string) => void;
 }
 
 const PreviewThumbnail: FC<Props> = ({ uploadedFile, removeImage }) => {

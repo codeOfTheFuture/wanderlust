@@ -8,15 +8,22 @@ import { setUser } from "../store/slices/userSlice";
 import { Tour } from "../types/typings";
 
 import { connectToDatabase } from "../lib/mongodb";
+import toast from "react-hot-toast";
 
 const CreateTour: NextPage = () => {
   const submitForm = async (newTour: Tour) => {
-    await fetch("/api/tours", {
+    const response = await fetch("/api/tours", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newTour),
+    });
+
+    await toast.promise(await response.json(), {
+      loading: "Submitting Form...",
+      success: "Tour Added!",
+      error: "Error adding tour.",
     });
   };
 

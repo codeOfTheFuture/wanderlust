@@ -1,19 +1,9 @@
 import React, { FC } from "react";
 import TourCard from "./TourCard";
-import { TourResults, User } from "../../types/typings";
-import { useAppDispatch, useAppSelector } from "../../store";
-import {
-  fetchOfferedTours,
-  getPopularTours,
-  getTourDeals,
-  getToursCategory,
-  getToursFilter,
-  getToursStatus,
-  getUserFavoriteTours,
-  selectTours,
-} from "../../store/slices/toursSlice";
+import { TourResults } from "../../types/typings";
+import { useAppSelector } from "../../store";
+import { getToursStatus, selectTours } from "../../store/slices/toursSlice";
 import { useRouter } from "next/router";
-import { selectUser } from "../../store/slices/userSlice";
 import ReactLoading from "react-loading";
 import Pagination from "./Pagination";
 
