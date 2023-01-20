@@ -20,7 +20,8 @@ const TourCards: FC<Props> = ({ loading }) => {
   return (
     <div
       className={`${
-        router.pathname === "/search" && "justify-between h-[100vh] p-4"
+        router.pathname === "/search" &&
+        "justify-between h-[100vh] p-4 mt-20 lg:mt-0"
       } flex flex-col w-11/12 sm:w-5/6 lg:w-full mx-auto bg-white relative ${
         (loading || status === "loading") && "overflow-hidden"
       }`}>

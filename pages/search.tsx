@@ -85,25 +85,21 @@ const Search: FC = () => {
       <div className="flex justify-center xl:justify-start">
         {/* Map */}
         <div
-          className={`w-full xl:w-3/5 h-[85vh] absolute bottom-0 transition-opacity duration-300 ease-in-out ${
-            viewMap
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none xl:opacity-100 xl:pointer-events-auto"
+          className={`w-full xl:w-3/5 h-[85vh] absolute bottom-0 ${
+            viewMap ? "block" : "hidden xl:block"
           }`}>
           <Map setLoading={setLoading} />
         </div>
 
         {/* Tour Card List */}
         <div
-          className={`w-full xl:w-2/5 absolute right-0 overflow-auto transition-opacity duration-300 ease-in-out ${
-            viewMap
-              ? "opacity-0 pointer-events-none xl:opacity-100 xl:pointer-events-auto"
-              : "opacity-100 pointer-events-auto"
+          className={`w-full xl:w-2/5 absolute right-0 overflow-auto ${
+            viewMap ? "hidden xl:block" : "block"
           }`}>
           <TourCards loading={loading} />
         </div>
         <button
-          className="absolute bottom-5 flex gap-2 items-center xl:hidden py-2 px-6 bg-white font-semibold rounded-full border border-black hover:bg-gray-100"
+          className="absolute bottom-5 flex gap-2 items-center z-50 xl:hidden py-2 px-6 bg-white font-semibold rounded-full border border-black hover:bg-gray-100"
           onClick={() => setViewMap(prevState => !prevState)}>
           {viewMap ? (
             <ViewListIcon className="w-4 h-4" />
