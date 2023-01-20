@@ -77,7 +77,7 @@ const TourCard: FC<Props> = ({ tour }) => {
           <PencilAltIcon className="w-10 text-black opacity-90 hover:scale-125 transition-all duration-300 ease-in-out" />
         ) : (
           <HeartIcon
-            className={`${
+            className={`${user ? "block" : "hidden"} ${
               tourFavorite ? "text-error-color" : "text-black opacity-60"
             } w-10  opacity-90 hover:scale-125 transition-all duration-300 ease-in-out`}
             onClick={e => {
