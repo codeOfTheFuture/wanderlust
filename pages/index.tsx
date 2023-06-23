@@ -92,7 +92,7 @@ const Home: NextPage = () => {
 						handleAddressChange={handleAddressChange}
 						setZoomLevel={setZoomLevel}
 						comboBoxStyles="flex w-full h-16 sm:h-20 shadow-md"
-						comboboxInputStyles="relative w-full h-full pl-10 pr-[8rem] text-xl border border-primary-text focus:outline-none"
+						comboboxInputStyles="relative w-full h-full px-2 sm:pl-10 sm:pr-[8rem] text-xl border border-primary-text focus:outline-none"
 					/>
 				</form>
 			</div>
