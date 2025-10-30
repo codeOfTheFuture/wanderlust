@@ -1,21 +1,19 @@
-import TourCard from "./TourCard";
-import { TourResults } from "../../types/typings";
 import { useAppSelector } from "../../store";
 import { getToursStatus, selectTours } from "../../store/slices/toursSlice";
 import ReactLoading from "react-loading";
-import Pagination from "./Pagination";
+import TourCard from "../tour-cards/TourCard";
 
 interface Props {
 	loading: boolean;
 }
 
-const TourCards = ({ loading }: Props) => {
-	const toursResults = useAppSelector(selectTours) as TourResults;
+const SearchResults = ({ loading }: Props) => {
+	const toursResults = useAppSelector(selectTours);
 	const status = useAppSelector(getToursStatus);
 
 	return (
 		<div
-			className={`flex flex-col w-full mx-auto bg-white relative ${
+			className={`justify-between h-[100vh] p-4 mt-20 lg:mt-0 flex flex-col w-full mx-auto bg-white relative ${
 				(loading || status === "loading") && "overflow-hidden"
 			}`}
 		>
@@ -33,17 +31,15 @@ const TourCards = ({ loading }: Props) => {
 				</div>
 			)}
 			<div
-				className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-start items-start gap-6 w-full"
-				} ${(status === "loading" || loading) && "opacity-50"} `}
+				className={`grid grid-cols-1 md:grid-cols-2 mt-16 justify-start items-start gap-6 w-full ${
+					(status === "loading" || loading) && "opacity-50"
+				} `}
 			>
 				{toursResults?.results?.map(tour => (
 					<TourCard key={tour._id.toString()} tour={tour} />
 				))}
 			</div>
-
-			{toursResults.results.length > 0 && <Pagination />}
 		</div>
 	);
 };
-
-export default TourCards;
+export default SearchResults;

@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import toast from "react-hot-toast";
 import { CloudinaryImage } from "../types/typings";
 import getSignature from "../utils/getSignature";
 
@@ -20,12 +21,21 @@ const useOnDrop = (cb: Callback) => {
         formData.append("timestamp", timestamp);
         formData.append("api_key", CLOUDINARY_KEY);
 
+        toast.loading("Uploading Image...");
+
         const response = await fetch(URL, {
           method: "POST",
           body: formData,
         });
 
         const data = (await response.json()) as CloudinaryImage;
+
+        if (response.status === 200) {
+          toast.dismiss();
+          toast.success("Image Successfully Uploaded!");
+        } else {
+          toast.error("Error Uploading Image.");
+        }
 
         cb(data);
       });
@@ -37,32 +47,3 @@ const useOnDrop = (cb: Callback) => {
 };
 
 export default useOnDrop;
-
-// const useOnDrop = (tourPhotos: CloudinaryImage[] | undefined) => {
-//   const [uploadedFiles, setUploadedFiles] = useState<CloudinaryImage[]>(
-//     tourPhotos || []
-//   );
-
-//   const onDrop = useCallback((acceptedFiles: File[]) => {
-//     acceptedFiles.forEach(async acceptedFile => {
-//       const { signature, timestamp } = await getSignature();
-
-//       const formData = new FormData();
-//       formData.append("file", acceptedFile);
-//       formData.append("signature", signature);
-//       formData.append("timestamp", timestamp);
-//       formData.append("api_key", CLOUDINARY_KEY);
-
-//       const response = await fetch(URL, {
-//           method: "post",
-//           body: formData,
-//         }),
-//         data: CloudinaryImage = await response.json();
-
-//       setUploadedFiles(prevState => [...prevState, data]);
-//     });
-//   }, []);
-//   return { uploadedFiles, setUploadedFiles, onDrop };
-// };
-
-// export default useOnDrop;

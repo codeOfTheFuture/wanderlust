@@ -7,6 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 import { User } from "../../types/typings";
+import toast from "react-hot-toast";
 
 export interface UserState {
   user: User | null;

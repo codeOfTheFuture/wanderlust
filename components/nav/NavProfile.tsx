@@ -7,6 +7,7 @@ import { selectUser } from "../../store/slices/userSlice";
 import { useAppSelector } from "../../store";
 import NavDropdownLink from "./NavDropdownLink";
 import { signOut } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const NavProfile: FC = () => {
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
@@ -20,7 +21,14 @@ const NavProfile: FC = () => {
   useClickOutside(dropsDownRef, () => setToggleDropdown(false));
 
   const logOut = () => {
-    signOut();
+    const signOutResponse = signOut();
+
+    toast.promise(signOutResponse, {
+      loading: "Signing Out...",
+      success: "You have successfully signed out!",
+      error: "Error signing out.",
+    });
+
     setToggleDropdown(false);
   };
 

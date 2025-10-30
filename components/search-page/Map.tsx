@@ -1,4 +1,3 @@
-import mapboxgl from "mapbox-gl";
 import {
   Dispatch,
   FC,
@@ -15,7 +14,6 @@ import {
   selectViewport,
   selectZoom,
 } from "../../store/slices/mapSlice";
-import { selectSearchQuery } from "../../store/slices/searchSlice";
 import { fetchToursSearch, selectTours } from "../../store/slices/toursSlice";
 import { TourResults } from "../../types/typings";
 import MapMarker from "./MapMarker";
@@ -33,7 +31,11 @@ const Map: FC<Props> = ({ setLoading }) => {
   const dispatch = useAppDispatch();
 
   const [selectedTourId, setSelectedTourId] = useState<string>("");
-  const [viewState, setViewState] = useState({
+  const [viewState, setViewState] = useState<{
+    longitude: number;
+    latitude: number;
+    zoom: number;
+  }>({
     longitude: center[0] || -74.007727,
     latitude: center[1] || 40.707385,
     zoom: zoom,

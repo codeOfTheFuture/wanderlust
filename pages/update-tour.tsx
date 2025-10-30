@@ -8,6 +8,7 @@ import { connectToDatabase } from "../lib/mongodb";
 import { ObjectId } from "mongodb";
 import { Tour } from "../types/typings";
 import { setUser } from "../store/slices/userSlice";
+import toast from "react-hot-toast";
 
 interface Props {
   tour: Tour;
@@ -15,12 +16,18 @@ interface Props {
 
 const UpdateTour: NextPage<Props> = ({ tour }) => {
   const submitForm = async (tourToUpdate: Tour) => {
-    await fetch(`/api/tours/${tour._id}`, {
+    const response = await fetch(`/api/tours/${tour._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(tourToUpdate),
+    });
+
+    toast.promise(await response.json(), {
+      loading: "Submitting Form...",
+      success: "Tour updated!",
+      error: "Error updating tour.",
     });
   };
 

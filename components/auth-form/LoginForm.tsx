@@ -5,8 +5,7 @@ import AuthLink from "./AuthLink";
 import Button from "../ui/Button";
 import FormInput from "../ui/FormInput";
 import { BuiltInProviderType } from "next-auth/providers";
-import { useAppDispatch } from "../../store";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
   providers: Record<
@@ -20,7 +19,6 @@ const LoginForm: FC<Props> = ({ providers }) => {
   const [password, setPassword] = useState<string>("");
 
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const btnLabel = router.pathname === "/auth/signup" ? "Sign Up" : "Sign In";
   const facebookProviderName = `${btnLabel} with ${providers?.facebook.name}`;
@@ -32,6 +30,8 @@ const LoginForm: FC<Props> = ({ providers }) => {
     e.preventDefault();
 
     if (router.pathname === "/auth/signup") {
+      toast.loading("Please wait while your account is created...");
+
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -46,20 +46,42 @@ const LoginForm: FC<Props> = ({ providers }) => {
       const data = await response.json();
 
       if (data.acknowledged) {
-        await signIn("credentials", {
+        const signUpResponse = await signIn("credentials", {
           redirect: false,
           email,
           password,
         });
 
+        if (signUpResponse?.ok) {
+          toast.dismiss();
+          toast.success("Signup Successful!");
+        }
+
+        if (signUpResponse?.error) {
+          toast.dismiss();
+          toast.error("Error Creating Account.");
+        }
+
         return router.push("/");
       }
     } else {
-      await signIn("credentials", {
+      toast.loading("Please wait...");
+
+      const signInResponse = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
+
+      if (signInResponse?.ok) {
+        toast.dismiss();
+        toast.success("SignIn Successful!");
+      }
+
+      if (signInResponse?.error) {
+        toast.dismiss();
+        toast.error("Error Signing In.");
+      }
 
       return router.push("/");
     }
